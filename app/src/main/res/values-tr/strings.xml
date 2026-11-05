@@ -351,4 +351,5 @@
     <string name="emi_sub">Bu, ödeyebileceğin bir taksit önermemize yardımcı olur.</string>
     <string name="emi_yes">Evet</string>
     <string name="emi_no">Hayır</string>
+    <string name="ob_continue">Devam</string>
 </resources>

@@ -351,4 +351,5 @@
     <string name="emi_sub">So können wir dir eine passende Rate vorschlagen.</string>
     <string name="emi_yes">Ja</string>
     <string name="emi_no">Nein</string>
+    <string name="ob_continue">Weiter</string>
 </resources>

@@ -351,4 +351,5 @@
     <string name="emi_sub">इससे हम आपके लिए संभालने योग्य EMI सुझा पाते हैं।</string>
     <string name="emi_yes">हां</string>
     <string name="emi_no">नहीं</string>
+    <string name="ob_continue">जारी रखें</string>
 </resources>

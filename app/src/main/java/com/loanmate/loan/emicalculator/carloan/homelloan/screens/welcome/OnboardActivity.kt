@@ -529,8 +529,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
                 step.key == DEFAULT_HOME_KEY -> R.string.dh_button
                 step.key == PERMISSION_HUB_KEY -> R.string.perm_allow
                 step.key == WELCOME_KEY -> R.string.wl_button
-                state.stepIndex == viewModel.steps.lastIndex -> R.string.get_started
-                else -> R.string.next
+                else -> R.string.ob_continue
             }
         )
     }

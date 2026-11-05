@@ -51,7 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ob_logo_tile"
-                android:elevation="10dp">
+>
 
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/ringVw"

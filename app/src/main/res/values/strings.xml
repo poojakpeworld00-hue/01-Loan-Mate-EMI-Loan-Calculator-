@@ -429,4 +429,5 @@
     <string name="emi_sub">This helps us suggest an EMI you can manage.</string>
     <string name="emi_yes">Yes</string>
     <string name="emi_no">No</string>
+    <string name="ob_continue">Continue</string>
 </resources>

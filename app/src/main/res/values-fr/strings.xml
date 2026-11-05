@@ -351,4 +351,5 @@
     <string name="emi_sub">Cela nous aide à proposer une mensualité adaptée.</string>
     <string name="emi_yes">Oui</string>
     <string name="emi_no">Non</string>
+    <string name="ob_continue">Continuer</string>
 </resources>

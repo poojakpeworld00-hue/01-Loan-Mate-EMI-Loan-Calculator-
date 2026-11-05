@@ -350,4 +350,5 @@
     <string name="emi_sub">無理なく返済できるEMIの提案に役立ちます。</string>
     <string name="emi_yes">はい</string>
     <string name="emi_no">いいえ</string>
+    <string name="ob_continue">続ける</string>
 </resources>

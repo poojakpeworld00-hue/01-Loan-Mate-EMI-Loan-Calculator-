@@ -350,4 +350,5 @@
     <string name="emi_sub">Thông tin này giúp chúng tôi gợi ý mức EMI phù hợp.</string>
     <string name="emi_yes">Có</string>
     <string name="emi_no">Không</string>
+    <string name="ob_continue">Tiếp tục</string>
 </resources>

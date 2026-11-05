@@ -350,4 +350,5 @@
     <string name="emi_sub">Ini membantu kami menyarankan cicilan yang sanggup kamu bayar.</string>
     <string name="emi_yes">Ya</string>
     <string name="emi_no">Tidak</string>
+    <string name="ob_continue">Lanjut</string>
 </resources>
