@@ -76,16 +76,16 @@
       },
       "colors": {
         "light": {
-          "button": "#FFC233",
-          "button_text": "#0B0C10",
-          "background": "#14161D",
-          "text": "#F4F5F7"
+          "button": "#3399FF",
+          "button_text": "#FFFFFF",
+          "background": "#FFFFFF",
+          "text": "#16202E"
         },
         "dark": {
-          "button": "#FFC233",
-          "button_text": "#0B0C10",
-          "background": "#14161D",
-          "text": "#F4F5F7"
+          "button": "#3399FF",
+          "button_text": "#FFFFFF",
+          "background": "#FFFFFF",
+          "text": "#16202E"
         }
       },
       "screens": {
@@ -330,78 +330,6 @@
           }
         },
         "OB_9": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_10": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_11": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_12": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_13": {
           "bottom_ad": {
             "on": true,
             "type": "native_banner"
@@ -972,16 +900,16 @@
       },
       "colors": {
         "light": {
-          "button": "#FF3B5C",
+          "button": "#3399FF",
           "button_text": "#FFFFFF",
-          "background": "#14161D",
-          "text": "#F4F5F7"
+          "background": "#FFFFFF",
+          "text": "#16202E"
         },
         "dark": {
-          "button": "#FF3B5C",
+          "button": "#3399FF",
           "button_text": "#FFFFFF",
-          "background": "#14161D",
-          "text": "#F4F5F7"
+          "background": "#FFFFFF",
+          "text": "#16202E"
         }
       },
       "screens": {
@@ -1333,78 +1261,6 @@
           }
         },
         "OB_9": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_10": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_11": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_12": {
-          "bottom_ad": {
-            "on": true,
-            "type": "native_banner"
-          },
-          "exit_ad": {
-            "on": true,
-            "ads": [
-              "link",
-              "inter",
-              "app_open"
-            ]
-          },
-          "list_ad": {
-            "on": true,
-            "type": "native_big"
-          }
-        },
-        "OB_13": {
           "bottom_ad": {
             "on": true,
             "type": "native_banner"

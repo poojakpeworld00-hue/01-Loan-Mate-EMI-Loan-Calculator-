@@ -58,7 +58,7 @@ class LoanTwo : Application() {
         FaultLog.install(this)
         container = LoanCenter(this)
 
-//        LoanSpecHolder.forcePaidUser(true) // testing only: remove before the Play Store release
+        LoanSpecHolder.forcePaidUser(true) // testing only: remove before the Play Store release
 
         LoanSpecHolder.trackResolver = TrailFinder { ShipOrigin.track(this) }
         LoanSpecHolder.init(this)

@@ -4,13 +4,13 @@
     <item>
         <shape>
             <corners android:topLeftRadius="@dimen/_23sdp" android:topRightRadius="@dimen/_23sdp" />
-            <solid android:color="#802D6BFF" />
+            <solid android:color="#E5EBF4" />
         </shape>
     </item>
     <item android:top="1dp">
         <shape>
             <corners android:topLeftRadius="@dimen/_23sdp" android:topRightRadius="@dimen/_23sdp" />
-            <solid android:color="#101218" />
+            <solid android:color="#FFFFFF" />
         </shape>
     </item>
 </layer-list>

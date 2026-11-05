@@ -1,5 +1,8 @@
 package com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.os.SystemClock
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +30,8 @@ class ChooseAdapter(
     private val onClick: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var entered = -1
+    /** End of the step's entrance: rows bound after it appear without a fade. */
+    private var introUntil = 0L
     private val adAt = if (inlineAd != null) minOf(AD_AFTER, step.opts.size) else -1
 
     private val ctaAt = if (adAt >= 0 && cta != null) adAt + 1 else -1
@@ -48,6 +53,7 @@ class ChooseAdapter(
     // Full rebinds (onboarding's in-place language change) must not crossfade either: bind cancels row animations.
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         (recyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
+        introUntil = SystemClock.uptimeMillis() + INTRO_MS
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -129,17 +135,38 @@ class ChooseAdapter(
         }
         // A recycled row can carry a fade that was cut short (alpha 0): finish it before this row is shown again.
         holder.itemView.animate().cancel()
-        if (adapterPosition > entered) {
+        // Only the step's first screenful fades in. Rows bound later (scrolling, or the list re-laid out when the inline ad
+        // loads) show at once: a fade started then could be cut short and leave the card invisible.
+        if (adapterPosition > entered && SystemClock.uptimeMillis() < introUntil) {
             entered = adapterPosition
             holder.itemView.apply {
                 alpha = 0f
                 translationY = resources.getDimension(SdpR.dimen._12sdp)
                 animate().alpha(1f).translationY(0f).setStartDelay(50L + adapterPosition * 35L).setDuration(380)
-                    .setInterpolator(DecelerateInterpolator(2f)).start()
+                    .setInterpolator(DecelerateInterpolator(2f)).setListener(showFully(this)).start()
             }
         } else {
+            entered = maxOf(entered, adapterPosition)
             holder.itemView.alpha = 1f
             holder.itemView.translationY = 0f
+        }
+    }
+
+    // A row that comes back on screen after the intro never keeps a half-done fade.
+    override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+        if (holder is PackKeeper && SystemClock.uptimeMillis() >= introUntil) {
+            holder.itemView.alpha = 1f
+            holder.itemView.translationY = 0f
+        }
+    }
+
+    /** However [view]'s fade ends (finished or cut short), the card is left fully shown. */
+    private fun showFully(view: View) = object : AnimatorListenerAdapter() {
+        override fun onAnimationEnd(animation: Animator) = show()
+        override fun onAnimationCancel(animation: Animator) = show()
+        private fun show() {
+            view.alpha = 1f
+            view.translationY = 0f
         }
     }
 
@@ -159,6 +186,7 @@ class ChooseAdapter(
         const val TYPE_AD = 1
         const val TYPE_CTA = 2
         const val AD_AFTER = 2
+        const val INTRO_MS = 600L
         val SELECTION = Any()
     }
 }
