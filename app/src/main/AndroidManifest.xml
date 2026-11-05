@@ -28,7 +28,7 @@
         android:theme="@style/Theme.SkinHubSkinsBundles"
         tools:targetApi="33">
         <activity
-            android:name=".presentation.splash.StartActivity"
+            android:name=".screens.intro.StartActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/launcher_name"
@@ -41,45 +41,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.onboarding.OnboardActivity"
+            android:name=".screens.welcome.OnboardActivity"
             android:excludeFromRecents="true"
             android:configChanges="locale|layoutDirection"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.home.RootActivity"
+            android:name=".screens.dashboard.RootActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.catalog.LineupActivity"
+            android:name=".screens.library.LineupActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.catalog.SpotlightActivity"
+            android:name=".screens.library.SpotlightActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.articles.ToursActivity"
+            android:name=".screens.guides.ToursActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.articles.TourActivity"
+            android:name=".screens.guides.TourActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.calculator.CalculatorActivity"
+            android:name=".screens.emi.CalculatorActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.calculator.ComputeActivity"
+            android:name=".screens.emi.ComputeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.settings.SettingsActivity"
+            android:name=".screens.prefs.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.settings.LanguageActivity"
+            android:name=".screens.prefs.LanguageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.uninstall.ExitPathActivity"
+            android:name=".screens.leave.ExitPathActivity"
             android:configChanges="locale|layoutDirection"
             android:excludeFromRecents="true"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.uninstall.ExitDialogActivity"
+            android:name=".screens.leave.ExitDialogActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -117,7 +117,7 @@
 
         <!-- Silent `rc_sync` push: re-syncs Remote Config at once (no notification is shown). -->
         <service
-            android:name=".data.remote.config.RemoteSyncAlertService"
+            android:name=".store.cloud.flags.RemoteSyncAlertService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
