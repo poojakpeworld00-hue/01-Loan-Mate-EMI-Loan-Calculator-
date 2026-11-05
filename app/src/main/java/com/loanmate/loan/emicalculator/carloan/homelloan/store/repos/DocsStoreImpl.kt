@@ -15,7 +15,7 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 
 /**
- * Writes images to Pictures/SkinEmotes: MediaStore on Android 10+, a plain file plus a media scan before that.
+ * Writes images to Pictures/LoanMate: MediaStore on Android 10+, a plain file plus a media scan before that.
  * Below Android 10 the caller must already hold WRITE_EXTERNAL_STORAGE.
  */
 class DocsStoreImpl(private val context: Context) : DocsStore {
@@ -43,6 +43,6 @@ class DocsStoreImpl(private val context: Context) : DocsStore {
     private fun Bitmap.write(out: OutputStream) = check(compress(Bitmap.CompressFormat.PNG, 100, out))
 
     private companion object {
-        const val ALBUM = "SkinEmotes"
+        const val ALBUM = "LoanMate"
     }
 }
