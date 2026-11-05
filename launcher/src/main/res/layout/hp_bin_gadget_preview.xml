@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/widget_peek_holderIx"
+    android:id="@+id/widget_peek_holderIxVw"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_margin">
 
     <ImageView
-        android:id="@+id/widget_picIx"
+        android:id="@+id/widget_picIxVw"
         android:layout_width="@dimen/launcher_widget_preview_size"
         android:layout_height="@dimen/launcher_widget_preview_size"
         android:layout_gravity="center"
@@ -18,12 +18,12 @@
         tools:src="@mipmap/ic_launcher" />
 
     <org.fossify.commons.views.MyTextView
-        android:id="@+id/widget_titleIx"
+        android:id="@+id/widget_titleIxVw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/widget_picIx"
-        android:layout_alignStart="@+id/widget_picIx"
-        android:layout_alignEnd="@+id/widget_picIx"
+        android:layout_below="@+id/widget_picIxVw"
+        android:layout_alignStart="@+id/widget_picIxVw"
+        android:layout_alignEnd="@+id/widget_picIxVw"
         android:layout_marginTop="@dimen/small_margin"
         android:ellipsize="end"
         android:lines="1"
@@ -31,12 +31,12 @@
         tools:text="Calendar" />
 
     <org.fossify.commons.views.MyTextView
-        android:id="@+id/widget_sizeIx"
+        android:id="@+id/widget_sizeIxVw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/widget_titleIx"
-        android:layout_alignStart="@+id/widget_picIx"
-        android:layout_alignEnd="@+id/widget_picIx"
+        android:layout_below="@+id/widget_titleIxVw"
+        android:layout_alignStart="@+id/widget_picIxVw"
+        android:layout_alignEnd="@+id/widget_picIxVw"
         android:alpha="0.5"
         android:ellipsize="end"
         android:lines="1"

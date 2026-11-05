@@ -7,13 +7,13 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/well"
+        android:id="@+id/wellVw"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_66sdp"
         android:background="@drawable/fill_card_well">
 
         <TextView
-            android:id="@+id/watermark"
+            android:id="@+id/watermarkVw"
             style="@style/SH.Watermark"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/_minus3sdp"
@@ -21,14 +21,14 @@
             android:textSize="@dimen/_53ssp" />
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/imageVw"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:importantForAccessibility="no" />
     </FrameLayout>
 
     <LinearLayout
-        android:id="@+id/captions"
+        android:id="@+id/captionsVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -37,7 +37,7 @@
         android:paddingBottom="@dimen/_8sdp">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/nameVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -47,7 +47,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/subText"
+            android:id="@+id/subTextVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/sub_on_option"

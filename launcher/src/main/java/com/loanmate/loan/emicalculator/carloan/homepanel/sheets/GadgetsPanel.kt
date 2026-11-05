@@ -56,9 +56,9 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
         this.binding = HpGadgetsZoneBinding.bind(this)
         getAppWidgets()
 
-        binding.widgetsRollIx.setOnTouchListener { v, event ->
-            if (event.actionMasked == MotionEvent.ACTION_DOWN && binding.queryBarIx.hasFocus()) {
-                binding.queryBarIx.binding.topToolbarSearch.clearFocus()
+        binding.widgetsRollIxVw.setOnTouchListener { v, event ->
+            if (event.actionMasked == MotionEvent.ACTION_DOWN && binding.queryBarIxVw.hasFocus()) {
+                binding.queryBarIxVw.binding.topToolbarSearch.clearFocus()
                 activity?.hideKeyboard()
             }
 
@@ -72,7 +72,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
     }
 
     fun onConfigurationChanged() {
-        binding.widgetsRollIx.scrollToPosition(0)
+        binding.widgetsRollIxVw.scrollToPosition(0)
         prepareViews()
 
         if (widgets.isNotEmpty()) {
@@ -110,9 +110,9 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
 
         if (touchDownY != -1) {
             shouldIntercept =
-                event.y.toInt() - touchDownY > touchSlop && binding.widgetsRollIx.computeVerticalScrollOffset() == 0
+                event.y.toInt() - touchDownY > touchSlop && binding.widgetsRollIxVw.computeVerticalScrollOffset() == 0
             if (shouldIntercept) {
-                if (binding.queryBarIx.hasFocus()) {
+                if (binding.queryBarIxVw.hasFocus()) {
                     activity?.hideKeyboard()
                 }
                 activity?.startHandlingTouches(touchDownY)
@@ -153,7 +153,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
     }
 
     /** True once the widget list has been built at least once. */
-    fun hasWidgets() = binding.widgetsRollIx.adapter != null
+    fun hasWidgets() = binding.widgetsRollIxVw.adapter != null
 
     @SuppressLint("WrongConstant")
     fun getAppWidgets() {
@@ -261,7 +261,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
     }
 
     private fun splitWidgetsByApplets() {
-        val searchQuery = binding.queryBarIx.getCurrentQuery()
+        val searchQuery = binding.queryBarIxVw.getCurrentQuery()
         val filteredWidgets = if (searchQuery.isNotEmpty()) {
             widgets.filter { widget ->
                 widget.appTitle.normalizeString().contains(searchQuery.normalizeString(), ignoreCase = true) ||
@@ -298,14 +298,14 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
 
     private fun prepBridge(widgetsListItems: ArrayList<GadgetsStackItem>) {
         activity?.runOnUiThread {
-            val currAdapter = binding.widgetsRollIx.adapter
+            val currAdapter = binding.widgetsRollIxVw.adapter
             if (currAdapter == null) {
                 GadgetsLoader(activity!!, widgetsListItems, this) {
                     context.toast(R.string.launcher_touch_hold_widget)
                     ignoreTouches = false
                     touchDownY = -1
                 }.apply {
-                    binding.widgetsRollIx.adapter = this
+                    binding.widgetsRollIxVw.adapter = this
                 }
             } else {
                 (currAdapter as GadgetsLoader).updateItems(widgetsListItems)
@@ -318,14 +318,14 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
             return
         }
 
-        binding.widgetsFastscrollerIx.updateColors(context.getProperPrimaryColor())
-        (binding.widgetsRollIx.adapter as? GadgetsLoader)?.reloadCaptionTint(context.getProperTextColor())
+        binding.widgetsFastscrollerIxVw.updateColors(context.getProperPrimaryColor())
+        (binding.widgetsRollIxVw.adapter as? GadgetsLoader)?.reloadCaptionTint(context.getProperTextColor())
         prepRackBackdrop()
 
-        binding.queryBarIx.requireToolbar().beGone()
-        binding.queryBarIx.updateColors()
-        binding.queryBarIx.setupMenu()
-        binding.queryBarIx.onSearchTextChangedListener = {
+        binding.queryBarIxVw.requireToolbar().beGone()
+        binding.queryBarIxVw.updateColors()
+        binding.queryBarIxVw.setupMenu()
+        binding.queryBarIxVw.onSearchTextChangedListener = {
             splitWidgetsByApplets()
         }
     }

@@ -10,7 +10,7 @@
     android:paddingVertical="@dimen/_7sdp">
 
     <TextView
-        android:id="@+id/label"
+        android:id="@+id/labelVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -18,7 +18,7 @@
         android:textSize="@dimen/_9ssp" />
 
     <TextView
-        android:id="@+id/value"
+        android:id="@+id/valueVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.loanmate.loan.emicalculator.carloan.homepanel.sheets.GadgetsPanel xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/widgets_holderIx"
+    android:id="@+id/widgets_holderIxVw"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <org.fossify.commons.views.MySearchMenu
-        android:id="@+id/query_barIx"
+        android:id="@+id/query_barIxVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:applyWindowInsets="false" />
 
     <com.qtalk.recyclerviewfastscroller.RecyclerViewFastScroller
-        android:id="@+id/widgets_fastscrollerIx"
+        android:id="@+id/widgets_fastscrollerIxVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/query_barIx"
+        android:layout_below="@id/query_barIxVw"
         app:fastScrollEnabled="false">
 
         <org.fossify.commons.views.MyRecyclerView
-            android:id="@+id/widgets_rollIx"
+            android:id="@+id/widgets_rollIxVw"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"

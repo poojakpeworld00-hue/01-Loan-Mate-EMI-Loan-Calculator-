@@ -34,7 +34,7 @@ class InboxScenePanel(
     })
 
     private val hostFragment: Fragment?
-        get() = activity?.supportFragmentManager?.findFragmentById(R.id.postbox_holderIx)
+        get() = activity?.supportFragmentManager?.findFragmentById(R.id.postbox_holderIxVw)
 
     override fun setupFragment(activity: XCenterScene) {
         this.activity = activity
@@ -53,7 +53,7 @@ class InboxScenePanel(
         runCatching {
             val fragment = host.createHostPanel()
             fm.beginTransaction()
-                .replace(R.id.postbox_holderIx, fragment)
+                .replace(R.id.postbox_holderIxVw, fragment)
                 .setMaxLifecycle(fragment, Lifecycle.State.STARTED)
                 .commitNow()
         }.onFailure { Timber.e(it, "StarterTray: could not add the host panel") }

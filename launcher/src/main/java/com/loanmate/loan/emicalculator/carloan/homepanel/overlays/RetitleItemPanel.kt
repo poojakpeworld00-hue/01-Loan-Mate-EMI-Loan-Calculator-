@@ -12,17 +12,17 @@ class RetitleItemPanel(val activity: Activity, val item: DeskViewerGridItem, val
     init {
         val binding = HpPopupRenameBinBinding.inflate(activity.layoutInflater)
         val view = binding.root
-        binding.renameBoxEdittextIx.setText(item.title)
+        binding.renameBoxEdittextIxVw.setText(item.title)
 
         activity.getAlertDialogBuilder()
             .setPositiveButton(org.fossify.commons.R.string.ok, null)
             .setNegativeButton(org.fossify.commons.R.string.cancel) { _, _ -> com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("rename_cancel") }
             .apply {
                 activity.setupDialogStuff(view, this, org.fossify.commons.R.string.rename) { alertDialog ->
-                    alertDialog.showKeyboard(binding.renameBoxEdittextIx)
+                    alertDialog.showKeyboard(binding.renameBoxEdittextIxVw)
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                         com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("rename_ok")
-                        val newTitle = binding.renameBoxEdittextIx.value
+                        val newTitle = binding.renameBoxEdittextIxVw.value
                         if (newTitle.isNotEmpty()) {
                             ensureBackgroundThread {
                                 val result = activity.homeScreenGridItemsDB.reloadCellTitle(newTitle, item.id!!)

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/header"
+        android:id="@+id/crest"
         layout="@layout/box_header" />
 
     <androidx.core.widget.NestedScrollView
@@ -22,13 +22,13 @@
             android:paddingBottom="@dimen/_12sdp">
 
             <LinearLayout
-                android:id="@+id/rows"
+                android:id="@+id/rowsVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
             <FrameLayout
-                android:id="@+id/adInline"
+                android:id="@+id/adInlineVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -37,7 +37,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
-        android:id="@+id/adSlot"
+        android:id="@+id/adSlotVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"

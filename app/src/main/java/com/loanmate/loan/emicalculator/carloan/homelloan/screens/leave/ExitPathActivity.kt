@@ -71,10 +71,10 @@ class ExitPathActivity : AppCompatActivity() {
         kitEnableDarkEdgeToEdge()
         b = ScreenFarewellBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.content.padForOsBars()
-        b.glow.kitGlowPulse()
-        b.header.title.setText(R.string.un_title)
-        b.header.back.setOnClickListener { MetricsTwo.click("back"); goBack() }
+        b.contentVw.padForOsBars()
+        b.glowVw.kitGlowPulse()
+        b.crest.titleVw.setText(R.string.un_title)
+        b.crest.backVw.setOnClickListener { MetricsTwo.click("back"); goBack() }
         paid = config.track == Follow.B
         screen = savedInstanceState?.getString(KEY_SCREEN)?.let(ScreenTwo::valueOf) ?: if (paid) ScreenTwo.SPLASH else ScreenTwo.STEP1
         picked = savedInstanceState?.getString(KEY_REASON)?.let(PackCause::valueOf)
@@ -92,7 +92,7 @@ class ExitPathActivity : AppCompatActivity() {
     /** The language picked here applied in place (manifest configChanges, as the reference): the page again in it. */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        b.header.title.setText(R.string.un_title)
+        b.crest.titleVw.setText(R.string.un_title)
         if (screen != ScreenTwo.SPLASH && screen != ScreenTwo.PROGRESS) show(screen)
     }
 
@@ -118,65 +118,65 @@ class ExitPathActivity : AppCompatActivity() {
         splash?.root?.let(b.root::removeView)
         splash = null
         // Every page shows its own parts; the rest is hidden.
-        listOf(b.header.root, b.pageTitle, b.sub, b.list, b.rowsScroll, b.center, b.progress, b.percent, b.primary, b.secondary)
+        listOf(b.crest.root, b.pageTitleVw, b.subVw, b.listVw, b.rowsScrollVw, b.centerVw, b.prog, b.percentVw, b.primaryVw, b.secondaryVw)
             .forEach { it.visibility = View.GONE }
-        b.adSlot.removeAllViews()
-        if (next != ScreenTwo.SPLASH) Spots.bottom(this, b.adSlot, place())
+        b.adSlotVw.removeAllViews()
+        if (next != ScreenTwo.SPLASH) Spots.bottom(this, b.adSlotVw, place())
         when (next) {
             ScreenTwo.SPLASH -> presentBoot(flow.splashMs)
             ScreenTwo.LANGUAGE -> {
-                show(b.pageTitle, b.list, b.primary)
-                b.pageTitle.setText(R.string.un_language_title)
+                show(b.pageTitleVw, b.listVw, b.primaryVw)
+                b.pageTitleVw.setText(R.string.un_language_title)
                 // A tap marks the row and moves on after 250 ms; Continue moves on with the current pick.
                 var pick = container.settingsRepository.currentLanguageIndex()
-                b.list.layoutManager = LinearLayoutManager(this)
-                b.list.adapter = ChooseAdapter(tonguePhase(container.settingsRepository.languages), setOf(pick)) {
+                b.listVw.layoutManager = LinearLayoutManager(this)
+                b.listVw.adapter = ChooseAdapter(tonguePhase(container.settingsRepository.languages), setOf(pick)) {
                     pick = it
-                    (b.list.adapter as ChooseAdapter).kitSubmitSelection(setOf(it))
-                    b.list.postDelayed({ if (screen == ScreenTwo.LANGUAGE) pickTongue(it) }, 250)
+                    (b.listVw.adapter as ChooseAdapter).kitSubmitSelection(setOf(it))
+                    b.listVw.postDelayed({ if (screen == ScreenTwo.LANGUAGE) pickTongue(it) }, 250)
                 }
-                b.primary.setText(R.string.next)
-                b.primary.setOnClickListener { pickTongue(pick) }
+                b.primaryVw.setText(R.string.next)
+                b.primaryVw.setOnClickListener { pickTongue(pick) }
             }
             ScreenTwo.STEP1 -> {
-                show(b.header.root, b.pageTitle, b.sub, b.rowsScroll, b.primary, b.secondary)
-                b.pageTitle.setText(R.string.un_sorry_title)
-                b.sub.setText(R.string.un_sorry_body)
-                b.rows.removeAllViews()
+                show(b.crest.root, b.pageTitleVw, b.subVw, b.rowsScrollVw, b.primaryVw, b.secondaryVw)
+                b.pageTitleVw.setText(R.string.un_sorry_title)
+                b.subVw.setText(R.string.un_sorry_body)
+                b.rowsVw.removeAllViews()
                 TIPS.forEach { r ->
-                    RowToolBinding.inflate(layoutInflater, b.rows, true).apply {
-                        icon.setImageResource(r.icon)
-                        name.setText(r.label)
-                        sub.setText(r.fix)
+                    RowToolBinding.inflate(layoutInflater, b.rowsVw, true).apply {
+                        iconVw.setImageResource(r.icon)
+                        nameVw.setText(r.label)
+                        subVw.setText(r.fix)
                         root.setOnClickListener { fix(r) }
                     }
                 }
-                b.primary.setText(R.string.un_keep)
-                b.primary.setOnClickListener { keepTool() }
-                b.secondary.setText(R.string.un_still)
-                b.secondary.setOnClickListener { MetricsTwo.click("still_uninstall"); leave { show(ScreenTwo.STEP2) } }
+                b.primaryVw.setText(R.string.un_keep)
+                b.primaryVw.setOnClickListener { keepTool() }
+                b.secondaryVw.setText(R.string.un_still)
+                b.secondaryVw.setOnClickListener { MetricsTwo.click("still_uninstall"); leave { show(ScreenTwo.STEP2) } }
             }
             ScreenTwo.STEP2 -> {
-                show(b.header.root, b.pageTitle, b.rowsScroll, b.secondary)
-                b.pageTitle.setText(R.string.un_reason_title)
+                show(b.crest.root, b.pageTitleVw, b.rowsScrollVw, b.secondaryVw)
+                b.pageTitleVw.setText(R.string.un_reason_title)
                 wireReasons()
-                b.secondary.setText(R.string.un_keep)
-                b.secondary.setOnClickListener { keepTool() }
+                b.secondaryVw.setText(R.string.un_keep)
+                b.secondaryVw.setOnClickListener { keepTool() }
             }
             ScreenTwo.PROGRESS -> {
-                show(b.center, b.progress, b.percent)
-                b.centerTitle.text = getString(R.string.un_progress, getString(R.string.app_name))
-                b.centerSub.setText(R.string.un_progress_sub)
+                show(b.centerVw, b.prog, b.percentVw)
+                b.centerTitleVw.text = getString(R.string.un_progress, getString(R.string.app_name))
+                b.centerSubVw.setText(R.string.un_progress_sub)
                 runHeadway(flow.progressMs.coerceIn(500L, 20_000L))
             }
             ScreenTwo.STEP3 -> {
-                show(b.header.root, b.center, b.primary, b.secondary)
-                b.centerTitle.setText(R.string.un_confirm_title)
-                b.centerSub.setText(R.string.un_confirm_body)
-                b.primary.setText(R.string.un_keep)
-                b.primary.setOnClickListener { keepTool() }
-                b.secondary.setText(R.string.un_uninstall)
-                b.secondary.setOnClickListener { MetricsTwo.click("uninstall"); leave { end() } }
+                show(b.crest.root, b.centerVw, b.primaryVw, b.secondaryVw)
+                b.centerTitleVw.setText(R.string.un_confirm_title)
+                b.centerSubVw.setText(R.string.un_confirm_body)
+                b.primaryVw.setText(R.string.un_keep)
+                b.primaryVw.setOnClickListener { keepTool() }
+                b.secondaryVw.setText(R.string.un_uninstall)
+                b.secondaryVw.setOnClickListener { MetricsTwo.click("uninstall"); leave { end() } }
                 // As the reference: no tap within 3 s ends the flow.
                 timer = lifecycleScope.launch { delay(3_000); leave { end() } }
             }
@@ -189,52 +189,52 @@ class ExitPathActivity : AppCompatActivity() {
     private fun presentBoot(durationMs: Long) {
         val s = ScreenBootBinding.inflate(layoutInflater, b.root, false)
         b.root.addView(s.root)
-        s.content.padForOsBars()
+        s.contentVw.padForOsBars()
         splash = s
-        ObjectAnimator.ofInt(s.progress, "progress", 0, 100).setDuration(durationMs).start()
+        ObjectAnimator.ofInt(s.prog, "progress", 0, 100).setDuration(durationMs).start()
         timer = lifecycleScope.launch { delay(durationMs); kitLeaveWhenFree { show(ScreenTwo.LANGUAGE) } }
     }
 
     /** Phase 2: a picked reason opens its fix, the fix button and "Uninstall anyway" (→ progress). */
     private fun wireReasons() {
-        b.rows.removeAllViews()
+        b.rowsVw.removeAllViews()
         PackCause.entries.forEach { r ->
             val selected = picked == r
-            RowFarewellReasonBinding.inflate(layoutInflater, b.rows, true).apply {
-                card.strokeColor = getColor(if (selected) R.color.sh_primary else R.color.sh_border)
-                radio.setImageResource(if (selected) R.drawable.glyph_radio_checked else R.drawable.glyph_radio_unchecked)
-                if (selected) radio.setColorFilter(getColor(R.color.sh_primary))
-                label.setText(r.label)
-                row.setOnClickListener {
+            RowFarewellReasonBinding.inflate(layoutInflater, b.rowsVw, true).apply {
+                panel.strokeColor = getColor(if (selected) R.color.sh_primary else R.color.sh_border)
+                rdo.setImageResource(if (selected) R.drawable.glyph_radio_checked else R.drawable.glyph_radio_unchecked)
+                if (selected) rdo.setColorFilter(getColor(R.color.sh_primary))
+                labelVw.setText(r.label)
+                rowVw.setOnClickListener {
                     MetricsTwo.click("reason", r.name.lowercase())
                     MetricsTwo.step(MetricsTwo.UNINSTALL, "reason", r.name.lowercase())
                     picked = r
                     wireReasons()
                 }
-                fix.visibility = if (selected) View.VISIBLE else View.GONE
-                fixText.setText(r.fix)
-                fixButton.setText(r.fixButton)
-                fixButton.setOnClickListener { fix(r) }
-                anyway.setOnClickListener { MetricsTwo.click("uninstall_anyway"); leave { show(ScreenTwo.PROGRESS) } }
+                fixVw.visibility = if (selected) View.VISIBLE else View.GONE
+                fixTextVw.setText(r.fix)
+                fixButtonVw.setText(r.fixButton)
+                fixButtonVw.setOnClickListener { fix(r) }
+                anywayVw.setOnClickListener { MetricsTwo.click("uninstall_anyway"); leave { show(ScreenTwo.PROGRESS) } }
             }
         }
     }
 
     /** 0 → 100 % over [durationMs], "Ready to uninstall" for 1.2 s, then step 3. */
     private fun runHeadway(durationMs: Long) {
-        b.progress.progress = 0
-        b.percent.setTextColor(getColor(R.color.sh_muted))
+        b.prog.progress = 0
+        b.percentVw.setTextColor(getColor(R.color.sh_muted))
         val start = SystemClock.elapsedRealtime()
         timer = lifecycleScope.launch {
             while (true) {
                 val p = ((SystemClock.elapsedRealtime() - start) * 100 / durationMs).toInt().coerceAtMost(100)
-                b.progress.progress = p
-                b.percent.text = getString(R.string.un_progress_percent, p)
+                b.prog.progress = p
+                b.percentVw.text = getString(R.string.un_progress_percent, p)
                 if (p >= 100) break
                 delay(40)
             }
-            b.percent.setText(R.string.un_progress_done)
-            b.percent.setTextColor(getColor(R.color.sh_primary))
+            b.percentVw.setText(R.string.un_progress_done)
+            b.percentVw.setTextColor(getColor(R.color.sh_primary))
             delay(1_200)
             kitLeaveWhenFree { show(ScreenTwo.STEP3) }
         }

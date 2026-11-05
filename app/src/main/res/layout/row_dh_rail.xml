@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/railFill"
+        android:id="@+id/railFillVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#1F2D6BFF"
@@ -18,14 +18,14 @@
         android:padding="3dp">
 
         <ImageView
-            android:id="@+id/railIcon"
+            android:id="@+id/railIconVw"
             android:layout_width="@dimen/_27sdp"
             android:layout_height="@dimen/_27sdp"
             android:background="@drawable/fill_voice_play"
             android:padding="@dimen/_6sdp" />
 
         <TextView
-            android:id="@+id/railLabel"
+            android:id="@+id/railLabelVw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_7sdp"

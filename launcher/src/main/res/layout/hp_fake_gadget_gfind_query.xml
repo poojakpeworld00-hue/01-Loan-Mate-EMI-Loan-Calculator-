@@ -10,7 +10,7 @@
     android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/google_bar_markIx"
+        android:id="@+id/google_bar_markIxVw"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
@@ -22,7 +22,7 @@
         android:src="@drawable/hpd_ic_gfind_g" />
 
     <TextView
-        android:id="@+id/google_bar_hintIx"
+        android:id="@+id/google_bar_hintIxVw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -32,7 +32,7 @@
         android:textSize="16sp" />
 
     <ImageView
-        android:id="@+id/google_bar_voiceIx"
+        android:id="@+id/google_bar_voiceIxVw"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"

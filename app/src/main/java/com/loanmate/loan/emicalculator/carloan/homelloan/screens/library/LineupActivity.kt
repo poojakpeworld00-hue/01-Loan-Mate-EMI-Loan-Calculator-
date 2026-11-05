@@ -25,14 +25,14 @@ class LineupActivity : AppCompatActivity() {
         val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
+        b.crest.backVw.setOnClickListener { finish() }
 
         val vm = viewModel
-        b.header.title.text = vm.title.resolve(this)
-        b.list.layoutManager = GridLayoutManager(this, vm.columns)
+        b.crest.titleVw.text = vm.title.resolve(this)
+        b.listVw.layoutManager = GridLayoutManager(this, vm.columns)
         // Per-list RC place for the in-list ad: screens.list_<type>, and screens.list_<type>_items inside a category.
         val listPlace = "screens.list_${vm.type.name.lowercase()}" + if (!vm.showsGroups && vm.hasGroups) "_items" else ""
-        b.list.adapter = BrickAdapter(vm.tiles, vm.shape, listAd(listPlace)) { i ->
+        b.listVw.adapter = BrickAdapter(vm.tiles, vm.shape, listAd(listPlace)) { i ->
             MetricsTwo.click("item", i)
             Spots.exit(this, PLACE) {
                 startActivity(
@@ -41,7 +41,7 @@ class LineupActivity : AppCompatActivity() {
                 )
             }
         }
-        Spots.bottom(this, b.adSlot, PLACE)
+        Spots.bottom(this, b.adSlotVw, PLACE)
     }
 
     override fun onResume() {

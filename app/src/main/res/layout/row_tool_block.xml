@@ -17,7 +17,7 @@
     android:paddingBottom="@dimen/_8sdp">
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/iconVw"
         android:layout_width="@dimen/_33sdp"
         android:layout_height="@dimen/_33sdp"
         android:background="@drawable/fill_sticker_thumb"
@@ -32,7 +32,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/nameVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -43,7 +43,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/sub"
+            android:id="@+id/subVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="viewStart"

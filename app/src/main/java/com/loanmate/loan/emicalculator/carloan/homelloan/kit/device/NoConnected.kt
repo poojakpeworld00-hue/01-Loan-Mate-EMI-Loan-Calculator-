@@ -97,12 +97,12 @@ object NoConnected {
 
     private fun show(activity: Activity) {
         val v = SheetNoOnlineBinding.inflate(activity.layoutInflater)
-        v.netRetry.setOnClickListener {
+        v.netRetryVw.setOnClickListener {
             MetricsTwo.click("retry", "no_internet")
             if (kitHasNetwork(app)) post(true)
-            else v.netIcon.animate().translationX(12f).setInterpolator(CycleInterpolator(3f)).setDuration(400).start()
+            else v.netIconVw.animate().translationX(12f).setInterpolator(CycleInterpolator(3f)).setDuration(400).start()
         }
-        v.netSettings.setOnClickListener {
+        v.netSettingsVw.setOnClickListener {
             MetricsTwo.click("open_settings", "no_internet")
             val panel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY)
             else Intent(Settings.ACTION_WIRELESS_SETTINGS)

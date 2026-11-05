@@ -14,7 +14,7 @@
         android:background="@drawable/fill_dh_ring" />
 
     <ImageView
-        android:id="@+id/rowTile"
+        android:id="@+id/rowTileVw"
         android:layout_width="@dimen/_24sdp"
         android:layout_height="@dimen/_24sdp"
         android:layout_marginStart="@dimen/_11sdp"
@@ -24,7 +24,7 @@
         app:tint="@color/white" />
 
     <TextView
-        android:id="@+id/rowLabel"
+        android:id="@+id/rowLabelVw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_11sdp"

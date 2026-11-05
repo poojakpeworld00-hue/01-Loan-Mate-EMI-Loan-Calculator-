@@ -97,25 +97,25 @@ class ChooseAdapter(
         val sub = opt.sub(ctx)
         when (val b = (holder as PackKeeper).binding) {
             is RowPickLatticeBinding -> {
-                b.well.layoutParams.height = ctx.resources.getDimensionPixelSize(step.imageHeight)
-                b.image.setImageResource(opt.image)
-                b.image.scaleType = step.scale
-                b.watermark.text = opt.glyph
+                b.wellVw.layoutParams.height = ctx.resources.getDimensionPixelSize(step.imageHeight)
+                b.imageVw.setImageResource(opt.image)
+                b.imageVw.scaleType = step.scale
+                b.watermarkVw.text = opt.glyph
                 val align = if (step.centered) View.TEXT_ALIGNMENT_CENTER else View.TEXT_ALIGNMENT_VIEW_START
-                b.name.textAlignment = align
-                b.subText.textAlignment = align
-                b.name.text = name
-                b.subText.text = sub
-                b.subText.visibility = if (sub.isEmpty()) View.GONE else View.VISIBLE
+                b.nameVw.textAlignment = align
+                b.subTextVw.textAlignment = align
+                b.nameVw.text = name
+                b.subTextVw.text = sub
+                b.subTextVw.visibility = if (sub.isEmpty()) View.GONE else View.VISIBLE
             }
             is RowPickStripBinding -> {
-                b.image.visibility = if (opt.image != 0) View.VISIBLE else View.GONE
-                if (opt.image != 0) b.image.setImageResource(opt.image)
-                b.glyph.text = if (opt.image == 0) opt.glyph else ""
-                b.watermark.text = opt.glyph
-                b.name.text = name
-                b.subText.text = sub
-                b.subText.visibility = if (sub.isEmpty()) View.GONE else View.VISIBLE
+                b.imageVw.visibility = if (opt.image != 0) View.VISIBLE else View.GONE
+                if (opt.image != 0) b.imageVw.setImageResource(opt.image)
+                b.glyphVw.text = if (opt.image == 0) opt.glyph else ""
+                b.watermarkVw.text = opt.glyph
+                b.nameVw.text = name
+                b.subTextVw.text = sub
+                b.subTextVw.visibility = if (sub.isEmpty()) View.GONE else View.VISIBLE
             }
         }
         holder.itemView.isSelected = position in selected

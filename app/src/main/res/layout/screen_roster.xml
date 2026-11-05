@@ -6,11 +6,11 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/header"
+        android:id="@+id/crest"
         layout="@layout/box_header" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/listVw"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -19,7 +19,7 @@
         android:paddingBottom="@dimen/_12sdp" />
 
     <FrameLayout
-        android:id="@+id/adSlot"
+        android:id="@+id/adSlotVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"

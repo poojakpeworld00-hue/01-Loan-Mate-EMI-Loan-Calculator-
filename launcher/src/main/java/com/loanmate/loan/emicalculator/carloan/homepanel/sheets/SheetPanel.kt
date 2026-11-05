@@ -97,13 +97,13 @@ class SheetPanel(
         this.activity = activity
         this.binding = HpAllAppsZoneBinding.bind(this)
 
-        val layoutManager = binding.allAppsGridIx.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.allAppsGridIxVw.layoutManager as MyGridLayoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int) =
                 if (getLister()?.isPromoSlotSpot(position) == true) layoutManager.spanCount else 1
         }
 
-        binding.allAppsGridIx.setOnTouchListener { _, event ->
+        binding.allAppsGridIxVw.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP || event.actionMasked == MotionEvent.ACTION_CANCEL) {
                 touchDownY = -1
             }
@@ -111,7 +111,7 @@ class SheetPanel(
             return@setOnTouchListener false
         }
 
-        binding.allAppsFlipperIx.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        binding.allAppsFlipperIxVw.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) = drawDots(selected = position)
         })
     }
@@ -127,11 +127,11 @@ class SheetPanel(
 
     @SuppressLint("NotifyDataSetChanged")
     fun onResume() {
-        if (binding.allAppsGridIx.layoutManager == null || (binding.allAppsGridIx.adapter == null && pagesAdapter == null)) {
+        if (binding.allAppsGridIxVw.layoutManager == null || (binding.allAppsGridIxVw.adapter == null && pagesAdapter == null)) {
             return
         }
 
-        val layoutManager = binding.allAppsGridIx.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.allAppsGridIxVw.layoutManager as MyGridLayoutManager
         if (layoutManager.spanCount != context.launcherConfig.drawerColumnCount || shownPaged != isPaged) {
             onConfigurationChanged()
 
@@ -140,11 +140,11 @@ class SheetPanel(
     }
 
     fun onConfigurationChanged() {
-        binding.allAppsGridIx.scrollToPosition(0)
-        binding.allAppsFlipperIx.setCurrentItem(0, false)
+        binding.allAppsGridIxVw.scrollToPosition(0)
+        binding.allAppsFlipperIxVw.setCurrentItem(0, false)
         prepareViews()
 
-        val layoutManager = binding.allAppsGridIx.layoutManager as MyGridLayoutManager
+        val layoutManager = binding.allAppsGridIxVw.layoutManager as MyGridLayoutManager
         layoutManager.spanCount = context.launcherConfig.drawerColumnCount
         prepBridge(launchers)
     }
@@ -176,7 +176,7 @@ class SheetPanel(
                     val mostlyVertical = !isPaged || abs(distance) > abs(event.x.toInt() - touchDownX)
                     shouldIntercept = distance > touchSlop && mostlyVertical && isMatrixAtTop()
                     if (shouldIntercept) {
-                        if (binding.queryBarIx.hasFocus()) {
+                        if (binding.queryBarIxVw.hasFocus()) {
                             activity?.hideKeyboard()
                         }
                         activity?.startHandlingTouches(touchDownY)
@@ -192,7 +192,7 @@ class SheetPanel(
 
     private fun isMatrixAtTop(): Boolean {
         if (isPaged) return true
-        val grid = binding.allAppsGridIx
+        val grid = binding.allAppsGridIxVw
         val first = grid.getChildAt(0) ?: return true
         val layoutManager = grid.layoutManager ?: return true
         return grid.getChildAdapterPosition(first) <= 0 &&
@@ -245,7 +245,7 @@ class SheetPanel(
 
     private val onItemClick: (Any) -> Unit = {
         val launcher = it as WidgetCenter
-        val where = if (binding.queryBarIx.isSearchOpen) "search" else "drawer"
+        val where = if (binding.queryBarIxVw.isSearchOpen) "search" else "drawer"
         when {
             com.loanmate.loan.emicalculator.carloan.homepanel.onboard.FeaturedCards.isSponsored(launcher) -> com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("sponsored_tile", launcher.title)
             launcher.packageName == context.applicationContext.packageName -> com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("our_icon", where)
@@ -268,35 +268,35 @@ class SheetPanel(
     private fun prepBridge(launchers: List<WidgetCenter>) {
         activity?.runOnUiThread {
             val paged = isPaged
-            val layoutManager = binding.allAppsGridIx.layoutManager as MyGridLayoutManager
+            val layoutManager = binding.allAppsGridIxVw.layoutManager as MyGridLayoutManager
             layoutManager.spanCount = context.launcherConfig.drawerColumnCount
 
             if (shownPaged != paged) {
                 shownPaged = paged
-                binding.allAppsGridIx.beVisibleIf(!paged)
-                binding.allAppsFlipperIx.beVisibleIf(paged)
-                binding.allAppsLeafPipsIx.beVisibleIf(paged)
+                binding.allAppsGridIxVw.beVisibleIf(!paged)
+                binding.allAppsFlipperIxVw.beVisibleIf(paged)
+                binding.allAppsLeafPipsIxVw.beVisibleIf(paged)
                 (adSlot.parent as? ViewGroup)?.removeView(adSlot)
                 if (paged) {
                     launchersAdapter = null
-                    binding.allAppsGridIx.adapter = null
+                    binding.allAppsGridIxVw.adapter = null
                 } else {
                     pagesAdapter = null
-                    binding.allAppsFlipperIx.adapter = null
+                    binding.allAppsFlipperIxVw.adapter = null
                 }
             }
 
             if (paged) {
                 if (pagesAdapter == null) {
                     pagesAdapter = SheetLeavesLoader(activity!!, this, adSlot, onItemClick)
-                    binding.allAppsFlipperIx.adapter = pagesAdapter
+                    binding.allAppsFlipperIxVw.adapter = pagesAdapter
                 }
             } else if (getLister() == null) {
                 CentersLoader(activity!!, this, adSlot, onItemClick).apply {
                     launchersAdapter = this
-                    binding.allAppsGridIx.itemAnimator = null
-                    binding.allAppsGridIx.adapter = this
-                    prewarm(binding.allAppsGridIx, layoutManager.spanCount * PREWARM_ROWS)
+                    binding.allAppsGridIxVw.itemAnimator = null
+                    binding.allAppsGridIxVw.adapter = this
+                    prewarm(binding.allAppsGridIxVw, layoutManager.spanCount * PREWARM_ROWS)
                 }
             }
 
@@ -319,8 +319,8 @@ class SheetPanel(
         return pages
     }
 
-    private fun drawDots(count: Int = pagesAdapter?.itemCount ?: 0, selected: Int = binding.allAppsFlipperIx.currentItem) {
-        val dots = binding.allAppsLeafPipsIx
+    private fun drawDots(count: Int = pagesAdapter?.itemCount ?: 0, selected: Int = binding.allAppsFlipperIxVw.currentItem) {
+        val dots = binding.allAppsLeafPipsIxVw
         val size = resources.getDimensionPixelSize(R.dimen.launcher_drawer_page_dot)
         val gap = resources.getDimensionPixelSize(R.dimen.launcher_drawer_page_dot_gap)
         while (dots.childCount > count) dots.removeViewAt(dots.childCount - 1)
@@ -338,7 +338,7 @@ class SheetPanel(
     }
 
     fun restoreToFirstPage() {
-        if (binding.allAppsFlipperIx.adapter != null) binding.allAppsFlipperIx.setCurrentItem(0, false)
+        if (binding.allAppsFlipperIxVw.adapter != null) binding.allAppsFlipperIxVw.setCurrentItem(0, false)
     }
 
     fun onIconHidden(item: DeskViewerGridItem) {
@@ -366,9 +366,9 @@ class SheetPanel(
 
         if (!scrollListenerAdded) {
             scrollListenerAdded = true
-            binding.allAppsGridIx.addOnScrollListener(object : OnScrollListener() {
+            binding.allAppsGridIxVw.addOnScrollListener(object : OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (binding.queryBarIx.hasFocus() && dy > 0 && binding.allAppsGridIx.computeVerticalScrollOffset() > 0) {
+                    if (binding.queryBarIxVw.hasFocus() && dy > 0 && binding.allAppsGridIxVw.computeVerticalScrollOffset() > 0) {
                         activity?.hideKeyboard()
                     }
                 }
@@ -379,24 +379,24 @@ class SheetPanel(
 
         putLookupPoint()
         putBottomLookupClearance()
-        binding.queryBarIx.beVisibleIf(context.launcherConfig.showSearchBar)
-        binding.queryBarIx.requireToolbar().beGone()
-        binding.queryBarIx.updateColors()
-        binding.queryBarIx.putRackSkin()
-        binding.queryBarIx.setupMenu()
+        binding.queryBarIxVw.beVisibleIf(context.launcherConfig.showSearchBar)
+        binding.queryBarIxVw.requireToolbar().beGone()
+        binding.queryBarIxVw.updateColors()
+        binding.queryBarIxVw.putRackSkin()
+        binding.queryBarIxVw.setupMenu()
 
-        binding.queryBarIx.onSearchTextChangedListener = {
+        binding.queryBarIxVw.onSearchTextChangedListener = {
             submitList(launchers)
         }
-        binding.queryBarIx.onSearchOpenListener = { surfaceLookupDeck(true) }
-        binding.queryBarIx.onSearchClosedListener = { surfaceLookupDeck(false) }
+        binding.queryBarIxVw.onSearchOpenListener = { surfaceLookupDeck(true) }
+        binding.queryBarIxVw.onSearchClosedListener = { surfaceLookupDeck(false) }
 
-        binding.queryBarIx.binding.topToolbarSearch.setOnTouchListener { _, event ->
+        binding.queryBarIxVw.binding.topToolbarSearch.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP) com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("drawer_search")
             false
         }
-        binding.queryBarIx.binding.topToolbarSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (binding.queryBarIx.getCurrentQuery().isEmpty()) return@setOnEditorActionListener false
+        binding.queryBarIxVw.binding.topToolbarSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (binding.queryBarIxVw.getCurrentQuery().isEmpty()) return@setOnEditorActionListener false
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE,
                 EditorInfo.IME_ACTION_SEARCH,
@@ -413,8 +413,8 @@ class SheetPanel(
 
         if (appliedSearchAtBottom == bottom) return
         appliedSearchAtBottom = bottom
-        val search = binding.queryBarIx.id
-        val dots = binding.allAppsLeafPipsIx.id
+        val search = binding.queryBarIxVw.id
+        val dots = binding.allAppsLeafPipsIxVw.id
 
         fun RelativeLayout.LayoutParams.anchor(vararg rules: Pair<Int, Int>) {
             for (verb in listOf(RelativeLayout.ABOVE, RelativeLayout.BELOW, RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.ALIGN_PARENT_BOTTOM)) {
@@ -423,29 +423,29 @@ class SheetPanel(
             rules.forEach { (verb, subject) -> addRule(verb, subject) }
         }
 
-        (binding.queryBarIx.layoutParams as RelativeLayout.LayoutParams).anchor(
+        (binding.queryBarIxVw.layoutParams as RelativeLayout.LayoutParams).anchor(
             if (bottom) RelativeLayout.ALIGN_PARENT_BOTTOM to RelativeLayout.TRUE else RelativeLayout.ALIGN_PARENT_TOP to RelativeLayout.TRUE
         )
-        (binding.allAppsGridIx.layoutParams as RelativeLayout.LayoutParams).anchor(
+        (binding.allAppsGridIxVw.layoutParams as RelativeLayout.LayoutParams).anchor(
             if (bottom) RelativeLayout.ABOVE to search else RelativeLayout.BELOW to search
         )
-        (binding.allAppsLeafPipsIx.layoutParams as RelativeLayout.LayoutParams).anchor(
+        (binding.allAppsLeafPipsIxVw.layoutParams as RelativeLayout.LayoutParams).anchor(
             if (bottom) RelativeLayout.ABOVE to search else RelativeLayout.ALIGN_PARENT_BOTTOM to RelativeLayout.TRUE
         )
-        (binding.allAppsFlipperIx.layoutParams as RelativeLayout.LayoutParams).anchor(
+        (binding.allAppsFlipperIxVw.layoutParams as RelativeLayout.LayoutParams).anchor(
             if (bottom) RelativeLayout.ALIGN_PARENT_TOP to RelativeLayout.TRUE else RelativeLayout.BELOW to search,
             RelativeLayout.ABOVE to dots,
         )
-        (binding.noResultsStubIx.layoutParams as RelativeLayout.LayoutParams).anchor(
+        (binding.noResultsStubIxVw.layoutParams as RelativeLayout.LayoutParams).anchor(
             if (bottom) RelativeLayout.ALIGN_PARENT_TOP to RelativeLayout.TRUE else RelativeLayout.BELOW to search
         )
 
-        (binding.queryPageIx.layoutParams as RelativeLayout.LayoutParams).anchor(
+        (binding.queryPageIxVw.layoutParams as RelativeLayout.LayoutParams).anchor(
             if (bottom) RelativeLayout.ALIGN_PARENT_TOP to RelativeLayout.TRUE else RelativeLayout.BELOW to search,
             if (bottom) RelativeLayout.ABOVE to search else RelativeLayout.ALIGN_PARENT_BOTTOM to RelativeLayout.TRUE,
         )
-        binding.queryPageIx.gravity = Gravity.TOP
-        binding.queryBarIx.requestLayout()
+        binding.queryPageIxVw.gravity = Gravity.TOP
+        binding.queryBarIxVw.requestLayout()
     }
 
     private fun putBottomLookupClearance() {
@@ -460,13 +460,13 @@ class SheetPanel(
 
     private fun syncBottomLookupClearance() {
         val bottom = context.launcherConfig.drawerSearchAtBottom
-        val wanted = if (bottom) binding.allAppsGridIx.paddingBottom else 0
-        val bar = binding.queryBarIx
+        val wanted = if (bottom) binding.allAppsGridIxVw.paddingBottom else 0
+        val bar = binding.queryBarIxVw
         if (bar.paddingBottom != wanted) {
             bar.setPadding(bar.paddingLeft, bar.paddingTop, bar.paddingRight, wanted)
         }
 
-        val grid = binding.allAppsGridIx
+        val grid = binding.allAppsGridIxVw
         val topGap = if (bottom) resources.getDimensionPixelSize(R.dimen.launcher_drawer_list_top_gap) else 0
         if (grid.paddingTop != topGap) {
             grid.setPadding(grid.paddingLeft, topGap, grid.paddingRight, grid.paddingBottom)
@@ -475,7 +475,7 @@ class SheetPanel(
     }
 
     private fun syncDotsToLookupCapsule(bottom: Boolean) {
-        val dots = binding.allAppsLeafPipsIx
+        val dots = binding.allAppsLeafPipsIxVw
         val params = dots.layoutParams as? RelativeLayout.LayoutParams ?: return
 
         if (bottom) {
@@ -483,10 +483,10 @@ class SheetPanel(
             if (dots.paddingBottom != own) dots.setPadding(dots.paddingLeft, dots.paddingTop, dots.paddingRight, own)
         }
         val margin = if (bottom) {
-            val pill = binding.queryBarIx.binding.toolbarContainer
+            val pill = binding.queryBarIxVw.binding.toolbarContainer
             var pillTop = 0
             var v: View? = pill
-            while (v != null && v !== binding.queryBarIx) { pillTop += v.top; v = v.parent as? View }
+            while (v != null && v !== binding.queryBarIxVw) { pillTop += v.top; v = v.parent as? View }
             if (v == null || pill.height == 0) return
             val gap = resources.getDimensionPixelSize(R.dimen.launcher_page_dots_search_gap)
             -(pillTop - gap).coerceAtLeast(0)
@@ -501,7 +501,7 @@ class SheetPanel(
 
     private fun surfaceNoOutcomesPlaceholderIfNeeded() {
         val itemCount = if (isPaged) pagesAdapter?.itemCount else getLister()?.itemCount
-        binding.noResultsStubIx.beVisibleIf(itemCount != null && itemCount == 0)
+        binding.noResultsStubIxVw.beVisibleIf(itemCount != null && itemCount == 0)
     }
 
     override fun onAppLauncherLongPressed(x: Float, y: Float, appLauncher: WidgetCenter) {
@@ -528,18 +528,18 @@ class SheetPanel(
         activity?.surfaceAtriumGlyphTweaks(x, y, gridItem, true)
         ignoreTouches = true
 
-        binding.queryBarIx.closeSearch()
+        binding.queryBarIxVw.closeSearch()
     }
 
     fun restoreLookup() {
-        if (binding.queryBarIx.isSearchOpen) {
-            binding.queryBarIx.closeSearch()
+        if (binding.queryBarIxVw.isSearchOpen) {
+            binding.queryBarIxVw.closeSearch()
         }
     }
 
     private fun submitList(items: List<WidgetCenter>) {
-        val searchQuery = binding.queryBarIx.getCurrentQuery()
-        if (binding.queryBarIx.isSearchOpen) {
+        val searchQuery = binding.queryBarIxVw.getCurrentQuery()
+        if (binding.queryBarIxVw.isSearchOpen) {
             drawLookupDeck(items, searchQuery)
             return
         }
@@ -554,7 +554,7 @@ class SheetPanel(
 
         if (isPaged) {
             pagesAdapter?.submitPages(chunkPages(filtered), context.launcherConfig.drawerColumnCount, context.launcherConfig.drawerRowCount.coerceAtLeast(2))
-            binding.allAppsFlipperIx.setCurrentItem(0, false)
+            binding.allAppsFlipperIxVw.setCurrentItem(0, false)
             drawDots(selected = 0)
             surfaceNoOutcomesPlaceholderIfNeeded()
             return
@@ -569,20 +569,20 @@ class SheetPanel(
     private var suggestionsGeneration = 0
 
     private fun surfaceLookupDeck(open: Boolean) {
-        binding.queryPageIx.beVisibleIf(open)
+        binding.queryPageIxVw.beVisibleIf(open)
         if (open) {
-            binding.allAppsGridIx.beGone()
-            binding.allAppsFlipperIx.beGone()
-            binding.allAppsLeafPipsIx.beGone()
-            binding.noResultsStubIx.beGone()
+            binding.allAppsGridIxVw.beGone()
+            binding.allAppsFlipperIxVw.beGone()
+            binding.allAppsLeafPipsIxVw.beGone()
+            binding.noResultsStubIxVw.beGone()
             suggestions = null
             pullSelections()
-            drawLookupDeck(launchers, binding.queryBarIx.getCurrentQuery())
+            drawLookupDeck(launchers, binding.queryBarIxVw.getCurrentQuery())
         } else {
             val paged = isPaged
-            binding.allAppsGridIx.beVisibleIf(!paged)
-            binding.allAppsFlipperIx.beVisibleIf(paged)
-            binding.allAppsLeafPipsIx.beVisibleIf(paged)
+            binding.allAppsGridIxVw.beVisibleIf(!paged)
+            binding.allAppsFlipperIxVw.beVisibleIf(paged)
+            binding.allAppsLeafPipsIxVw.beVisibleIf(paged)
             searchAdapter?.highlight = ""
             submitList(launchers)
         }
@@ -590,7 +590,7 @@ class SheetPanel(
 
     private fun lookupGridBridge(): CentersLoader {
         searchAdapter?.let { return it }
-        val grid = binding.queryAppsGridIx
+        val grid = binding.queryAppsGridIxVw
         grid.layoutManager = object : GridLayoutManager(context, SEARCH_COLUMNS) {
             override fun canScrollVertically() = false
         }
@@ -628,7 +628,7 @@ class SheetPanel(
             activity?.runOnUiThread {
                 if (generation != suggestionsGeneration) return@runOnUiThread
                 suggestions = ranked
-                if (binding.queryBarIx.isSearchOpen && binding.queryBarIx.getCurrentQuery().isEmpty()) {
+                if (binding.queryBarIxVw.isSearchOpen && binding.queryBarIxVw.getCurrentQuery().isEmpty()) {
                     drawLookupDeck(launchers, "")
                 }
             }
@@ -639,28 +639,28 @@ class SheetPanel(
         val adapter = lookupGridBridge()
         if (query.isEmpty()) {
             val apps = live(suggestions ?: emptyList(), items)
-            binding.queryAppsTitleIx.setText(R.string.launcher_suggested_apps)
+            binding.queryAppsTitleIxVw.setText(R.string.launcher_suggested_apps)
             adapter.highlight = ""
             adapter.submitList(apps.toMutableList())
-            binding.queryAppsCellIx.beVisibleIf(apps.size >= WidgetChoices.MIN_TO_SHOW)
-            binding.queryHotlinksCellIx.beGone()
-            binding.noResultsStubIx.beGone()
+            binding.queryAppsCellIxVw.beVisibleIf(apps.size >= WidgetChoices.MIN_TO_SHOW)
+            binding.queryHotlinksCellIxVw.beGone()
+            binding.noResultsStubIxVw.beGone()
             return
         }
         val needle = query.normalizeString()
         val matches = items.filter { it.title.normalizeString().contains(needle, ignoreCase = true) }
             .sortedWith(compareBy<WidgetCenter> { !it.title.normalizeString().startsWith(needle, ignoreCase = true) }.thenBy { it.title.lowercase() })
-        binding.queryAppsTitleIx.setText(R.string.launcher_searched_apps)
+        binding.queryAppsTitleIxVw.setText(R.string.launcher_searched_apps)
         adapter.highlight = query
         adapter.submitList(matches.take(SEARCH_MAX_RESULTS).toMutableList())
-        binding.queryAppsCellIx.beVisibleIf(matches.isNotEmpty())
-        binding.noResultsStubIx.beVisibleIf(matches.isEmpty())
+        binding.queryAppsCellIxVw.beVisibleIf(matches.isNotEmpty())
+        binding.noResultsStubIxVw.beVisibleIf(matches.isEmpty())
         drawShortcuts(matches.firstOrNull())
     }
 
     private fun drawShortcuts(app: WidgetCenter?) {
-        val card = binding.queryHotlinksCellIx
-        val list = binding.queryHotlinksRollIx
+        val card = binding.queryHotlinksCellIxVw
+        val list = binding.queryHotlinksRollIxVw
         list.removeAllViews()
         if (app == null) { card.beGone(); return }
         val launcherApps = context.applicationContext.getSystemService(Context.LAUNCHER_APPS_SERVICE) as LauncherApps
@@ -670,13 +670,13 @@ class SheetPanel(
             launcherApps.getShortcuts(LauncherApps.ShortcutQuery().setQueryFlags(flags).setPackage(app.packageName), Process.myUserHandle())
         }.getOrNull()?.filter { it.isEnabled }?.take(SEARCH_MAX_SHORTCUTS).orEmpty()
         if (shortcuts.isEmpty()) { card.beGone(); return }
-        binding.queryHotlinksTitleIx.text = app.title
+        binding.queryHotlinksTitleIxVw.text = app.title
         val inflater = LayoutInflater.from(context)
         val density = resources.displayMetrics.densityDpi
         shortcuts.forEach { shortcut ->
             val row = HpBinQueryShortcutBinding.inflate(inflater, list, false)
-            row.queryHotlinkTextIx.text = shortcut.shortLabel ?: shortcut.longLabel ?: ""
-            row.queryHotlinkIconIx.setImageDrawable(runCatching { launcherApps.getShortcutIconDrawable(shortcut, density) }.getOrNull())
+            row.queryHotlinkTextIxVw.text = shortcut.shortLabel ?: shortcut.longLabel ?: ""
+            row.queryHotlinkIconIxVw.setImageDrawable(runCatching { launcherApps.getShortcutIconDrawable(shortcut, density) }.getOrNull())
             row.root.setOnClickListener {
                 com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("search_shortcut")
                 runCatching {
@@ -694,7 +694,7 @@ class SheetPanel(
             return apps.toMutableList()
         }
 
-        val spanCount = (binding.allAppsGridIx.layoutManager as MyGridLayoutManager).spanCount
+        val spanCount = (binding.allAppsGridIxVw.layoutManager as MyGridLayoutManager).spanCount
         val row = CenterAdsToggles.rackAdvertRowPoint()
         val index = (row * spanCount).coerceIn(0, apps.size)
         return apps.toMutableList().apply { add(index, CentersLoader.AD_SLOT) }

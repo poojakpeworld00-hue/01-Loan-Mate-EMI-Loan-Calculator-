@@ -8,7 +8,7 @@
     android:background="@drawable/lm_screen_bg">
 
     <View
-        android:id="@+id/glow"
+        android:id="@+id/glowVw"
         android:layout_width="@dimen/_350sdp"
         android:layout_height="@dimen/_240sdp"
         android:layout_gravity="top|end"
@@ -23,13 +23,13 @@
     android:orientation="vertical">
 
 <androidx.core.widget.NestedScrollView
-    android:id="@+id/scroll"
+    android:id="@+id/scrl"
     android:layout_width="match_parent"
     android:layout_height="0dp"
     android:layout_weight="1">
 
     <LinearLayout
-        android:id="@+id/content"
+        android:id="@+id/contentVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -38,7 +38,7 @@
         android:paddingBottom="@dimen/_17sdp">
 
         <LinearLayout
-            android:id="@+id/header"
+            android:id="@+id/crest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -64,7 +64,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/headline"
+                    android:id="@+id/headlineVw"
                     style="@style/SH.Title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/settings"
+                android:id="@+id/settingsVw"
                 android:layout_width="@dimen/_33sdp"
                 android:layout_height="@dimen/_33sdp"
                 android:layout_marginStart="@dimen/_8sdp"
@@ -94,7 +94,7 @@
             android:layout_marginTop="@dimen/_8sdp">
 
         <FrameLayout
-            android:id="@+id/tileCharacters"
+            android:id="@+id/tileCharactersVw"
             android:layout_width="0dp"
             android:layout_height="@dimen/_83sdp"
             android:layout_weight="1"
@@ -104,7 +104,7 @@
             android:foreground="@drawable/lm_fg_sticker_press">
 
             <ImageView
-                android:id="@+id/tileCharactersArt"
+                android:id="@+id/tileCharactersArtVw"
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="bottom|end"
@@ -126,7 +126,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/tileBundles"
+            android:id="@+id/tileBundlesVw"
             android:layout_width="0dp"
             android:layout_height="@dimen/_83sdp"
             android:layout_weight="1"
@@ -137,7 +137,7 @@
             android:foreground="@drawable/lm_fg_sticker_press">
 
             <ImageView
-                android:id="@+id/tileBundlesArt"
+                android:id="@+id/tileBundlesArtVw"
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="bottom|end"
@@ -165,7 +165,7 @@
             android:layout_marginTop="@dimen/_9sdp">
 
         <FrameLayout
-            android:id="@+id/tileWeapons"
+            android:id="@+id/tileWeaponsVw"
             android:layout_width="0dp"
             android:layout_height="@dimen/_83sdp"
             android:layout_weight="1"
@@ -175,7 +175,7 @@
             android:foreground="@drawable/lm_fg_sticker_press">
 
             <ImageView
-                android:id="@+id/tileWeaponsArt"
+                android:id="@+id/tileWeaponsArtVw"
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="bottom|end"
@@ -197,7 +197,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/tilePets"
+            android:id="@+id/tilePetsVw"
             android:layout_width="0dp"
             android:layout_height="@dimen/_83sdp"
             android:layout_weight="1"
@@ -208,7 +208,7 @@
             android:foreground="@drawable/lm_fg_sticker_press">
 
             <ImageView
-                android:id="@+id/tilePetsArt"
+                android:id="@+id/tilePetsArtVw"
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="bottom|end"
@@ -236,7 +236,7 @@
             android:layout_marginTop="@dimen/_9sdp">
 
         <FrameLayout
-            android:id="@+id/tileEmotes"
+            android:id="@+id/tileEmotesVw"
             android:layout_width="0dp"
             android:layout_height="@dimen/_83sdp"
             android:layout_weight="1"
@@ -246,7 +246,7 @@
             android:foreground="@drawable/lm_fg_sticker_press">
 
             <ImageView
-                android:id="@+id/tileEmotesArt"
+                android:id="@+id/tileEmotesArtVw"
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="bottom|end"
@@ -268,7 +268,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/tileVehicles"
+            android:id="@+id/tileVehiclesVw"
             android:layout_width="0dp"
             android:layout_height="@dimen/_83sdp"
             android:layout_weight="1"
@@ -279,7 +279,7 @@
             android:foreground="@drawable/lm_fg_sticker_press">
 
             <ImageView
-                android:id="@+id/tileVehiclesArt"
+                android:id="@+id/tileVehiclesArtVw"
                 android:layout_width="@dimen/_65sdp"
                 android:layout_height="@dimen/_65sdp"
                 android:layout_gravity="bottom|end"
@@ -302,7 +302,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/toolsTitle"
+            android:id="@+id/toolsTitleVw"
             style="@style/SH.Section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -312,14 +312,14 @@
             android:textSize="@dimen/_12ssp" />
 
         <LinearLayout
-            android:id="@+id/tools"
+            android:id="@+id/toolsVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
         <!-- list_ad: moved to RC's list_ad_position at runtime. -->
         <FrameLayout
-            android:id="@+id/adInline"
+            android:id="@+id/adInlineVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
@@ -329,7 +329,7 @@
 
     <!-- bottom_ad: pinned, full width, no margin. -->
     <FrameLayout
-        android:id="@+id/adSlot"
+        android:id="@+id/adSlotVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />

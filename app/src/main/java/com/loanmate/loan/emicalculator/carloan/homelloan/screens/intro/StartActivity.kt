@@ -63,25 +63,25 @@ class StartActivity : AppCompatActivity() {
         if (savedInstanceState == null) RateQuery.countEnter(this)
         val b = ScreenBootBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.content.padForOsBars()
+        b.contentVw.padForOsBars()
 
-        b.glow.kitGlowPulse()
-        b.bg.scaleX = 1.1f; b.bg.scaleY = 1.1f
-        b.bg.animate().scaleX(1f).scaleY(1f).setDuration(SPLASH_MS).setInterpolator(DecelerateInterpolator()).start()
+        b.glowVw.kitGlowPulse()
+        b.bgVw.scaleX = 1.1f; b.bgVw.scaleY = 1.1f
+        b.bgVw.animate().scaleX(1f).scaleY(1f).setDuration(SPLASH_MS).setInterpolator(DecelerateInterpolator()).start()
 
-        b.logo.alpha = 0f; b.logo.scaleX = 0.6f; b.logo.scaleY = 0.6f
-        b.logo.animate().alpha(1f).scaleX(1f).scaleY(1f).setStartDelay(60).setDuration(600)
+        b.logoVw.alpha = 0f; b.logoVw.scaleX = 0.6f; b.logoVw.scaleY = 0.6f
+        b.logoVw.animate().alpha(1f).scaleX(1f).scaleY(1f).setStartDelay(60).setDuration(600)
             .setInterpolator(OvershootInterpolator(2f)).start()
-        listOf(b.brand to 210L, b.tag to 300L, b.motto to 360L).forEach { (v, delay) ->
+        listOf(b.brandVw to 210L, b.tagVw to 300L, b.mottoVw to 360L).forEach { (v, delay) ->
             v.alpha = 0f
             v.animate().alpha(1f).setStartDelay(delay).setDuration(600).start()
         }
-        b.ring1.kitRingOut(0)
-        b.ring2.kitRingOut(800)
-        b.tileShine.kitShine(b.tile, 2400)
-        b.tile.clipToOutline = true
+        b.ring1Vw.kitRingOut(0)
+        b.ring2Vw.kitRingOut(800)
+        b.tileShineVw.kitShine(b.tileVw, 2400)
+        b.tileVw.clipToOutline = true
         // The whole logo bobs, so the sticker's hard shadow moves with it.
-        ObjectAnimator.ofFloat(b.logo, View.TRANSLATION_Y, 0f, -resources.getDimension(SdpR.dimen._6sdp)).apply {
+        ObjectAnimator.ofFloat(b.logoVw, View.TRANSLATION_Y, 0f, -resources.getDimension(SdpR.dimen._6sdp)).apply {
             duration = 1500
             repeatMode = ValueAnimator.REVERSE
             repeatCount = ValueAnimator.INFINITE
@@ -89,9 +89,9 @@ class StartActivity : AppCompatActivity() {
             start()
         }
 
-        val progress = ObjectAnimator.ofInt(b.progress, "progress", 0, 90).apply {
+        val progress = ObjectAnimator.ofInt(b.prog, "progress", 0, 90).apply {
             duration = LoanSpecHolder.current.value.base.splashWaitSec * 1000L + CONFIG_WAIT_MS / 2
-            addUpdateListener { b.percent.text = getString(R.string.splash_percent, it.animatedValue as Int) }
+            addUpdateListener { b.percentVw.text = getString(R.string.splash_percent, it.animatedValue as Int) }
             start()
         }
         // Reference startup order: consent → preload → hold → config → splash ad → route.
@@ -118,8 +118,8 @@ class StartActivity : AppCompatActivity() {
             UniqueAreas.lock()
             suspendCancellableCoroutine { done -> Grants.queryFor(this@StartActivity, "splash") { done.resume(Unit) } }
             progress.cancel()
-            b.progress.setProgressCompat(100, true)
-            b.percent.text = getString(R.string.splash_percent, 100)
+            b.prog.setProgressCompat(100, true)
+            b.percentVw.text = getString(R.string.splash_percent, 100)
             Spots.exit(this@StartActivity, Spots.SPLASH) { Views.outBy("next"); route() }
         }
     }

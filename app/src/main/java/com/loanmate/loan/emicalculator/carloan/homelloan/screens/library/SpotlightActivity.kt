@@ -38,26 +38,26 @@ class SpotlightActivity : AppCompatActivity() {
         val b = ScreenFocusBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
+        b.crest.backVw.setOnClickListener { finish() }
 
         val item = viewModel.item
-        b.header.title.text = item.title
-        b.image.setImageResource(item.image)
+        b.crest.titleVw.text = item.title
+        b.imageVw.setImageResource(item.image)
         if (viewModel.type.itemShape.fullBleed) {
             // Wide artwork: show it edge to edge at its own aspect ratio instead of inside the square well.
-            b.image.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
-            b.image.adjustViewBounds = true
-            b.image.setPadding(0, 0, 0, 0)
+            b.imageVw.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            b.imageVw.adjustViewBounds = true
+            b.imageVw.setPadding(0, 0, 0, 0)
         }
-        b.image.contentDescription = item.name
-        b.name.text = item.name
-        b.desc.text = item.desc
+        b.imageVw.contentDescription = item.name
+        b.nameVw.text = item.name
+        b.descVw.text = item.desc
         item.stats.forEach { (label, value) ->
-            val s = RowStatBinding.inflate(layoutInflater, b.stats, true)
-            s.label.setText(label)
-            s.value.text = value
+            val s = RowStatBinding.inflate(layoutInflater, b.statsVw, true)
+            s.labelVw.setText(label)
+            s.valueVw.text = value
         }
-        b.download.setOnClickListener {
+        b.downloadVw.setOnClickListener {
             MetricsTwo.click("download", item.name)
             val needsPermission = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
@@ -65,7 +65,7 @@ class SpotlightActivity : AppCompatActivity() {
             if (needsPermission) requestWrite.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE) else viewModel.download()
         }
         kitCollectWhenStarted(viewModel.messages) { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
-        wireViewSpot("screens.detail", b.adInline, b.adSlot)
+        wireViewSpot("screens.detail", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {

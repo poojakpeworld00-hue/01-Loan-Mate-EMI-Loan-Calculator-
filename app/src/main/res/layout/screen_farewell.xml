@@ -9,7 +9,7 @@
     android:background="@color/sh_bg">
 
     <View
-        android:id="@+id/glow"
+        android:id="@+id/glowVw"
         android:layout_width="@dimen/_350sdp"
         android:layout_height="@dimen/_240sdp"
         android:layout_gravity="top|end"
@@ -18,17 +18,17 @@
         android:background="@drawable/fill_corner_glow" />
 
     <LinearLayout
-        android:id="@+id/content"
+        android:id="@+id/contentVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <include
-            android:id="@+id/header"
+            android:id="@+id/crest"
             layout="@layout/box_header" />
 
         <TextView
-            android:id="@+id/pageTitle"
+            android:id="@+id/pageTitleVw"
             style="@style/SH.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:textAlignment="viewStart" />
 
         <TextView
-            android:id="@+id/sub"
+            android:id="@+id/subVw"
             style="@style/SH.Sub"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
             android:textAlignment="viewStart" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
+            android:id="@+id/listVw"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/_8sdp"
@@ -56,14 +56,14 @@
             android:scrollbars="none" />
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/rowsScroll"
+            android:id="@+id/rowsScrollVw"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:visibility="gone">
 
             <LinearLayout
-                android:id="@+id/rows"
+                android:id="@+id/rowsVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -72,7 +72,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <LinearLayout
-            android:id="@+id/center"
+            android:id="@+id/centerVw"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -82,7 +82,7 @@
             android:visibility="gone">
 
             <ImageView
-                android:id="@+id/centerIcon"
+                android:id="@+id/centerIconVw"
                 android:layout_width="@dimen/_54sdp"
                 android:layout_height="@dimen/_54sdp"
                 android:background="@drawable/fill_icon_chip"
@@ -91,7 +91,7 @@
                 android:src="@drawable/glyph_delete" />
 
             <TextView
-                android:id="@+id/centerTitle"
+                android:id="@+id/centerTitleVw"
                 style="@style/SH.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/centerSub"
+                android:id="@+id/centerSubVw"
                 style="@style/SH.Sub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 android:gravity="center" />
 
             <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progress"
+                android:id="@+id/prog"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
@@ -121,7 +121,7 @@
                 app:trackThickness="8dp" />
 
             <TextView
-                android:id="@+id/percent"
+                android:id="@+id/percentVw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -133,14 +133,14 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/primary"
+            android:id="@+id/primaryVw"
             style="@style/SH.Cta"
             android:layout_width="match_parent"
             android:layout_marginHorizontal="@dimen/_17sdp"
             android:layout_marginTop="@dimen/_6sdp" />
 
         <TextView
-            android:id="@+id/secondary"
+            android:id="@+id/secondaryVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -151,7 +151,7 @@
             android:textStyle="bold" />
 
         <FrameLayout
-            android:id="@+id/adSlot"
+            android:id="@+id/adSlotVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/_10sdp"

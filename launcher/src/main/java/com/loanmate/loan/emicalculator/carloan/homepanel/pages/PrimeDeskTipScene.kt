@@ -123,7 +123,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
         }
 
         Launcher.events.onScreen("default_home_hint")
-        findViewById<View>(R.id.llBaseIx)?.setOnClickListener {
+        findViewById<View>(R.id.rowBaseIx)?.setOnClickListener {
             Launcher.events.onClick("default_home_hint_close")
             finish()
         }
@@ -151,23 +151,23 @@ class PrimeDeskTipScene : AppCompatActivity() {
         val d = resources.displayMetrics.density
         val label = appLabel()
 
-        findViewById<TextView>(R.id.homeHintTitleIx).setText(kind.title)
-        findViewById<TextView>(R.id.homeHintAppLabelIx).text = label
-        findViewById<TextView>(R.id.homeHintTextIx).text = boldLabel(getString(kind.description, label), label)
+        findViewById<TextView>(R.id.homeHintTitleIxVw).setText(kind.title)
+        findViewById<TextView>(R.id.homeHintAppLabelIxVw).text = label
+        findViewById<TextView>(R.id.homeHintTextIxVw).text = boldLabel(getString(kind.description, label), label)
         // Variable fonts: neither XML fontVariationSettings nor TextView.fontVariationSettings sticks here; a span does.
-        mapOf(R.id.homeHintTitleIx to 700, R.id.homeHintAppLabelIx to 700, R.id.homeHintGotItIx to 600)
+        mapOf(R.id.homeHintTitleIxVw to 700, R.id.homeHintAppLabelIxVw to 700, R.id.homeHintGotItIxVw to 600)
             .forEach { (id, w) -> findViewById<TextView>(id)?.let { it.text = weighted(it.text, w) } }
-        findViewById<ImageView>(R.id.homeHintAppIconIx).apply {
+        findViewById<ImageView>(R.id.homeHintAppIconIxVw).apply {
             setImageDrawable(squareIcon())
             clipToOutline = true
         }
-        findViewById<View>(R.id.homeHintTileIx).clipToOutline = true
-        findViewById<View>(R.id.homeHintGotItIx).setOnClickListener {
+        findViewById<View>(R.id.homeHintTileIxVw).clipToOutline = true
+        findViewById<View>(R.id.homeHintGotItIxVw).setOnClickListener {
             Launcher.events.onClick("default_home_hint_got_it")
             finish()
         }
 
-        val sheet = findViewById<View>(R.id.homeHintSheetIx)
+        val sheet = findViewById<View>(R.id.homeHintSheetIxVw)
         val bottomPad = sheet.paddingBottom
         ViewCompat.setOnApplyWindowInsetsListener(sheet) { v, insets ->
             v.updatePadding(bottom = bottomPad + insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
@@ -178,7 +178,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
             window.attributes = window.attributes.apply { blurBehindRadius = (BLUR_DP * d).toInt() }
         }
 
-        findViewById<View>(R.id.llBaseIx).apply {
+        findViewById<View>(R.id.rowBaseIx).apply {
             alpha = 0f
             animate().alpha(1f).setDuration(SCRIM_IN_MS)
         }
@@ -187,14 +187,14 @@ class PrimeDeskTipScene : AppCompatActivity() {
             it.animate().translationY(0f).setDuration(SHEET_IN_MS).setInterpolator(PathInterpolator(.2f, 0f, 0f, 1f))
         }
 
-        switchAnimator = ObjectAnimator.ofFloat(findViewById(R.id.homeHintSpinIx), View.ROTATION, 0f, 360f).apply {
+        switchAnimator = ObjectAnimator.ofFloat(findViewById(R.id.homeHintSpinIxVw), View.ROTATION, 0f, 360f).apply {
             duration = SPIN_MS
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator()
             start()
         }
         haloAnimator = ObjectAnimator.ofPropertyValuesHolder(
-            findViewById(R.id.homeHintHaloIx),
+            findViewById(R.id.homeHintHaloIxVw),
             PropertyValuesHolder.ofFloat(View.SCALE_X, .85f, 1.3f),
             PropertyValuesHolder.ofFloat(View.SCALE_Y, .85f, 1.3f),
             PropertyValuesHolder.ofFloat(View.ALPHA, .55f, 0f),
@@ -214,9 +214,9 @@ class PrimeDeskTipScene : AppCompatActivity() {
             val d = resources.displayMetrics.density
             val dot = if (tapStep == 0) 0f else 1f
             val press = if (tapStep == 1) .86f else 1f
-            findViewById<View>(R.id.homeHintDotIx).animate().scaleX(dot).scaleY(dot)
+            findViewById<View>(R.id.homeHintDotIxVw).animate().scaleX(dot).scaleY(dot)
                 .setDuration(DOT_MS).setInterpolator(PathInterpolator(.3f, 1.6f, .5f, 1f))
-            findViewById<View>(R.id.homeHintPointerIx).animate()
+            findViewById<View>(R.id.homeHintPointerIxVw).animate()
                 .translationX(if (tapStep == 0) 10 * d else 0f)
                 .translationY(if (tapStep == 0) 14 * d else 0f)
                 .scaleX(press).scaleY(press)
@@ -225,7 +225,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
                 haloAnimator?.start()
             } else {
                 haloAnimator?.cancel()
-                findViewById<View>(R.id.homeHintHaloIx).alpha = 0f
+                findViewById<View>(R.id.homeHintHaloIxVw).alpha = 0f
             }
             handler.postDelayed(this, TAP_STEP_MS)
         }
@@ -275,20 +275,20 @@ class PrimeDeskTipScene : AppCompatActivity() {
     private fun putType() {
         val label = appLabel()
         val icon = runCatching { applicationInfo.loadIcon(packageManager) }.getOrNull()
-        listOf(R.id.guideAppIconIx, R.id.guideFakeSheetIconIx).forEach {
+        listOf(R.id.guideAppIconIxVw, R.id.guideFakeSheetIconIxVw).forEach {
             findViewById<android.widget.ImageView>(it)?.setImageDrawable(icon)
         }
-        findViewById<android.widget.TextView>(R.id.guideTitleIx)?.text = getString(kind.title, label)
-        findViewById<android.widget.TextView>(R.id.guideDescriptionIx)?.setText(kind.description)
-        findViewById<android.widget.TextView>(R.id.guideFakeSheetTextIx)?.text = label
+        findViewById<android.widget.TextView>(R.id.guideTitleIxVw)?.text = getString(kind.title, label)
+        findViewById<android.widget.TextView>(R.id.guideDescriptionIxVw)?.setText(kind.description)
+        findViewById<android.widget.TextView>(R.id.guideFakeSheetTextIxVw)?.text = label
 
-        findViewById<View>(R.id.guideSheetFakeIx)?.visibility =
+        findViewById<View>(R.id.guideSheetFakeIxVw)?.visibility =
             if (kind.control == Control.SWITCH) View.VISIBLE else View.GONE
-        findViewById<View>(R.id.guideItemIx)?.visibility =
+        findViewById<View>(R.id.guideItemIxVw)?.visibility =
             if (kind.control == Control.NONE) View.VISIBLE else View.GONE
 
         if (kind.position == Position.TOP) {
-            findViewById<View>(R.id.guideSpacerIx)?.visibility = View.GONE
+            findViewById<View>(R.id.guideSpacerIxVw)?.visibility = View.GONE
             window.setGravity(Gravity.TOP)
             window.setLayout(
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -311,9 +311,9 @@ class PrimeDeskTipScene : AppCompatActivity() {
     }
 
     private fun beginSwitcherTween() {
-        val track = findViewById<FrameLayout>(R.id.guideSwitchRailIx) ?: return
-        val thumb = findViewById<View>(R.id.guideSwitchKnobIx) ?: return
-        val row = findViewById<View>(R.id.guideFakeSheetItemIx)
+        val track = findViewById<FrameLayout>(R.id.guideSwitchRailIxVw) ?: return
+        val thumb = findViewById<View>(R.id.guideSwitchKnobIxVw) ?: return
+        val row = findViewById<View>(R.id.guideFakeSheetItemIxVw)
 
         val travel =
             (TRACK_WIDTH_DP - THUMB_SIZE_DP - THUMB_INSET_DP * 2) * resources.displayMetrics.density

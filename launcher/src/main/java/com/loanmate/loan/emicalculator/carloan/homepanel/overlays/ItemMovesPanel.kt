@@ -111,17 +111,17 @@ class ItemMovesPanel(
     }
 
     private fun build() {
-        binding.trayHotlinksVw.removeAllViews()
-        shortcuts.forEach { binding.trayHotlinksVw.addView(shortcutRow(it)) }
+        binding.trayHotlinksVwVw.removeAllViews()
+        shortcuts.forEach { binding.trayHotlinksVwVw.addView(shortcutRow(it)) }
         val hasShortcuts = shortcuts.isNotEmpty()
-        binding.trayHotlinksVw.visibility = if (hasShortcuts) View.VISIBLE else View.GONE
-        binding.trayDividerVw.visibility = if (hasShortcuts && actions.isNotEmpty()) View.VISIBLE else View.GONE
+        binding.trayHotlinksVwVw.visibility = if (hasShortcuts) View.VISIBLE else View.GONE
+        binding.trayDividerVwVw.visibility = if (hasShortcuts && actions.isNotEmpty()) View.VISIBLE else View.GONE
 
-        binding.trayActionsVw.removeAllViews()
+        binding.trayActionsVwVw.removeAllViews()
         actions.forEach {
-            binding.trayActionsVw.addView(actionControl(it), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+            binding.trayActionsVwVw.addView(actionControl(it), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         }
-        binding.trayActionsVw.visibility = if (actions.isEmpty()) View.GONE else View.VISIBLE
+        binding.trayActionsVwVw.visibility = if (actions.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun shortcutRow(shortcut: Shortcut): View = LinearLayout(activity).apply {

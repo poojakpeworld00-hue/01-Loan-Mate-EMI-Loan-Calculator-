@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/header"
+        android:id="@+id/crest"
         layout="@layout/box_header" />
 
     <androidx.core.widget.NestedScrollView
@@ -29,7 +29,7 @@
                 android:text="@string/settings_appearance" />
 
             <LinearLayout
-                android:id="@+id/appearance"
+                android:id="@+id/appearanceVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
@@ -42,7 +42,7 @@
                 android:text="@string/settings_profile" />
 
             <LinearLayout
-                android:id="@+id/profile"
+                android:id="@+id/profileVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
@@ -55,13 +55,13 @@
                 android:text="@string/settings_about" />
 
             <LinearLayout
-                android:id="@+id/about"
+                android:id="@+id/aboutVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
             <TextView
-                android:id="@+id/version"
+                android:id="@+id/versionVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_18sdp"
@@ -70,7 +70,7 @@
                 android:textSize="@dimen/_10ssp" />
 
             <FrameLayout
-                android:id="@+id/adInline"
+                android:id="@+id/adInlineVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -79,7 +79,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
-        android:id="@+id/adSlot"
+        android:id="@+id/adSlotVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"

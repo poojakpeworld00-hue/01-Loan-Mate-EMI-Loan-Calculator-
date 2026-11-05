@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.loanmate.loan.emicalculator.carloan.homepanel.visual.DeskViewerGrid xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_show_gridIx"
+    android:id="@+id/main_show_gridIxVw"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.loanmate.loan.emicalculator.carloan.homepanel.visual.DeskViewerGridPaintZone
-        android:id="@+id/drawing_areaIx"
+        android:id="@+id/drawing_areaIxVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:translationZ="1dp" />
 
     <com.loanmate.loan.emicalculator.carloan.homepanel.visual.TailoredWidgetGadgetDimFrame
-        android:id="@+id/size_casingIx"
+        android:id="@+id/size_casingIxVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />

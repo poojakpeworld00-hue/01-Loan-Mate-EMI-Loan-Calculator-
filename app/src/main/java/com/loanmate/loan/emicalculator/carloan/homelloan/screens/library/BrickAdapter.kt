@@ -63,10 +63,10 @@ class BrickAdapter(
             descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         })
         val b = RowBlockBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        (b.image.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio = shape.ratio
+        (b.imageVw.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio = shape.ratio
         if (shape.fullBleed) {
-            b.image.setPadding(0, 0, 0, 0)
-            b.image.scaleType = ImageView.ScaleType.CENTER_CROP
+            b.imageVw.setPadding(0, 0, 0, 0)
+            b.imageVw.scaleType = ImageView.ScaleType.CENTER_CROP
         }
         return PackKeeper(b)
     }
@@ -81,10 +81,10 @@ class BrickAdapter(
         }
         holder as PackKeeper
         val (name, image) = tiles[blockIndex2(position)]
-        holder.b.image.setImageResource(image)
-        holder.b.name.text = name
+        holder.b.imageVw.setImageResource(image)
+        holder.b.nameVw.text = name
         // Full-bleed artwork (map covers and locations) already has its name printed on it.
-        holder.b.name.visibility = if (name.isNullOrEmpty() || shape.fullBleed) View.GONE else View.VISIBLE
+        holder.b.nameVw.visibility = if (name.isNullOrEmpty() || shape.fullBleed) View.GONE else View.VISIBLE
         holder.b.root.contentDescription = name
         holder.b.root.setOnClickListener {
             holder.bindingAdapterPosition.takeIf { it != RecyclerView.NO_POSITION }?.let { onClick(blockIndex2(it)) }

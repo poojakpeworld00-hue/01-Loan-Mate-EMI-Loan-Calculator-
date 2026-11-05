@@ -22,7 +22,7 @@
             android:clipChildren="true">
 
             <View
-                android:id="@+id/sheetGlow"
+                android:id="@+id/sheetGlowVw"
                 android:layout_width="@dimen/_190sdp"
                 android:layout_height="@dimen/_190sdp"
                 android:layout_gravity="end"
@@ -49,14 +49,14 @@
                         android:layout_height="@dimen/_56sdp">
 
                         <View
-                            android:id="@+id/sheetRing"
+                            android:id="@+id/sheetRingVw"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/fill_setup_ring"
                             android:importantForAccessibility="no" />
 
                         <TextView
-                            android:id="@+id/sheetBadge"
+                            android:id="@+id/sheetBadgeVw"
                             android:layout_width="@dimen/_48sdp"
                             android:layout_height="@dimen/_48sdp"
                             android:layout_gravity="center"
@@ -80,7 +80,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/sheetEyebrow"
+                            android:id="@+id/sheetEyebrowVw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/brand_extrabold"
@@ -91,7 +91,7 @@
                             tools:text="MISSION 04 / 13" />
 
                         <TextView
-                            android:id="@+id/sheetNext"
+                            android:id="@+id/sheetNextVw"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_2sdp"
@@ -105,7 +105,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/sheetSegments"
+                    android:id="@+id/sheetSegmentsVw"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_7sdp"
                     android:layout_marginTop="@dimen/_18sdp"
@@ -119,7 +119,7 @@
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:id="@+id/sheetDone"
+                        android:id="@+id/sheetDoneVw"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -130,7 +130,7 @@
                         tools:text="3 of 13 done" />
 
                     <TextView
-                        android:id="@+id/sheetXp"
+                        android:id="@+id/sheetXpVw"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawablePadding="@dimen/_3sdp"
@@ -155,7 +155,7 @@
             android:paddingBottom="@dimen/_16sdp">
 
             <TextView
-                android:id="@+id/sheetTitle"
+                android:id="@+id/sheetTitleVw"
                 style="@style/SH.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -164,7 +164,7 @@
                 android:textSize="@dimen/_17ssp" />
 
             <TextView
-                android:id="@+id/sheetMood"
+                android:id="@+id/sheetMoodVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -174,7 +174,7 @@
                 tools:text="Good start · 10 steps to go" />
 
             <LinearLayout
-                android:id="@+id/voiceCard"
+                android:id="@+id/voiceCardVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_13sdp"
@@ -198,7 +198,7 @@
                         android:clipChildren="false">
 
                         <View
-                            android:id="@+id/voiceRipple"
+                            android:id="@+id/voiceRippleVw"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:alpha="0"
@@ -206,7 +206,7 @@
                             android:importantForAccessibility="no" />
 
                         <ImageButton
-                            android:id="@+id/voicePlay"
+                            android:id="@+id/voicePlayVw"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/fill_voice_play"
@@ -242,7 +242,7 @@
                                 android:textSize="@dimen/_9ssp" />
 
                             <TextView
-                                android:id="@+id/voiceTime"
+                                android:id="@+id/voiceTimeVw"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/brand_bold"
@@ -253,7 +253,7 @@
                         </LinearLayout>
 
                         <com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.RippleScreen
-                            android:id="@+id/voiceWave"
+                            android:id="@+id/voiceWaveVw"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_20sdp"
                             android:layout_marginTop="@dimen/_4sdp"
@@ -262,7 +262,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/voiceText"
+                    android:id="@+id/voiceTextVw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
@@ -274,14 +274,14 @@
             </LinearLayout>
 
             <FrameLayout
-                android:id="@+id/sheetCta"
+                android:id="@+id/sheetCtaVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_14sdp"
                 android:background="@drawable/fill_cta_clip">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/sheetContinue"
+                    android:id="@+id/sheetContinueVw"
                     style="@style/SH.Cta"
                     android:layout_width="match_parent"
                     android:text="@string/sh_continue"
@@ -291,7 +291,7 @@
                     app:iconSize="@dimen/_16sdp" />
 
                 <View
-                    android:id="@+id/sheetShine"
+                    android:id="@+id/sheetShineVw"
                     android:layout_width="@dimen/_23sdp"
                     android:layout_height="@dimen/_37sdp"
                     android:background="@drawable/fill_shine"
@@ -302,7 +302,7 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/sheetClose"
+                android:id="@+id/sheetCloseVw"
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingHorizontal="@dimen/_12sdp"
@@ -320,7 +320,7 @@
                 app:drawableTint="#C4CEE6" />
 
             <TextView
-                android:id="@+id/sheetSaved"
+                android:id="@+id/sheetSavedVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
@@ -341,7 +341,7 @@
         android:importantForAccessibility="no" />
 
     <FrameLayout
-        android:id="@+id/sheetX"
+        android:id="@+id/sheetXVw"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="end"

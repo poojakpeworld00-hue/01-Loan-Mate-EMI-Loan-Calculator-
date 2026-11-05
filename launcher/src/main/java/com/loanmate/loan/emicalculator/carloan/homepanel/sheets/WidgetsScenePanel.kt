@@ -64,27 +64,27 @@ class WidgetsScenePanel(
             lookupInApplet(it)
         }
 
-        binding.pageSuggestedGridIx.adapter = suggestedAdapter
-        binding.pageRecentsGridIx.adapter = recentAdapter
-        binding.pageResultsRollIx.adapter = resultsAdapter
-        binding.pageQueryIncRollIx.adapter = searchInAdapter
+        binding.pageSuggestedGridIxVw.adapter = suggestedAdapter
+        binding.pageRecentsGridIxVw.adapter = recentAdapter
+        binding.pageResultsRollIxVw.adapter = resultsAdapter
+        binding.pageQueryIncRollIxVw.adapter = searchInAdapter
 
-        binding.pageQueryIx.doAfterTextChanged {
+        binding.pageQueryIxVw.doAfterTextChanged {
             resultsCap = COLLAPSED_RESULTS
             reloadSections()
         }
 
-        binding.pageQueryIx.setOnTouchListener { _, event ->
+        binding.pageQueryIxVw.setOnTouchListener { _, event ->
             if (event.actionMasked == MotionEvent.ACTION_UP) com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("panel_search")
             false
         }
 
-        binding.pageQueryWipeIx.setOnClickListener {
+        binding.pageQueryWipeIxVw.setOnClickListener {
             com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("panel_search_clear")
-            binding.pageQueryIx.setText("")
+            binding.pageQueryIxVw.setText("")
         }
 
-        binding.pageSeeExtraIx.setOnClickListener {
+        binding.pageSeeExtraIxVw.setOnClickListener {
             com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("panel_see_more")
             resultsCap = if (resultsCap == COLLAPSED_RESULTS) {
                 EXPANDED_RESULTS
@@ -97,7 +97,7 @@ class WidgetsScenePanel(
 
     fun onOpened() {
         val hour = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-        binding.pageHelloIx.setText(
+        binding.pageHelloIxVw.setText(
             when {
                 hour < 12 -> R.string.launcher_greeting_morning
                 hour < 17 -> R.string.launcher_greeting_afternoon
@@ -106,24 +106,24 @@ class WidgetsScenePanel(
         )
         val locale = java.util.Locale.getDefault()
         val pattern = android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM")
-        binding.pageDayIx.text = java.text.SimpleDateFormat(pattern, locale).format(java.util.Date())
+        binding.pageDayIxVw.text = java.text.SimpleDateFormat(pattern, locale).format(java.util.Date())
         com.loanmate.loan.emicalculator.carloan.homepanel.helpers.enterMotion(
-            binding.pageCrestIx,
-            binding.pageQueryHolderIx,
-            binding.pageSuggestedCrestIx,
-            binding.pageSuggestedGridIx,
-            binding.pageRecentsCrestIx,
-            binding.pageRecentsGridIx,
+            binding.pageCrestIxVw,
+            binding.pageQueryHolderIxVw,
+            binding.pageSuggestedCrestIxVw,
+            binding.pageSuggestedGridIxVw,
+            binding.pageRecentsCrestIxVw,
+            binding.pageRecentsGridIxVw,
         )
     }
 
     fun reloadUnits() {
         val activity = activity ?: return
         CenterEmbedAd.wireOnReveal(
-            activity, CenterAdsToggles.KEY_PANEL_MIDDLE, binding.pageMidEmbeddedCasingIx
+            activity, CenterAdsToggles.KEY_PANEL_MIDDLE, binding.pageMidEmbeddedCasingIxVw
         )
         CenterEmbedAd.wireOnReveal(
-            activity, CenterAdsToggles.KEY_PANEL_BOTTOM, binding.pageEmbeddedCasingIx
+            activity, CenterAdsToggles.KEY_PANEL_BOTTOM, binding.pageEmbeddedCasingIxVw
         )
     }
 
@@ -144,47 +144,47 @@ class WidgetsScenePanel(
     fun hasProbe() = getQuery().isNotEmpty()
 
     fun restoreLookup() {
-        binding.pageQueryIx.setText("")
-        binding.pageScrollIx.scrollTo(0, 0)
+        binding.pageQueryIxVw.setText("")
+        binding.pageScrollIxVw.scrollTo(0, 0)
     }
 
-    private fun getQuery() = binding.pageQueryIx.text.toString().trim()
+    private fun getQuery() = binding.pageQueryIxVw.text.toString().trim()
 
     private fun reloadSections() {
         val query = getQuery()
         val hasProbe = query.isNotEmpty()
 
-        binding.pageQueryWipeIx.beVisibleIf(hasProbe)
-        binding.pageSuggestedCrestIx.beVisibleIf(!hasProbe)
-        binding.pageSuggestedGridIx.beVisibleIf(!hasProbe)
+        binding.pageQueryWipeIxVw.beVisibleIf(hasProbe)
+        binding.pageSuggestedCrestIxVw.beVisibleIf(!hasProbe)
+        binding.pageSuggestedGridIxVw.beVisibleIf(!hasProbe)
 
         if (hasProbe) {
             val results = launchers.filter {
                 it.title.normalizeString().contains(query.normalizeString(), ignoreCase = true)
             }
 
-            binding.pageRecentsCrestIx.beGone()
-            binding.pageRecentsGridIx.beGone()
-            binding.pageResultsCrestIx.beVisible()
-            binding.pageResultsRollIx.beVisible()
-            binding.pageSeeExtraIx.beVisibleIf(results.size > COLLAPSED_RESULTS)
-            binding.pageSeeExtraIx.setText(
+            binding.pageRecentsCrestIxVw.beGone()
+            binding.pageRecentsGridIxVw.beGone()
+            binding.pageResultsCrestIxVw.beVisible()
+            binding.pageResultsRollIxVw.beVisible()
+            binding.pageSeeExtraIxVw.beVisibleIf(results.size > COLLAPSED_RESULTS)
+            binding.pageSeeExtraIxVw.setText(
                 if (resultsCap == COLLAPSED_RESULTS) R.string.launcher_see_more else R.string.launcher_see_less
             )
             resultsAdapter.submitList(results.take(resultsCap))
 
             val searchTargets = launchers.filter { it.packageName in SEARCH_IN_PACKAGES }
-            binding.pageQueryIncCrestIx.beVisibleIf(searchTargets.isNotEmpty())
-            binding.pageQueryIncRollIx.beVisibleIf(searchTargets.isNotEmpty())
+            binding.pageQueryIncCrestIxVw.beVisibleIf(searchTargets.isNotEmpty())
+            binding.pageQueryIncRollIxVw.beVisibleIf(searchTargets.isNotEmpty())
             searchInAdapter.submitList(searchTargets)
         } else {
             val recent = launchers.drop(SUGGESTED_COUNT).take(RECENT_COUNT)
-            binding.pageResultsCrestIx.beGone()
-            binding.pageResultsRollIx.beGone()
-            binding.pageQueryIncCrestIx.beGone()
-            binding.pageQueryIncRollIx.beGone()
-            binding.pageRecentsCrestIx.beVisibleIf(recent.isNotEmpty())
-            binding.pageRecentsGridIx.beVisibleIf(recent.isNotEmpty())
+            binding.pageResultsCrestIxVw.beGone()
+            binding.pageResultsRollIxVw.beGone()
+            binding.pageQueryIncCrestIxVw.beGone()
+            binding.pageQueryIncRollIxVw.beGone()
+            binding.pageRecentsCrestIxVw.beVisibleIf(recent.isNotEmpty())
+            binding.pageRecentsGridIxVw.beVisibleIf(recent.isNotEmpty())
 
             suggestedAdapter.submitList(launchers.take(SUGGESTED_COUNT))
             recentAdapter.submitList(recent)

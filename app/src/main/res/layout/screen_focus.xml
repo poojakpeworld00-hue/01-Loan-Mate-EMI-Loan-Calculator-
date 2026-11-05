@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/header"
+        android:id="@+id/crest"
         layout="@layout/box_header" />
 
     <androidx.core.widget.NestedScrollView
@@ -23,7 +23,7 @@
             android:paddingBottom="@dimen/_12sdp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/image"
+                android:id="@+id/imageVw"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_204sdp"
                 android:background="@drawable/fill_image_well"
@@ -32,7 +32,7 @@
                 app:shapeAppearanceOverlay="@style/SH.Shape22" />
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/nameVw"
                 style="@style/SH.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
                 android:textAlignment="viewStart" />
 
             <GridLayout
-                android:id="@+id/stats"
+                android:id="@+id/statsVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/_minus3sdp"
@@ -48,7 +48,7 @@
                 android:columnCount="2" />
 
             <TextView
-                android:id="@+id/desc"
+                android:id="@+id/descVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_9sdp"
@@ -58,7 +58,7 @@
                 android:textSize="@dimen/_11ssp" />
 
             <FrameLayout
-                android:id="@+id/adInline"
+                android:id="@+id/adInlineVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -67,7 +67,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/download"
+        android:id="@+id/downloadVw"
         style="@style/SH.Cta"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="@dimen/_13sdp"
@@ -75,7 +75,7 @@
         android:text="@string/download" />
 
     <FrameLayout
-        android:id="@+id/adSlot"
+        android:id="@+id/adSlotVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"

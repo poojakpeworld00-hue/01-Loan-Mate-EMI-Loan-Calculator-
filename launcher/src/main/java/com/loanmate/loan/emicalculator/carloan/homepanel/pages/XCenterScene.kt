@@ -182,8 +182,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         if (!isAllProgramsSectionExpanded() && IconStore.launchers.isNotEmpty()) {
             // Same apps, but the config may have moved rows (the ad row): resubmit regardless.
-            binding.allAppsBlockIx.root.gotLaunchers(IconStore.launchers, force = true)
-            binding.startPageIx.root.gotLaunchers(IconStore.launchers)
+            binding.allAppsBlockIxVw.root.gotLaunchers(IconStore.launchers, force = true)
+            binding.startPageIxVw.root.gotLaunchers(IconStore.launchers)
         }
         // time / search widget and our own icon on home
         ensureBackgroundThread {
@@ -249,21 +249,21 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         getSystemService(LauncherApps::class.java)?.registerCallback(packageCallback, Handler(Looper.getMainLooper()))
         setupEdgeToEdge(
             padTopSystem = listOf(
-                binding.allAppsBlockIx.root,
-                binding.widgetsBlockIx.root,
-                binding.startPageIx.root,
+                binding.allAppsBlockIxVw.root,
+                binding.widgetsBlockIxVw.root,
+                binding.startPageIxVw.root,
                 // not msgsPageIx: the host panel fragment applies its own insets
             ),
             padBottomImeAndSystem = listOf(
-                binding.allAppsBlockIx.allAppsGridIx,
-                binding.allAppsBlockIx.allAppsLeafPipsIx,
-                binding.widgetsBlockIx.widgetsRollIx,
-                binding.startPageIx.pageScrollIx,
+                binding.allAppsBlockIxVw.allAppsGridIxVw,
+                binding.allAppsBlockIxVw.allAppsLeafPipsIxVw,
+                binding.widgetsBlockIxVw.widgetsRollIxVw,
+                binding.startPageIxVw.pageScrollIxVw,
             ),
 
             padBottomSystem = listOf(
-                binding.mainShowGridIx.root,
-                binding.startPageIx.pageEmbeddedCasingIx
+                binding.mainShowGridIxVw.root,
+                binding.startPageIxVw.pageEmbeddedCasingIxVw
             )
         )
 
@@ -276,21 +276,21 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         mMoveGestureThreshold = resources.getDimensionPixelSize(R.dimen.launcher_move_gesture_threshold)
 
         arrayOf(
-            binding.allAppsBlockIx.root as CenterPanel<*>,
-            binding.widgetsBlockIx.root as CenterPanel<*>
+            binding.allAppsBlockIxVw.root as CenterPanel<*>,
+            binding.widgetsBlockIxVw.root as CenterPanel<*>
         ).forEach { fragment ->
             fragment.setupFragment(this)
             fragment.y = mScreenHeight.toFloat()
             fragment.beVisible()
         }
 
-        binding.startPageIx.root.apply {
+        binding.startPageIxVw.root.apply {
             setupFragment(this@XCenterScene)
             x = mScreenWidth.toFloat()
             beVisible()
         }
 
-        binding.msgsPageIx.root.apply {
+        binding.msgsPageIxVw.root.apply {
             setupFragment(this@XCenterScene)
             x = -mScreenWidth.toFloat()
             beVisible()
@@ -298,13 +298,13 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         treatIntentMove(intent)
 
-        binding.mainShowGridIx.root.itemClickListener = {
+        binding.mainShowGridIxVw.root.itemClickListener = {
             performElementTap(it)
         }
 
-        binding.mainShowGridIx.root.itemLongClickListener = {
+        binding.mainShowGridIxVw.root.itemLongClickListener = {
             performCellLongTap(
-                x = binding.mainShowGridIx.root.getClickableRect(it).left.toFloat(),
+                x = binding.mainShowGridIxVw.root.getClickableRect(it).left.toFloat(),
                 clickedGridItem = it
             )
         }
@@ -313,15 +313,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         if (savedInstanceState == null) revealMsgsIfRequested(intent)
 
-        binding.baseHolderIx.post { perhapsSurfaceGuide() }
+        binding.baseHolderIxVw.post { perhapsSurfaceGuide() }
 
-        binding.baseHolderIx.postDelayed({
+        binding.baseHolderIxVw.postDelayed({
             Looper.myQueue().addIdleHandler {
                 // A messages panel switched off by launcher_config is not warmed up; if the config
                 // turns it on later, opening it builds it.
                 if (!isFinishing && !isDestroyed &&
                     CenterAdsToggles.deckEnabled(CenterAdsToggles.RIGHT_SWIPE)
-                ) binding.msgsPageIx.root.warmUp()
+                ) binding.msgsPageIxVw.root.warmUp()
                 false
             }
         }, INBOX_WARM_UP_DELAY)
@@ -342,7 +342,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         val step = nextGuidePhase()
         if (step == null) {
             concealSwipeHint()
-        } else if (mGuideStep != step || !binding.swipeHintIx.isVisible) {
+        } else if (mGuideStep != step || !binding.swipeHintIxVw.isVisible) {
             surfaceGuidePhase(step)
         }
     }
@@ -352,9 +352,9 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         mGuideStep = step
 
         val chevrons = listOf(
-            binding.swipeHintChevron1Ix,
-            binding.swipeHintChevron2Ix,
-            binding.swipeHintChevron3Ix,
+            binding.swipeHintChevron1IxVw,
+            binding.swipeHintChevron2IxVw,
+            binding.swipeHintChevron3IxVw,
         )
         val travel = resources.getDimension(R.dimen.launcher_swipe_hint_travel)
 
@@ -389,7 +389,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             }
         }
 
-        binding.swipeHintChevronsIx.orientation =
+        binding.swipeHintChevronsIxVw.orientation =
             if (vertical) LinearLayout.VERTICAL else LinearLayout.HORIZONTAL
 
         val alphas = if (distance < 0f) listOf(1f, 0.6f, 0.3f) else listOf(0.3f, 0.6f, 1f)
@@ -400,13 +400,13 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             view.translationX = 0f
             view.translationY = 0f
         }
-        binding.swipeHintChevronsIx.translationX = 0f
-        binding.swipeHintChevronsIx.translationY = 0f
-        binding.swipeHintTextIx.setText(label)
-        binding.swipeHintIx.beVisible()
+        binding.swipeHintChevronsIxVw.translationX = 0f
+        binding.swipeHintChevronsIxVw.translationY = 0f
+        binding.swipeHintTextIxVw.setText(label)
+        binding.swipeHintIxVw.beVisible()
 
         mSwipeHintAnimator = ObjectAnimator.ofFloat(
-            binding.swipeHintChevronsIx,
+            binding.swipeHintChevronsIxVw,
             property,
             0f,
             distance,
@@ -430,7 +430,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     private fun performGuidePhase(): Boolean {
         val step = mGuideStep ?: return false
-        if (!binding.swipeHintIx.isVisible) return false
+        if (!binding.swipeHintIxVw.isVisible) return false
 
         concealSwipeHint()
         Launcher.events.onClick("swipe_guide", step.name.lowercase())
@@ -438,7 +438,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         when (step) {
             CenterTourStop.SWIPE_RIGHT_MESSAGES -> surfaceMsgsDeck()
             CenterTourStop.SWIPE_LEFT_APPS -> surfaceLeftDeck()
-            CenterTourStop.SWIPE_UP_DRAWER -> displayFragment(binding.allAppsBlockIx)
+            CenterTourStop.SWIPE_UP_DRAWER -> displayFragment(binding.allAppsBlockIxVw)
         }
         return true
     }
@@ -449,12 +449,12 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     private fun concealSwipeHint() {
-        if (!binding.swipeHintIx.isVisible) {
+        if (!binding.swipeHintIxVw.isVisible) {
             return
         }
 
         abortGuideTween()
-        binding.swipeHintIx.beGone()
+        binding.swipeHintIxVw.beGone()
     }
 
     private fun prepWallpaperTintSentry() {
@@ -509,10 +509,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         val wasAnyFragmentOpen = isAllProgramsSectionExpanded() || isGadgetsSectionExpanded()
         if (wasJustPaused) {
             if (isAllProgramsSectionExpanded()) {
-                concealFragment(binding.allAppsBlockIx)
+                concealFragment(binding.allAppsBlockIxVw)
             }
             if (isGadgetsSectionExpanded()) {
-                concealFragment(binding.widgetsBlockIx)
+                concealFragment(binding.widgetsBlockIxVw)
             }
         } else {
             closeAppletRack()
@@ -527,13 +527,13 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             concealMsgsDeck()
         }
 
-        binding.allAppsBlockIx.queryBarIx.closeSearch()
+        binding.allAppsBlockIxVw.queryBarIxVw.closeSearch()
         // Every surface is closing (some still animating): onResume must not read them as open.
         mWorkspaceUnwound = true
 
         val alreadyOnHome = intent.flags and FLAG_ACTIVITY_BROUGHT_TO_FRONT == 0
         if (alreadyOnHome && !wasAnyFragmentOpen) {
-            binding.mainShowGridIx.root.skipToPage(0)
+            binding.mainShowGridIxVw.root.skipToPage(0)
         }
 
         treatIntentMove(intent)
@@ -544,7 +544,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         if (!intent.getBooleanExtra(EXTRA_OPEN_MESSAGES, false)) return
         intent.removeExtra(EXTRA_OPEN_MESSAGES)
         if (!CenterAdsToggles.deckEnabled(CenterAdsToggles.RIGHT_SWIPE)) return
-        binding.baseHolderIx.post {
+        binding.baseHolderIxVw.post {
             if (isFinishing || isDestroyed || isMsgsStageExpanded()) return@post
             revealMsgsDeck()
         }
@@ -553,7 +553,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     override fun onStart() {
         super.onStart()
         try {
-            binding.mainShowGridIx.root.appWidgetHost.startListening()
+            binding.mainShowGridIxVw.root.appWidgetHost.startListening()
         } catch (e: Exception) {
             Timber.w(e, "StarterTray: appWidgetHost.startListening failed")
         }
@@ -570,8 +570,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         val unwound = mWorkspaceUnwound
         mWorkspaceUnwound = false
         if (!unwound && isWorkspaceCovered()) {
-            binding.mainShowGridIx.root.animate().cancel()
-            binding.mainShowGridIx.root.alpha = 0f
+            binding.mainShowGridIxVw.root.animate().cancel()
+            binding.mainShowGridIxVw.root.alpha = 0f
         }
         running = WeakReference(this)
         Launcher.events.onScreen(if (unwound) SCREEN_HOME else liveScreen())
@@ -593,10 +593,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             perhapsSurfaceGuide()
         }, ANIMATION_DURATION)
 
-        with(binding.baseHolderIx) {
+        with(binding.baseHolderIxVw) {
             onGlobalLayout {
-                binding.allAppsBlockIx.root.prepareViews()
-                binding.widgetsBlockIx.root.prepareViews()
+                binding.allAppsBlockIxVw.root.prepareViews()
+                binding.widgetsBlockIxVw.root.prepareViews()
             }
         }
 
@@ -621,8 +621,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                     IconStore.installedSignature = null
                 }
 
-                binding.allAppsBlockIx.root.gotLaunchers(IconStore.launchers)
-                binding.startPageIx.root.gotLaunchers(IconStore.launchers)
+                binding.allAppsBlockIxVw.root.gotLaunchers(IconStore.launchers)
+                binding.startPageIxVw.root.gotLaunchers(IconStore.launchers)
                 renewHomebases()
             }.onFailure { Timber.w(it, "StarterTray: onResume refresh failed") }
         }
@@ -630,18 +630,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         closeDisabledPanels()
         syncMessagingDockCell()
 
-        binding.mainShowGridIx.root.resizeGrid(
+        binding.mainShowGridIxVw.root.resizeGrid(
             newRowCount = launcherConfig.homeRowCount,
             newColumnCount = launcherConfig.homeColumnCount
         )
-        binding.mainShowGridIx.root.updateColors()
-        binding.allAppsBlockIx.root.onResume()
+        binding.mainShowGridIxVw.root.updateColors()
+        binding.allAppsBlockIxVw.root.onResume()
     }
 
     override fun onStop() {
         super.onStop()
         try {
-            binding.mainShowGridIx.root.appWidgetHost.stopListening()
+            binding.mainShowGridIxVw.root.appWidgetHost.stopListening()
         } catch (_: Exception) {
         }
 
@@ -682,18 +682,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             concealMsgsDeck()
             true
         } else if (isAllProgramsSectionExpanded()) {
-            binding.allAppsBlockIx.root.restoreLookup()
-            concealFragment(binding.allAppsBlockIx)
+            binding.allAppsBlockIxVw.root.restoreLookup()
+            concealFragment(binding.allAppsBlockIxVw)
             true
         } else if (isGadgetsSectionExpanded()) {
-            if (binding.widgetsBlockIx.queryBarIx.isSearchOpen) {
+            if (binding.widgetsBlockIxVw.queryBarIxVw.isSearchOpen) {
                 wipeWidgetsLookup()
             } else {
-                concealFragment(binding.widgetsBlockIx)
+                concealFragment(binding.widgetsBlockIxVw)
             }
             true
-        } else if (binding.mainShowGridIx.sizeCasingIx.isVisible) {
-            binding.mainShowGridIx.root.concealResizeLines()
+        } else if (binding.mainShowGridIxVw.sizeCasingIxVw.isVisible) {
+            binding.mainShowGridIxVw.root.concealResizeLines()
             true
         } else {
             true
@@ -737,8 +737,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        binding.allAppsBlockIx.root.onConfigurationChanged()
-        binding.widgetsBlockIx.root.onConfigurationChanged()
+        binding.allAppsBlockIxVw.root.onConfigurationChanged()
+        binding.widgetsBlockIxVw.root.onConfigurationChanged()
 
         reloadStatusBandGlyphs(livePanelTint())
     }
@@ -800,8 +800,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             MotionEvent.ACTION_DOWN -> {
                 mTouchDownX = event.x.toInt()
                 mTouchDownY = event.y.toInt()
-                mAllAppsFragmentY = binding.allAppsBlockIx.root.y.toInt()
-                mWidgetsFragmentY = binding.widgetsBlockIx.root.y.toInt()
+                mAllAppsFragmentY = binding.allAppsBlockIxVw.root.y.toInt()
+                mWidgetsFragmentY = binding.widgetsBlockIxVw.root.y.toInt()
                 mIgnoreUpEvent = false
             }
 
@@ -818,12 +818,12 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 if (mLongPressedIcon != null && (mOpenPopupMenu != null) && hasFingerMoved) {
                     mOpenPopupMenu?.dismiss()
                     mOpenPopupMenu = null
-                    binding.mainShowGridIx.root.itemDraggingStarted(mLongPressedIcon!!)
-                    concealFragment(binding.allAppsBlockIx)
+                    binding.mainShowGridIxVw.root.itemDraggingStarted(mLongPressedIcon!!)
+                    concealFragment(binding.allAppsBlockIxVw)
                 }
 
                 if (mLongPressedIcon != null && hasFingerMoved) {
-                    binding.mainShowGridIx.root.draggedItemMoved(event.x.toInt(), event.y.toInt())
+                    binding.mainShowGridIxVw.root.draggedItemMoved(event.x.toInt(), event.y.toInt())
                 }
 
                 if (hasFingerMoved && !mIgnoreMoveEvents) {
@@ -836,18 +836,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                         mIgnoreXMoveEvents = true
                         if (isGadgetsSectionExpanded()) {
                             val newY = mWidgetsFragmentY - diffY
-                            binding.widgetsBlockIx.root.y = min(
+                            binding.widgetsBlockIxVw.root.y = min(
                                 a = max(0f, newY), b = mScreenHeight.toFloat()
                             )
                         } else if (mLongPressedIcon == null && mDrawerEnabled) {
                             val newY = mAllAppsFragmentY - diffY
-                            binding.allAppsBlockIx.root.y = min(
+                            binding.allAppsBlockIxVw.root.y = min(
                                 a = max(0f, newY), b = mScreenHeight.toFloat()
                             )
                         }
                     } else if (abs(diffX) > abs(diffY) && !mIgnoreXMoveEvents) {
                         mIgnoreYMoveEvents = true
-                        binding.mainShowGridIx.root.setSwipeMovement(diffX)
+                        binding.mainShowGridIxVw.root.setSwipeMovement(diffX)
                     }
                 }
 
@@ -862,30 +862,30 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 mLongPressedIcon = null
                 mLastTouchCoords = Pair(-1f, -1f)
                 reinitBlockTouches()
-                binding.mainShowGridIx.root.itemDraggingStopped()
+                binding.mainShowGridIxVw.root.itemDraggingStopped()
 
                 if (!mIgnoreUpEvent) {
                     if (!mIgnoreYMoveEvents) {
-                        if (binding.allAppsBlockIx.root.y < mScreenHeight * 0.5) {
+                        if (binding.allAppsBlockIxVw.root.y < mScreenHeight * 0.5) {
                             displayFragment(
-                                fragment = binding.allAppsBlockIx,
+                                fragment = binding.allAppsBlockIxVw,
                                 reloadUnits = mAllAppsFragmentY == mScreenHeight
                             )
                         } else if (isAllProgramsSectionExpanded()) {
-                            concealFragment(binding.allAppsBlockIx)
+                            concealFragment(binding.allAppsBlockIxVw)
                         }
 
-                        if (binding.widgetsBlockIx.root.y < mScreenHeight * 0.5) {
-                            displayFragment(binding.widgetsBlockIx)
+                        if (binding.widgetsBlockIxVw.root.y < mScreenHeight * 0.5) {
+                            displayFragment(binding.widgetsBlockIxVw)
                         } else if (isGadgetsSectionExpanded()) {
-                            concealFragment(binding.widgetsBlockIx)
+                            concealFragment(binding.widgetsBlockIxVw)
                         }
                     }
 
                 }
 
                 if (!mIgnoreXMoveEvents) {
-                    val grid = binding.mainShowGridIx.root
+                    val grid = binding.mainShowGridIxVw.root
                     // No fling claimed this release, yet the swipe was quick: commit the page.
                     if (!mIgnoreUpEvent && mIgnoreYMoveEvents && event.actionMasked == MotionEvent.ACTION_UP) {
                         quickSwipeDirection(event)?.let { grid.flingSwipe(towardsNext = it) }
@@ -909,7 +909,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         if (savedInstanceState.getBoolean(APP_DRAWER_STATE)) {
-            displayFragment(binding.allAppsBlockIx, 0L)
+            displayFragment(binding.allAppsBlockIxVw, 0L)
         }
     }
 
@@ -949,14 +949,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 )
 
                 runOnUiThread {
-                    binding.mainShowGridIx.root.skipToPage(page)
+                    binding.mainShowGridIxVw.root.skipToPage(page)
                 }
 
                 Thread.sleep(2000)
 
                 try {
                     item.accept()
-                    binding.mainShowGridIx.root.repoAndDisplayGridItem(gridItem)
+                    binding.mainShowGridIxVw.root.repoAndDisplayGridItem(gridItem)
                 } catch (_: IllegalStateException) {
                 }
             }
@@ -1059,7 +1059,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             pullMainAppletPackages()
             launcherConfig.wasHomeScreenInit = true
             launcherConfig.wasSearchBarPurged = true
-            binding.mainShowGridIx.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullGridItems()
         }
 
         // First run: everything that only places apps needs their names, not their icons. Seeding
@@ -1073,7 +1073,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             if (!launcherConfig.isDrawerEnabled || launcherConfig.homeAndDrawer) {
                 DeskWidgetsFiller.placeMissing(this, names)
             }
-            binding.mainShowGridIx.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullGridItems()
         }
 
         val knownSignature = IconStore.installedSignature
@@ -1082,10 +1082,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         // (installs, removals, updates). Same signature, same providers: the list is not rebuilt -
         // that decoded every installed widget's preview again on every return to the home screen.
         val appsChanged = knownSignature == null || knownSignature != IconStore.installedSignature
-        binding.allAppsBlockIx.root.gotLaunchers(launchers)
-        binding.startPageIx.root.gotLaunchers(launchers)
-        if (appsChanged || !binding.widgetsBlockIx.root.hasWidgets()) {
-            binding.widgetsBlockIx.root.getAppWidgets()
+        binding.allAppsBlockIxVw.root.gotLaunchers(launchers)
+        binding.startPageIxVw.root.gotLaunchers(launchers)
+        if (appsChanged || !binding.widgetsBlockIxVw.root.hasWidgets()) {
+            binding.widgetsBlockIxVw.root.getAppWidgets()
         }
 
         // An app being updated drops out of the launcher list for a moment; deleting its rows then
@@ -1121,11 +1121,11 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             ensureBackgroundThread {
                 purgeSeededLookupBandIfNeeded()
 
-                binding.mainShowGridIx.root.deletePlacedLookupBars()
-                binding.mainShowGridIx.root.pullGridItems()
+                binding.mainShowGridIxVw.root.deletePlacedLookupBars()
+                binding.mainShowGridIxVw.root.pullGridItems()
             }
         } else {
-            binding.mainShowGridIx.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullGridItems()
         }
     }
 
@@ -1136,14 +1136,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         return true
     }
 
-    fun isAllProgramsSectionExpanded() = binding.allAppsBlockIx.root.y != mScreenHeight.toFloat()
+    fun isAllProgramsSectionExpanded() = binding.allAppsBlockIxVw.root.y != mScreenHeight.toFloat()
 
     private fun isGadgetsSectionExpanded() =
-        binding.widgetsBlockIx.root.y != mScreenHeight.toFloat()
+        binding.widgetsBlockIxVw.root.y != mScreenHeight.toFloat()
 
-    fun isLeftStageExpanded() = binding.startPageIx.root.x != mScreenWidth.toFloat()
+    fun isLeftStageExpanded() = binding.startPageIxVw.root.x != mScreenWidth.toFloat()
 
-    fun isMsgsStageExpanded() = binding.msgsPageIx.root.x != -mScreenWidth.toFloat()
+    fun isMsgsStageExpanded() = binding.msgsPageIxVw.root.x != -mScreenWidth.toFloat()
 
     /** The surface in front now, as an analytics screen name; the widgets list has none of its own. */
     private fun liveScreen() = when {
@@ -1165,19 +1165,19 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             return
         }
         CenterDealBroker.run(this, CenterAdsToggles.LEFT_SWIPE) {
-            binding.startPageIx.root.reloadUnits()
-            binding.startPageIx.root.onOpened()
-            surfaceSideDeck(binding.startPageIx.root)
+            binding.startPageIxVw.root.reloadUnits()
+            binding.startPageIxVw.root.onOpened()
+            surfaceSideDeck(binding.startPageIxVw.root)
 
             doneGuidePhase(CenterTourStop.SWIPE_LEFT_APPS)
         }
     }
 
     fun concealLeftDeck() {
-        concealSideDeck(binding.startPageIx.root, mScreenWidth.toFloat())
+        concealSideDeck(binding.startPageIxVw.root, mScreenWidth.toFloat())
 
         Handler(Looper.getMainLooper()).postDelayed({
-            binding.startPageIx.root.restoreLookup()
+            binding.startPageIxVw.root.restoreLookup()
         }, ANIMATION_DURATION)
     }
 
@@ -1222,18 +1222,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     private fun revealMsgsDeck() {
-        binding.msgsPageIx.root.refresh()
-        surfaceSideDeck(binding.msgsPageIx.root) {
+        binding.msgsPageIxVw.root.refresh()
+        surfaceSideDeck(binding.msgsPageIxVw.root) {
             // Load the inbox ribbon only once the panel has landed, so a collapsible never opens mid-slide.
-            if (mOpenSidePanel === binding.msgsPageIx.root) binding.msgsPageIx.root.onPanelSettled()
+            if (mOpenSidePanel === binding.msgsPageIxVw.root) binding.msgsPageIxVw.root.onPanelSettled()
         }
 
-        binding.msgsPageIx.root.setPanelVisible(true)
+        binding.msgsPageIxVw.root.setPanelVisible(true)
     }
 
     fun concealMsgsDeck() {
-        binding.msgsPageIx.root.setPanelVisible(false)
-        concealSideDeck(binding.msgsPageIx.root, -mScreenWidth.toFloat())
+        binding.msgsPageIxVw.root.setPanelVisible(false)
+        concealSideDeck(binding.msgsPageIxVw.root, -mScreenWidth.toFloat())
     }
 
     fun closePostbox() {
@@ -1243,14 +1243,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     private fun surfaceSideDeck(panel: View, onShown: (() -> Unit)? = null) {
-        Launcher.events.onScreen(if (panel === binding.startPageIx.root) SCREEN_SUGGESTED else SCREEN_HOST_APP)
+        Launcher.events.onScreen(if (panel === binding.startPageIxVw.root) SCREEN_SUGGESTED else SCREEN_HOST_APP)
         concealSwipeHint()
         mOpenSidePanel = panel
         tweenSideDeckTo(panel, 0f, onShown)
         window.navigationBarColor = resources.getColor(R.color.launcher_semitransparent_navigation)
-        binding.mainShowGridIx.root.fragmentExpanded()
-        binding.mainShowGridIx.root.concealResizeLines()
-        binding.mainShowGridIx.root.animate()
+        binding.mainShowGridIxVw.root.fragmentExpanded()
+        binding.mainShowGridIxVw.root.concealResizeLines()
+        binding.mainShowGridIxVw.root.animate()
             .alpha(0f)
             .setDuration(ANIMATION_DURATION)
             .start()
@@ -1271,7 +1271,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             perhapsSurfaceGuide()
         }
         window.navigationBarColor = Color.TRANSPARENT
-        binding.mainShowGridIx.root.fragmentCollapsed()
+        binding.mainShowGridIxVw.root.fragmentCollapsed()
         reloadStatusBandGlyphs()
         hideKeyboard()
     }
@@ -1298,8 +1298,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     fun startHandlingTouches(touchDownY: Int) {
         mLongPressedIcon = null
         mTouchDownY = touchDownY
-        mAllAppsFragmentY = binding.allAppsBlockIx.root.y.toInt()
-        mWidgetsFragmentY = binding.widgetsBlockIx.root.y.toInt()
+        mAllAppsFragmentY = binding.allAppsBlockIxVw.root.y.toInt()
+        mWidgetsFragmentY = binding.widgetsBlockIxVw.root.y.toInt()
         mIgnoreUpEvent = false
     }
 
@@ -1324,8 +1324,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
 
         window.navigationBarColor = resources.getColor(R.color.launcher_semitransparent_navigation)
-        binding.mainShowGridIx.root.fragmentExpanded()
-        binding.mainShowGridIx.root.concealResizeLines()
+        binding.mainShowGridIxVw.root.fragmentExpanded()
+        binding.mainShowGridIxVw.root.concealResizeLines()
 
         concealSwipeHint()
         if (fragment is HpAllAppsZoneBinding) {
@@ -1349,7 +1349,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             && launcherConfig.autoShowKeyboardInAppDrawer
         ) {
             fragment.root.post {
-                showKeyboard(fragment.queryBarIx.binding.topToolbarSearch)
+                showKeyboard(fragment.queryBarIxVw.binding.topToolbarSearch)
             }
         }
 
@@ -1358,10 +1358,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             // onRestoreInstanceState after a theme flip: the slab lands this frame, but a view
             // animator only runs on the next one, so the restored drawer sat over a fully drawn
             // workspace until then - or for good, when that frame never ran it.
-            binding.mainShowGridIx.root.animate().cancel()
-            binding.mainShowGridIx.root.alpha = 0f
+            binding.mainShowGridIxVw.root.animate().cancel()
+            binding.mainShowGridIxVw.root.alpha = 0f
         } else {
-            binding.mainShowGridIx.root.animate()
+            binding.mainShowGridIxVw.root.animate()
                 .alpha(0f)
                 .setDuration(animationDuration)
                 .start()
@@ -1381,7 +1381,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
 
         window.navigationBarColor = Color.TRANSPARENT
-        binding.mainShowGridIx.root.fragmentCollapsed()
+        binding.mainShowGridIxVw.root.fragmentCollapsed()
         reloadStatusBandGlyphs()
 
         hideKeyboard()
@@ -1390,11 +1390,11 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
         Handler(Looper.getMainLooper()).postDelayed({
             if (fragment is HpAllAppsZoneBinding) {
-                fragment.allAppsGridIx.scrollToPosition(0)
+                fragment.allAppsGridIxVw.scrollToPosition(0)
                 fragment.root.restoreToFirstPage()
                 fragment.root.touchDownY = -1
             } else if (fragment is HpGadgetsZoneBinding) {
-                fragment.widgetsRollIx.scrollToPosition(0)
+                fragment.widgetsRollIxVw.scrollToPosition(0)
                 fragment.root.touchDownY = -1
             }
         }, animationDuration)
@@ -1407,9 +1407,9 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         concealSwipeHint()
 
-        val (x, y) = binding.mainShowGridIx.root.intoViewSpaceCoords(eventX, eventY)
+        val (x, y) = binding.mainShowGridIxVw.root.intoViewSpaceCoords(eventX, eventY)
         mIgnoreMoveEvents = true
-        val clickedGridItem = binding.mainShowGridIx.root.isClickingGridItem(x.toInt(), y.toInt())
+        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingGridItem(x.toInt(), y.toInt())
         if (clickedGridItem != null) {
             performCellLongTap(x, clickedGridItem)
         }
@@ -1435,14 +1435,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             return
         }
 
-        binding.mainShowGridIx.root.concealResizeLines()
-        val (x, y) = binding.mainShowGridIx.root.intoViewSpaceCoords(eventX, eventY)
-        val clickedGridItem = binding.mainShowGridIx.root.isClickingGridItem(x.toInt(), y.toInt())
+        binding.mainShowGridIxVw.root.concealResizeLines()
+        val (x, y) = binding.mainShowGridIxVw.root.intoViewSpaceCoords(eventX, eventY)
+        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingGridItem(x.toInt(), y.toInt())
         if (clickedGridItem != null) {
             performElementTap(clickedGridItem)
         }
         if (clickedGridItem?.type != ITEM_TYPE_FOLDER) {
-            binding.mainShowGridIx.root.dismissFolder(redraw = true)
+            binding.mainShowGridIxVw.root.dismissFolder(redraw = true)
         }
     }
 
@@ -1452,8 +1452,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             return
         }
 
-        val (x, y) = binding.mainShowGridIx.root.intoViewSpaceCoords(eventX, eventY)
-        val clickedGridItem = binding.mainShowGridIx.root.isClickingGridItem(x.toInt(), y.toInt())
+        val (x, y) = binding.mainShowGridIxVw.root.intoViewSpaceCoords(eventX, eventY)
+        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingGridItem(x.toInt(), y.toInt())
         if (clickedGridItem != null) {
             return
         }
@@ -1473,11 +1473,11 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         if (isAllProgramsSectionExpanded()) {
             val close = {
                 Launcher.events.onScreen(SCREEN_HOME)
-                binding.allAppsBlockIx.root.y = mScreenHeight.toFloat()
-                binding.allAppsBlockIx.allAppsGridIx.scrollToPosition(0)
-                binding.allAppsBlockIx.root.restoreToFirstPage()
-                binding.allAppsBlockIx.root.touchDownY = -1
-                binding.mainShowGridIx.root.fragmentCollapsed()
+                binding.allAppsBlockIxVw.root.y = mScreenHeight.toFloat()
+                binding.allAppsBlockIxVw.allAppsGridIxVw.scrollToPosition(0)
+                binding.allAppsBlockIxVw.root.restoreToFirstPage()
+                binding.allAppsBlockIxVw.root.touchDownY = -1
+                binding.mainShowGridIxVw.root.fragmentCollapsed()
                 reloadStatusBandGlyphs()
 
                 perhapsSurfaceGuide()
@@ -1494,11 +1494,11 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         if (isGadgetsSectionExpanded()) {
             val close = {
                 Launcher.events.onScreen(SCREEN_HOME)
-                binding.widgetsBlockIx.root.y = mScreenHeight.toFloat()
-                binding.widgetsBlockIx.widgetsRollIx.scrollToPosition(0)
+                binding.widgetsBlockIxVw.root.y = mScreenHeight.toFloat()
+                binding.widgetsBlockIxVw.widgetsRollIxVw.scrollToPosition(0)
                 wipeWidgetsLookup()
-                binding.widgetsBlockIx.root.touchDownY = -1
-                binding.mainShowGridIx.root.fragmentCollapsed()
+                binding.widgetsBlockIxVw.root.touchDownY = -1
+                binding.mainShowGridIxVw.root.fragmentCollapsed()
                 reloadStatusBandGlyphs()
 
                 perhapsSurfaceGuide()
@@ -1512,7 +1512,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     fun wipeWidgetsLookup() {
-        binding.widgetsBlockIx.queryBarIx.closeSearch()
+        binding.widgetsBlockIxVw.queryBarIxVw.closeSearch()
     }
 
     private fun performElementTap(clickedGridItem: DeskViewerGridItem) {
@@ -1537,7 +1537,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 val id = clickedGridItem.shortcutId
                 val packageName = clickedGridItem.packageName
                 val userHandle = android.os.Process.myUserHandle()
-                val shortcutBounds = binding.mainShowGridIx.root.getClickableRect(clickedGridItem)
+                val shortcutBounds = binding.mainShowGridIxVw.root.getClickableRect(clickedGridItem)
                 val launcherApps =
                     applicationContext.getSystemService(LAUNCHER_APPS_SERVICE) as LauncherApps
                 runCatching {
@@ -1548,16 +1548,16 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     private fun wakeFolder(folder: DeskViewerGridItem) {
-        binding.mainShowGridIx.root.wakeFolder(folder)
+        binding.mainShowGridIxVw.root.wakeFolder(folder)
     }
 
     private fun performCellLongTap(x: Float, clickedGridItem: DeskViewerGridItem) {
         if (clickedGridItem.type == ITEM_TYPE_ICON || clickedGridItem.type == ITEM_TYPE_SHORTCUT || clickedGridItem.type == ITEM_TYPE_FOLDER) {
-            binding.baseHolderIx.performHapticFeedback()
+            binding.baseHolderIxVw.performHapticFeedback()
         }
 
-        val anchorY = binding.mainShowGridIx.root.sideMargins.top +
-                (clickedGridItem.top * binding.mainShowGridIx.root.cellHeight.toFloat())
+        val anchorY = binding.mainShowGridIxVw.root.sideMargins.top +
+                (clickedGridItem.top * binding.mainShowGridIxVw.root.cellHeight.toFloat())
         surfaceAtriumGlyphTweaks(x, anchorY, clickedGridItem, false)
     }
 
@@ -1567,11 +1567,11 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         gridItem: DeskViewerGridItem,
         isOnAllAppsFragment: Boolean,
     ) {
-        binding.mainShowGridIx.root.concealResizeLines()
+        binding.mainShowGridIxVw.root.concealResizeLines()
         mLongPressedIcon = gridItem
         // The card is placed against the item's bounds on screen, so it can sit clear of it. A
         // drawer tile reports screen coordinates already; grid rows and widgets are in the grid's.
-        val grid = binding.mainShowGridIx.root
+        val grid = binding.mainShowGridIxVw.root
         val gridOnScreen = IntArray(2).also { grid.getLocationOnScreen(it) }
         val (centerX, itemTop, itemBottom) = when {
             isOnAllAppsFragment -> {
@@ -1613,17 +1613,17 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     fun widgetLongPressedOnRoll(gridItem: DeskViewerGridItem) {
         mLongPressedIcon = gridItem
-        concealFragment(binding.widgetsBlockIx)
-        binding.mainShowGridIx.root.itemDraggingStarted(mLongPressedIcon!!)
+        concealFragment(binding.widgetsBlockIxVw)
+        binding.mainShowGridIxVw.root.itemDraggingStarted(mLongPressedIcon!!)
     }
 
     private fun reinitBlockTouches() {
-        binding.widgetsBlockIx.root.apply {
+        binding.widgetsBlockIxVw.root.apply {
             touchDownY = -1
             ignoreTouches = false
         }
 
-        binding.allAppsBlockIx.root.apply {
+        binding.allAppsBlockIxVw.root.apply {
             touchDownY = -1
             ignoreTouches = false
         }
@@ -1635,14 +1635,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             hiddenIconsDB.insert(hiddenIconUi)
 
             runOnUiThread {
-                binding.allAppsBlockIx.root.onIconHidden(item)
+                binding.allAppsBlockIxVw.root.onIconHidden(item)
             }
         }
     }
 
     private fun renameCell(homeScreenGridItem: DeskViewerGridItem) {
         RetitleItemPanel(this, homeScreenGridItem) {
-            binding.mainShowGridIx.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullGridItems()
         }
     }
 
@@ -1665,7 +1665,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         override fun resize(gridItem: DeskViewerGridItem) {
             Launcher.events.onClick("menu_resize")
-            binding.mainShowGridIx.root.widgetLongPressed(gridItem)
+            binding.mainShowGridIxVw.root.widgetLongPressed(gridItem)
         }
 
         override fun appInfoUi(gridItem: DeskViewerGridItem) {
@@ -1675,7 +1675,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         override fun remove(gridItem: DeskViewerGridItem) {
             Launcher.events.onClick("menu_remove")
-            binding.mainShowGridIx.root.deleteAppIcon(gridItem)
+            binding.mainShowGridIxVw.root.deleteAppIcon(gridItem)
         }
 
         override fun uninstall(gridItem: DeskViewerGridItem) {
@@ -1755,7 +1755,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         if (!isGadgetsSectionExpanded()) {
             mIgnoreUpEvent = true
-            displayFragment(binding.allAppsBlockIx)
+            displayFragment(binding.allAppsBlockIxVw)
         }
     }
 
@@ -1767,9 +1767,9 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         mIgnoreUpEvent = true
         if (isAllProgramsSectionExpanded()) {
-            concealFragment(binding.allAppsBlockIx)
+            concealFragment(binding.allAppsBlockIxVw)
         } else if (isGadgetsSectionExpanded()) {
-            concealFragment(binding.widgetsBlockIx)
+            concealFragment(binding.widgetsBlockIxVw)
         } else {
             try {
                 Class.forName("android.app.StatusBarManager")
@@ -1790,15 +1790,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         // Paging owns the fling while a page is dragged or still settling (see flingSwipe). The
         // messages panel sits left of the home page, so it opens only from there, at rest;
         // anywhere else a rightward fling is just the previous page.
-        if (binding.mainShowGridIx.root.flingSwipe(towardsNext = false)) {
+        if (binding.mainShowGridIxVw.root.flingSwipe(towardsNext = false)) {
             return
         }
         if (!isAllProgramsSectionExpanded() && !isGadgetsSectionExpanded() &&
-            binding.mainShowGridIx.root.isOnFirstPage()
+            binding.mainShowGridIxVw.root.isOnFirstPage()
         ) {
             surfaceMsgsDeck()
         } else {
-            binding.mainShowGridIx.root.prevPage(redraw = true)
+            binding.mainShowGridIxVw.root.prevPage(redraw = true)
         }
     }
 
@@ -1810,15 +1810,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         mIgnoreUpEvent = true
 
         // see onFlingRight: the apps panel sits right of the last page and opens only from it
-        if (binding.mainShowGridIx.root.flingSwipe(towardsNext = true)) {
+        if (binding.mainShowGridIxVw.root.flingSwipe(towardsNext = true)) {
             return
         }
         if (!isAllProgramsSectionExpanded() && !isGadgetsSectionExpanded() &&
-            binding.mainShowGridIx.root.isOnLastPage()
+            binding.mainShowGridIxVw.root.isOnLastPage()
         ) {
             surfaceLeftDeck()
         } else {
-            binding.mainShowGridIx.root.nextPage(redraw = true)
+            binding.mainShowGridIxVw.root.nextPage(redraw = true)
         }
     }
 
@@ -1826,12 +1826,12 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     fun pullAllAppletHomebases(): ArrayList<WidgetCenter> = AppScan.scan(
         this,
         onQuick = { quick ->
-            binding.allAppsBlockIx.root.gotLaunchers(quick)
-            binding.startPageIx.root.gotLaunchers(quick)
+            binding.allAppsBlockIxVw.root.gotLaunchers(quick)
+            binding.startPageIxVw.root.gotLaunchers(quick)
         },
         onProgress = { partial ->
-            binding.allAppsBlockIx.root.gotLaunchers(partial)
-            binding.startPageIx.root.gotLaunchers(partial)
+            binding.allAppsBlockIxVw.root.gotLaunchers(partial)
+            binding.startPageIxVw.root.gotLaunchers(partial)
         },
     )
 
@@ -1899,7 +1899,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 val slotFilled = items.any { it.docked && it.left == DOCK_SMS_SLOT && it.parentId == null }
                 if (!slotFilled) {
                     messagingDockCell(wanted)?.let { homeScreenGridItemsDB.insert(it) }
-                    binding.mainShowGridIx.root.pullGridItems()
+                    binding.mainShowGridIxVw.root.pullGridItems()
                 }
                 launcherConfig.dockSmsPackage = placed
                 return@ensureBackgroundThread
@@ -1914,7 +1914,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             }
             launcherConfig.dockSmsPackage = wanted
             Timber.d("StarterTray: dock messaging slot $placed -> $wanted (slotTaken=$slotTaken)")
-            binding.mainShowGridIx.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullGridItems()
         }
     }
 
@@ -2108,10 +2108,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         (panel.background as? ColorDrawable)?.color ?: getProperBackgroundColor()
 
     private fun livePanelTint(): Int? = when {
-        isAllProgramsSectionExpanded() -> slabBackgroundColor(binding.allAppsBlockIx)
-        isGadgetsSectionExpanded() -> slabBackgroundColor(binding.widgetsBlockIx)
-        isLeftStageExpanded() -> sideDeckBackdropTint(binding.startPageIx.root)
-        isMsgsStageExpanded() -> sideDeckBackdropTint(binding.msgsPageIx.root)
+        isAllProgramsSectionExpanded() -> slabBackgroundColor(binding.allAppsBlockIxVw)
+        isGadgetsSectionExpanded() -> slabBackgroundColor(binding.widgetsBlockIxVw)
+        isLeftStageExpanded() -> sideDeckBackdropTint(binding.startPageIxVw.root)
+        isMsgsStageExpanded() -> sideDeckBackdropTint(binding.msgsPageIxVw.root)
         else -> null
     }
 

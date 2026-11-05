@@ -2,7 +2,7 @@
 <!-- A step-2 reason: radio row; when picked it opens its quick fix, the fix button and "Uninstall anyway". -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card"
+    android:id="@+id/panel"
     style="@style/SH.Bento"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/row"
+            android:id="@+id/rowVw"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_44sdp"
             android:background="?attr/selectableItemBackground"
@@ -23,13 +23,13 @@
             android:paddingHorizontal="@dimen/_12sdp">
 
             <ImageView
-                android:id="@+id/radio"
+                android:id="@+id/rdo"
                 android:layout_width="@dimen/_17sdp"
                 android:layout_height="@dimen/_17sdp"
                 android:importantForAccessibility="no" />
 
             <TextView
-                android:id="@+id/label"
+                android:id="@+id/labelVw"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -41,7 +41,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/fix"
+            android:id="@+id/fixVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -50,7 +50,7 @@
             android:visibility="gone">
 
             <TextView
-                android:id="@+id/fixText"
+                android:id="@+id/fixTextVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/_7sdp"
@@ -60,13 +60,13 @@
                 app:drawableStartCompat="@drawable/glyph_star" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/fixButton"
+                android:id="@+id/fixButtonVw"
                 style="@style/SH.Cta"
                 android:layout_width="match_parent"
                 android:layout_marginTop="@dimen/_8sdp" />
 
             <TextView
-                android:id="@+id/anyway"
+                android:id="@+id/anywayVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"

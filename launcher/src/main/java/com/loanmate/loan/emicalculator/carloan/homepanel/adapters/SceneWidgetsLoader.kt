@@ -26,11 +26,11 @@ class SceneWidgetsLoader(
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindView(launcher: WidgetCenter) {
-            itemView.findViewById<TextView>(R.id.cell_headingAltIx).text = launcher.title
+            itemView.findViewById<TextView>(R.id.cell_headingAltIxVw).text = launcher.title
 
             // the icons are already loaded in memory by the drawer, no need for Glide here; one that
             // is not yet (a cold start) is decoded on its own instead of waiting for the full scan
-            val icon = itemView.findViewById<ImageView>(R.id.box_iconIx)
+            val icon = itemView.findViewById<ImageView>(R.id.box_iconIxVw)
             val ready = launcher.drawable ?: IconFetcher.cached(launcher.packageName, launcher.activityName)
             icon.setImageDrawable(ready)
             if (ready == null) {

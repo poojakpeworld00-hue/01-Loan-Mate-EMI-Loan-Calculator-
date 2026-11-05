@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/header"
+        android:id="@+id/crest"
         layout="@layout/box_header" />
 
     <androidx.core.widget.NestedScrollView
@@ -22,7 +22,7 @@
             android:paddingBottom="@dimen/_17sdp">
 
             <TextView
-                android:id="@+id/number"
+                android:id="@+id/numberVw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/fill_pill"
@@ -33,7 +33,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/title"
+                android:id="@+id/titleVw"
                 style="@style/SH.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textAlignment="viewStart" />
 
             <TextView
-                android:id="@+id/body"
+                android:id="@+id/bodyVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -51,7 +51,7 @@
                 android:textSize="@dimen/_12ssp" />
 
             <FrameLayout
-                android:id="@+id/adInline"
+                android:id="@+id/adInlineVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -60,7 +60,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
-        android:id="@+id/adSlot"
+        android:id="@+id/adSlotVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_10sdp"

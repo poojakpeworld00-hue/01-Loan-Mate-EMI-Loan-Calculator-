@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><com.loanmate.loan.emicalculator.carloan.homepanel.sheets.InboxScenePanel xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/msgs_page_holderIx"
+    android:id="@+id/msgs_page_holderIxVw"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/launcher_inbox_panel_bg"
@@ -7,7 +7,7 @@
     android:focusable="true">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/postbox_holderIx"
+        android:id="@+id/postbox_holderIxVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

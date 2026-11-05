@@ -8,17 +8,17 @@
     android:paddingVertical="8dp">
 
     <ImageView
-        android:id="@+id/box_iconIx"
+        android:id="@+id/box_iconIxVw"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"
         android:padding="3dp" />
 
     <TextView
-        android:id="@+id/cell_headingAltIx"
+        android:id="@+id/cell_headingAltIxVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/box_iconIx"
+        android:layout_below="@+id/box_iconIxVw"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="0dp"
         android:ellipsize="end"

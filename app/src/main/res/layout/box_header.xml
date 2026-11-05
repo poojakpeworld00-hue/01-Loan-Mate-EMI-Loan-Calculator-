@@ -7,7 +7,7 @@
     android:paddingVertical="@dimen/_9sdp">
 
     <ImageButton
-        android:id="@+id/back"
+        android:id="@+id/backVw"
         android:padding="@dimen/_9sdp"
         android:scaleType="fitCenter"
         android:layout_width="@dimen/_32sdp"
@@ -17,7 +17,7 @@
         android:src="@drawable/glyph_back" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/titleVw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_10sdp"

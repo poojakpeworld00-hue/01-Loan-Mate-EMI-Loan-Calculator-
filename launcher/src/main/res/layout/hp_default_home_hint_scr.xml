@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llBaseIx"
+    android:id="@+id/rowBaseIx"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <View
-        android:id="@+id/guideSpacerIx"
+        android:id="@+id/guideSpacerIxVw"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
     <LinearLayout
-        android:id="@+id/guideCellIx"
+        android:id="@+id/guideCellIxVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -24,7 +24,7 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/guideItemIx"
+            android:id="@+id/guideItemIxVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -35,7 +35,7 @@
             android:paddingBottom="14dp">
 
             <ImageView
-                android:id="@+id/guideAppIconIx"
+                android:id="@+id/guideAppIconIxVw"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@null"
@@ -50,7 +50,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/guideTitleIx"
+                    android:id="@+id/guideTitleIxVw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/launcher_hint_overlay_title"
@@ -59,7 +59,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/guideDescriptionIx"
+                    android:id="@+id/guideDescriptionIxVw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
@@ -72,7 +72,7 @@
         </LinearLayout>
 
         <FrameLayout
-            android:id="@+id/guideSheetFakeIx"
+            android:id="@+id/guideSheetFakeIxVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipChildren="false"
@@ -104,7 +104,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/guideFakeSheetItemIx"
+                android:id="@+id/guideFakeSheetItemIxVw"
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:layout_gravity="center"
@@ -128,7 +128,7 @@
                         android:layout_height="44dp"
                         android:layout_gravity="center"
                         android:contentDescription="@null"
-                        android:id="@+id/guideFakeSheetIconIx"
+                        android:id="@+id/guideFakeSheetIconIxVw"
                         android:src="@null" />
 
                 </FrameLayout>
@@ -142,7 +142,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/guideFakeSheetTextIx"
+                        android:id="@+id/guideFakeSheetTextIxVw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -165,14 +165,14 @@
                 </LinearLayout>
 
                 <FrameLayout
-                    android:id="@+id/guideSwitchRailIx"
+                    android:id="@+id/guideSwitchRailIxVw"
                     android:layout_width="52dp"
                     android:layout_height="32dp"
                     android:background="@drawable/hpd_floating_tutorial_switch_track"
                     android:duplicateParentState="false">
 
                     <View
-                        android:id="@+id/guideSwitchKnobIx"
+                        android:id="@+id/guideSwitchKnobIxVw"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_gravity="center_vertical|start"

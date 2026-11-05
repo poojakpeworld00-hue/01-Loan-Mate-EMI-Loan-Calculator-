@@ -90,7 +90,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     private var askingHome = false
     private var homeGrantedAt = 0L
     private var leftWithHome = false
-    private val homeDemo by lazy { RootBootGallery(b.homeDemo) }
+    private val homeDemo by lazy { RootBootGallery(b.homeDemoVw) }
     private var waitedForLocale = false
     private val finishAnyway = Runnable { finishSetup() }
     private val reAsk = Runnable { if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && currentKey() == DEFAULT_HOME_KEY) queryBaseBase() }
@@ -107,22 +107,22 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         kitEnableDarkEdgeToEdge()
         b = ScreenSetupBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.content.padForOsBars()
-        b.glow.kitGlowPulse()
-        b.ctaShine.kitShine(b.cta, 3200)
-        b.cta.clipToOutline = true
-        ctaHome = b.cta.parent as ViewGroup
-        ctaParams = b.cta.layoutParams
+        b.contentVw.padForOsBars()
+        b.glowVw.kitGlowPulse()
+        b.ctaShineVw.kitShine(b.ctaVw, 3200)
+        b.ctaVw.clipToOutline = true
+        ctaHome = b.ctaVw.parent as ViewGroup
+        ctaParams = b.ctaVw.layoutParams
         // A key forwarded to a fresh screen was the press that reopened it, not one on our step.
         if (savedInstanceState == null) intent.removeExtra(SysShortcutAim.EXTRA_SYSTEM_KEY)
 
-        b.back.setOnClickListener { MetricsTwo.click("back"); viewModel.back() }
-        b.skip.setOnClickListener { MetricsTwo.click("skip"); advance() }
-        b.next.setOnClickListener {
+        b.backVw.setOnClickListener { MetricsTwo.click("back"); viewModel.back() }
+        b.skipVw.setOnClickListener { MetricsTwo.click("skip"); advance() }
+        b.nextVw.setOnClickListener {
             MetricsTwo.click("continue")
             primaryTask()
         }
-        b.favAll.setOnClickListener { viewModel.switchAllStars() }
+        b.favAllVw.setOnClickListener { viewModel.switchAllStars() }
         onBackPressedDispatcher.addCallback(this) { MetricsTwo.hotkeyPress("back"); onOsHotkey(SysShortcut.BACK) }
 
         kitCollectWhenStarted(viewModel.state, ::render)
@@ -156,7 +156,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     override fun onStop() {
         // KitAway in Settings for the request: the step stays blank until its result, so after picking us the next step is
         // the first thing shown (some phones report the role late, after our first frame).
-        if (askingHome) b.content.visibility = View.INVISIBLE
+        if (askingHome) b.contentVw.visibility = View.INVISIBLE
         homeDemo.stop()
         super.onStop()
     }
@@ -204,9 +204,9 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
 
     /** Continue back in its pinned spot above the bottom ad (it may be in the list from the previous step). */
     private fun kitPinCta() {
-        if (b.cta.parent === ctaHome) return
-        (b.cta.parent as? ViewGroup)?.removeView(b.cta)
-        ctaHome.addView(b.cta, ctaHome.indexOfChild(b.adSlot), ctaParams)
+        if (b.ctaVw.parent === ctaHome) return
+        (b.ctaVw.parent as? ViewGroup)?.removeView(b.ctaVw)
+        ctaHome.addView(b.ctaVw, ctaHome.indexOfChild(b.adSlotVw), ctaParams)
     }
 
     private fun place(step: Phase) = "onboarding.${step.key}"
@@ -284,40 +284,40 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         val index = steps.indexOf(current).takeIf { it >= 0 } ?: steps.count { all.indexOf(it) < at }.coerceAtMost(steps.lastIndex)
         val v = SheetSetupBinding.inflate(layoutInflater)
         val number = String.format(Locale.getDefault(), "%02d", index + 1)
-        v.sheetBadge.text = number
-        v.sheetEyebrow.text = getString(R.string.sh_mission, number, steps.size.toString())
-        v.sheetNext.setText(current.name)
-        wireSegments(v.sheetSegments, index, steps.size)
-        v.sheetSegments.contentDescription = getString(R.string.sh_done, index, steps.size)
-        v.sheetDone.text = getString(R.string.sh_done, index, steps.size)
-        v.sheetXp.text = getString(R.string.sh_xp, index * 100)
-        v.sheetTitle.text = getText(R.string.sh_title).kitAccentBold(v.sheetTitle)
+        v.sheetBadgeVw.text = number
+        v.sheetEyebrowVw.text = getString(R.string.sh_mission, number, steps.size.toString())
+        v.sheetNextVw.setText(current.name)
+        wireSegments(v.sheetSegmentsVw, index, steps.size)
+        v.sheetSegmentsVw.contentDescription = getString(R.string.sh_done, index, steps.size)
+        v.sheetDoneVw.text = getString(R.string.sh_done, index, steps.size)
+        v.sheetXpVw.text = getString(R.string.sh_xp, index * 100)
+        v.sheetTitleVw.text = getText(R.string.sh_title).kitAccentBold(v.sheetTitleVw)
         val fraction = index.toFloat() / steps.size
         val mood = getString(if (fraction < 1f / 3) R.string.sh_mood_start else if (fraction < 2f / 3) R.string.sh_mood_half else R.string.sh_mood_almost)
         val left = steps.size - index
-        v.sheetMood.text = SpannableStringBuilder(mood).apply {
+        v.sheetMoodVw.text = SpannableStringBuilder(mood).apply {
             setSpan(ForegroundColorSpan(ContextCompat.getColor(this@OnboardActivity, R.color.sh_primary)), 0, length, 0)
             setSpan(StyleSpan(Typeface.BOLD), 0, length, 0)
             append(" · ").append(resources.getQuantityString(R.plurals.sh_to_go, left, left))
         }
-        v.sheetSaved.text = SpannableStringBuilder(getString(R.string.sh_saved)).apply {
+        v.sheetSavedVw.text = SpannableStringBuilder(getString(R.string.sh_saved)).apply {
             setSpan(ForegroundColorSpan(0xFFC4CEE6.toInt()), 0, length, 0)
             setSpan(StyleSpan(Typeface.BOLD), 0, length, 0)
             append(" ").append(getString(R.string.sh_saved_text))
         }
-        v.sheetGlow.kitGlowPulse()
-        ObjectAnimator.ofFloat(v.sheetRing, View.ROTATION, 0f, 360f).apply {
+        v.sheetGlowVw.kitGlowPulse()
+        ObjectAnimator.ofFloat(v.sheetRingVw, View.ROTATION, 0f, 360f).apply {
             duration = 9000
             repeatCount = ValueAnimator.INFINITE
             interpolator = LinearInterpolator()
             start()
         }
-        v.sheetShine.kitShine(v.sheetCta, 2600)
+        v.sheetShineVw.kitShine(v.sheetCtaVw, 2600)
         if (opens >= 2) wireSpeechCoach(v, index)
-        v.sheetContinue.setOnClickListener { MetricsTwo.click("continue"); advance() }
+        v.sheetContinueVw.setOnClickListener { MetricsTwo.click("continue"); advance() }
         // As the reference: "Go to Home" moves on like Continue; only the close button (or Back) closes the sheet.
-        v.sheetClose.setOnClickListener { MetricsTwo.click("go_home"); advance() }
-        v.sheetX.setOnClickListener { MetricsTwo.click("dismiss"); closeSheet() }
+        v.sheetCloseVw.setOnClickListener { MetricsTwo.click("go_home"); advance() }
+        v.sheetXVw.setOnClickListener { MetricsTwo.click("dismiss"); closeSheet() }
         OnboardProgress.sheet = true
         sheet = BottomSheetDialog(this).apply {
             setContentView(v.root)
@@ -369,10 +369,10 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         releaseSpeech() // an earlier sheet's player, if its dismiss hasn't run yet
         val player = MediaPlayer.create(this, speechClip(settings.languages[settings.currentLanguageIndex()].tag)) ?: return
         voice = player
-        v.voiceCard.visibility = View.VISIBLE
-        v.voiceWave.seed(index)
+        v.voiceCardVw.visibility = View.VISIBLE
+        v.voiceWaveVw.seed(index)
         val ripple = ObjectAnimator.ofPropertyValuesHolder(
-            v.voiceRipple,
+            v.voiceRippleVw,
             PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 1.7f),
             PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 1.7f),
             PropertyValuesHolder.ofFloat(View.ALPHA, 0.6f, 0f),
@@ -382,29 +382,29 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         val tick = object : Runnable {
             override fun run() {
                 val p = voice ?: return
-                v.voiceWave.progress = p.currentPosition.toFloat() / p.duration.coerceAtLeast(1)
-                v.voiceTime.text = time(if (p.isPlaying) p.currentPosition else p.duration)
-                if (p.isPlaying) v.voiceWave.postDelayed(this, 80)
+                v.voiceWaveVw.progress = p.currentPosition.toFloat() / p.duration.coerceAtLeast(1)
+                v.voiceTimeVw.text = time(if (p.isPlaying) p.currentPosition else p.duration)
+                if (p.isPlaying) v.voiceWaveVw.postDelayed(this, 80)
             }
         }
         fun show(playing: Boolean) {
-            v.voicePlay.setImageResource(if (playing) R.drawable.glyph_pause else R.drawable.glyph_play)
-            v.voicePlay.contentDescription = getString(if (playing) R.string.sh_pause else R.string.sh_play)
-            v.voiceWave.playing = playing
-            if (playing) { ripple.start(); v.voiceWave.post(tick) } else { ripple.cancel(); v.voiceRipple.alpha = 0f }
+            v.voicePlayVw.setImageResource(if (playing) R.drawable.glyph_pause else R.drawable.glyph_play)
+            v.voicePlayVw.contentDescription = getString(if (playing) R.string.sh_pause else R.string.sh_play)
+            v.voiceWaveVw.playing = playing
+            if (playing) { ripple.start(); v.voiceWaveVw.post(tick) } else { ripple.cancel(); v.voiceRippleVw.alpha = 0f }
         }
-        v.voiceTime.text = time(player.duration)
+        v.voiceTimeVw.text = time(player.duration)
         player.setOnCompletionListener {
             show(false)
-            v.voiceWave.progress = 1f
-            v.voicePlay.setImageResource(R.drawable.glyph_replay)
-            v.voicePlay.contentDescription = getString(R.string.sh_replay)
-            v.voiceText.setText(R.string.sh_voice_done)
+            v.voiceWaveVw.progress = 1f
+            v.voicePlayVw.setImageResource(R.drawable.glyph_replay)
+            v.voicePlayVw.contentDescription = getString(R.string.sh_replay)
+            v.voiceTextVw.setText(R.string.sh_voice_done)
         }
-        v.voicePlay.setOnClickListener {
+        v.voicePlayVw.setOnClickListener {
             MetricsTwo.click("voice_guide")
             if (player.isPlaying) player.pause() else {
-                v.voiceText.setText(R.string.sh_voice_text)
+                v.voiceTextVw.setText(R.string.sh_voice_text)
                 player.start()
             }
             show(player.isPlaying)
@@ -434,10 +434,10 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     private fun onBaseBasePhase(onIt: Boolean) {
         RootRootStep.shown = onIt
         // The reference's animated demo replaces the option list on this step; its button carries the home icon.
-        b.list.visibility = if (onIt) View.GONE else View.VISIBLE
-        b.homeDemo.root.visibility = if (onIt) View.VISIBLE else View.GONE
-        b.next.icon = if (onIt) ContextCompat.getDrawable(this, R.drawable.glyph_home) else null
-        b.next.iconGravity = com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_START
+        b.listVw.visibility = if (onIt) View.GONE else View.VISIBLE
+        b.homeDemoVw.root.visibility = if (onIt) View.VISIBLE else View.GONE
+        b.nextVw.icon = if (onIt) ContextCompat.getDrawable(this, R.drawable.glyph_home) else null
+        b.nextVw.iconGravity = com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_START
         if (onIt) homeDemo.start() else homeDemo.stop()
         if (onIt) queryBaseBase() // Settings opens straight away
     }
@@ -447,7 +447,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         askingHome = true
         Launcher.requestDefaultHome(this) { granted ->
             askingHome = false
-            b.content.visibility = View.VISIBLE
+            b.contentVw.visibility = View.VISIBLE
             if (granted) baseGranted() else kitDeclined()
         }
     }
@@ -523,12 +523,12 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     private fun wireTexts(step: Phase, state: OnboardLookStyle) {
         val preview = state.selection.firstOrNull()?.takeIf { step.key == LANG_KEY }
             ?.let { viewModel.languageTag(it) }?.let(::inTongue) ?: this
-        b.stepName.text = preview.getText(step.name)
-        b.title.text = preview.getText(step.title).kitAccentBold(b.title)
-        b.sub.text = preview.getText(step.sub)
-        b.skip.text = preview.getText(R.string.skip)
-        b.back.contentDescription = preview.getText(R.string.back)
-        b.next.text = preview.getText(
+        b.stepNameVw.text = preview.getText(step.name)
+        b.titleVw.text = preview.getText(step.title).kitAccentBold(b.titleVw)
+        b.subVw.text = preview.getText(step.sub)
+        b.skipVw.text = preview.getText(R.string.skip)
+        b.backVw.contentDescription = preview.getText(R.string.back)
+        b.nextVw.text = preview.getText(
             when {
                 step.key == DEFAULT_HOME_KEY -> R.string.dh_button
                 step.key == PERMISSION_HUB_KEY -> R.string.perm_allow
@@ -547,7 +547,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         viewModel.steps.getOrNull(viewModel.state.value.stepIndex)?.let { wireTexts(it, viewModel.state.value) }
-        (b.list.adapter as? ChooseAdapter)?.let { it.notifyItemRangeChanged(0, it.itemCount) }
+        (b.listVw.adapter as? ChooseAdapter)?.let { it.notifyItemRangeChanged(0, it.itemCount) }
         if (waitedForLocale) finishSetup()
     }
 
@@ -561,55 +561,55 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             val first = shownStep == -1
             shownStep = state.stepIndex
             val hasBanner = step.banner != 0
-            b.bannerBox.visibility = if (hasBanner) View.VISIBLE else View.GONE
+            b.bannerBoxVw.visibility = if (hasBanner) View.VISIBLE else View.GONE
             if (hasBanner) {
-                b.banner.setImageResource(step.banner)
-                b.banner.scaleX = 1.12f; b.banner.scaleY = 1.12f
-                b.banner.animate().scaleX(1f).scaleY(1f).setDuration(900).start()
+                b.bannerVw.setImageResource(step.banner)
+                b.bannerVw.scaleX = 1.12f; b.bannerVw.scaleY = 1.12f
+                b.bannerVw.animate().scaleX(1f).scaleY(1f).setDuration(900).start()
             }
-            b.back.visibility = if (state.stepIndex == 0) View.INVISIBLE else View.VISIBLE
+            b.backVw.visibility = if (state.stepIndex == 0) View.INVISIBLE else View.VISIBLE
             // As the reference: the tracker counts only the OB_ screens; welcome / permission_hub / default_home sit outside it.
             val obSteps = steps.filter { it.key !in INFO_STEPS }
             val obNumber = obSteps.indexOf(step) + 1
-            b.tracker.visibility = if (obNumber > 0) View.VISIBLE else View.INVISIBLE
-            b.progressFrame.visibility = b.tracker.visibility
-            b.progress.max = obSteps.size.coerceAtLeast(1)
-            b.stepNum.text = "%02d".format(obNumber)
-            b.stepTotal.text = getString(R.string.step_of_total, obSteps.size)
-            if (obNumber > 0) b.progress.setProgressCompat(obNumber, !first)
-            b.title.updatePadding(top = resources.getDimensionPixelSize(if (hasBanner) SdpR.dimen._30sdp else SdpR.dimen._10sdp))
-            b.skip.visibility = if (if (step.key == DEFAULT_HOME_KEY) viewModel.defaultHomeSkipButton else viewModel.skipButton) View.VISIBLE else View.GONE
+            b.trackerVw.visibility = if (obNumber > 0) View.VISIBLE else View.INVISIBLE
+            b.progFrame.visibility = b.trackerVw.visibility
+            b.prog.max = obSteps.size.coerceAtLeast(1)
+            b.stepNumVw.text = "%02d".format(obNumber)
+            b.stepTotalVw.text = getString(R.string.step_of_total, obSteps.size)
+            if (obNumber > 0) b.prog.setProgressCompat(obNumber, !first)
+            b.titleVw.updatePadding(top = resources.getDimensionPixelSize(if (hasBanner) SdpR.dimen._30sdp else SdpR.dimen._10sdp))
+            b.skipVw.visibility = if (if (step.key == DEFAULT_HOME_KEY) viewModel.defaultHomeSkipButton else viewModel.skipButton) View.VISIBLE else View.GONE
             onBaseBasePhase(step.key == DEFAULT_HOME_KEY)
             // As the reference: every step asks its `permissions.<step>` on open; permission_hub asks on its Allow button.
             if (step.key != PERMISSION_HUB_KEY) Grants.queryFor(this, step.key)
-            b.favRow.visibility = if (state.stepIndex == viewModel.favIndex) View.VISIBLE else View.GONE
+            b.favRowVw.visibility = if (state.stepIndex == viewModel.favIndex) View.VISIBLE else View.GONE
             val place = place(step)
             // RC decides both slots: `list_ad` sits between the options (big native), `bottom_ad` is pinned at the bottom.
             // With the in-list ad showing, Continue moves into the list right under it; otherwise it stays pinned.
             val inline = Spots.rosterOn(place)
             if (!inline) kitPinCta()
-            b.adSlot.removeAllViews()
-            Spots.bottom(this, b.adSlot, place)
+            b.adSlotVw.removeAllViews()
+            Spots.bottom(this, b.adSlotVw, place)
             val adapter = ChooseAdapter(
                 step, state.selection,
                 inlineAd = if (inline) { slot -> Spots.list(this, slot, place) } else null,
-                cta = if (inline) b.cta else null,
+                cta = if (inline) b.ctaVw else null,
             ) {
                 MetricsTwo.click("option", step.key)
                 // Information rows (launcher, welcome, permissions): a tap does what the button does.
                 if (step.key in INFO_STEPS) primaryTask() else viewModel.select(it)
             }
             this.adapter = adapter
-            b.list.layoutManager = GridLayoutManager(this, step.columns).apply {
+            b.listVw.layoutManager = GridLayoutManager(this, step.columns).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                     override fun getSpanSize(position: Int) = if (adapter.isSpot(position)) step.columns else 1
                 }
             }
-            b.list.adapter = adapter
+            b.listVw.adapter = adapter
             Views.show(step.key) // as the reference: the step's own key
-            b.body.alpha = 0f
-            b.body.translationX = resources.getDimension(SdpR.dimen._23sdp) * dir
-            b.body.animate().alpha(1f).translationX(0f).setDuration(250).setInterpolator(DecelerateInterpolator(2f)).start()
+            b.bodyVw.alpha = 0f
+            b.bodyVw.translationX = resources.getDimension(SdpR.dimen._23sdp) * dir
+            b.bodyVw.animate().alpha(1f).translationX(0f).setDuration(250).setInterpolator(DecelerateInterpolator(2f)).start()
         } else {
             adapter?.kitSubmitSelection(state.selection)
         }
@@ -617,8 +617,8 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         if (viewModel.favIndex < 0) return
         val favs = state.selections[viewModel.favIndex]
         val favTotal = steps[viewModel.favIndex].opts.size
-        b.favCount.text = getString(R.string.fav_count, favs.size, favTotal)
-        b.favAll.setText(if (favs.size == favTotal) R.string.clear_all else R.string.select_all)
+        b.favCountVw.text = getString(R.string.fav_count, favs.size, favTotal)
+        b.favAllVw.setText(if (favs.size == favTotal) R.string.clear_all else R.string.select_all)
     }
 
     private companion object {

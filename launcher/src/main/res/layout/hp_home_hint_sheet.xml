@@ -7,14 +7,14 @@
 
     <!-- Scrim; a tap here closes the hint (same id as the other hint layout's close target). -->
     <View
-        android:id="@+id/llBaseIx"
+        android:id="@+id/rowBaseIx"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/lnch_home_hint_scrim"
         android:importantForAccessibility="no" />
 
     <LinearLayout
-        android:id="@+id/homeHintSheetIx"
+        android:id="@+id/homeHintSheetIxVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -45,13 +45,13 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/homeHintTileIx"
+                android:id="@+id/homeHintTileIxVw"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:background="@drawable/hpd_home_hint_tile">
 
                 <ImageView
-                    android:id="@+id/homeHintSpinIx"
+                    android:id="@+id/homeHintSpinIxVw"
                     android:layout_width="104dp"
                     android:layout_height="104dp"
                     android:layout_gravity="center"
@@ -83,7 +83,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/homeHintTitleIx"
+                    android:id="@+id/homeHintTitleIxVw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:accessibilityHeading="true"
@@ -152,7 +152,7 @@
                             android:background="@drawable/hpd_home_hint_radio_on" />
 
                         <View
-                            android:id="@+id/homeHintHaloIx"
+                            android:id="@+id/homeHintHaloIxVw"
                             android:layout_width="34dp"
                             android:layout_height="34dp"
                             android:layout_gravity="center"
@@ -160,7 +160,7 @@
                             android:background="@drawable/hpd_home_hint_radio_on" />
 
                         <View
-                            android:id="@+id/homeHintDotIx"
+                            android:id="@+id/homeHintDotIxVw"
                             android:layout_width="10dp"
                             android:layout_height="10dp"
                             android:layout_gravity="center"
@@ -171,7 +171,7 @@
                     </FrameLayout>
 
                     <ImageView
-                        android:id="@+id/homeHintAppIconIx"
+                        android:id="@+id/homeHintAppIconIxVw"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginStart="12dp"
@@ -179,7 +179,7 @@
                         android:importantForAccessibility="no" />
 
                     <TextView
-                        android:id="@+id/homeHintAppLabelIx"
+                        android:id="@+id/homeHintAppLabelIxVw"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
@@ -195,7 +195,7 @@
 
                 <!-- Above the row (row has elevation); no background, so it casts no shadow. -->
                 <ImageView
-                    android:id="@+id/homeHintPointerIx"
+                    android:id="@+id/homeHintPointerIxVw"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_gravity="bottom|end"
@@ -218,7 +218,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/homeHintTextIx"
+            android:id="@+id/homeHintTextIxVw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -231,7 +231,7 @@
             android:textSize="13.5sp" />
 
         <Button
-            android:id="@+id/homeHintGotItIx"
+            android:id="@+id/homeHintGotItIxVw"
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:layout_marginTop="14dp"

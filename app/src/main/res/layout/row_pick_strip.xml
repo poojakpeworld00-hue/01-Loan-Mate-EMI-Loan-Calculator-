@@ -7,7 +7,7 @@
     android:background="@drawable/fill_option">
 
     <TextView
-        android:id="@+id/watermark"
+        android:id="@+id/watermarkVw"
         style="@style/SH.Watermark"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/_minus2sdp"
@@ -28,7 +28,7 @@
             android:background="@drawable/fill_icon_circle">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/image"
+                android:id="@+id/imageVw"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
@@ -36,7 +36,7 @@
                 app:shapeAppearanceOverlay="@style/SH.ShapeRound" />
 
             <TextView
-                android:id="@+id/glyph"
+                android:id="@+id/glyphVw"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -55,7 +55,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/nameVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"
@@ -64,7 +64,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/subText"
+                android:id="@+id/subTextVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"

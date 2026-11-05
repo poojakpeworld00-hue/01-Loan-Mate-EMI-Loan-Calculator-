@@ -598,7 +598,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
         redrawGrid()
 
         val widgetView = widgetViews.firstOrNull { it.tag == resizedWidget!!.widgetId }
-        binding.sizeCasingIx.beGone()
+        binding.sizeCasingIxVw.beGone()
         if (widgetView != null) {
             val viewX = widgetView.x.toInt()
             val viewY = widgetView.y.toInt()
@@ -607,7 +607,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
                 .filter { !it.outOfBounds() }
                 .filter { it.widgetId != item.widgetId }
                 .toMutableList() as ArrayList<DeskViewerGridItem>
-            binding.sizeCasingIx.reloadSnapshotCoords(
+            binding.sizeCasingIxVw.reloadSnapshotCoords(
                 coords = frameRect,
                 cellWidth = cellWidth,
                 cellHeight = cellHeight,
@@ -615,14 +615,14 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
                 gridItem = item,
                 allGridItems = otherGridItems
             )
-            binding.sizeCasingIx.beVisible()
-            binding.sizeCasingIx.z = 1f
-            binding.sizeCasingIx.onClickListener = {
+            binding.sizeCasingIxVw.beVisible()
+            binding.sizeCasingIxVw.z = 1f
+            binding.sizeCasingIxVw.onClickListener = {
                 Launcher.events.onClick("widget_resize_done")
                 concealResizeLines()
             }
 
-            binding.sizeCasingIx.onResizeListener = { cellsRect ->
+            binding.sizeCasingIxVw.onResizeListener = { cellsRect ->
                 item.left = cellsRect.left
                 item.top = cellsRect.top
                 item.right = cellsRect.right
@@ -676,7 +676,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
 
             widgetView.ignoreTouches = true
             widgetView.setOnTouchListener { v, event ->
-                binding.sizeCasingIx.onTouchEvent(event)
+                binding.sizeCasingIxVw.onTouchEvent(event)
                 return@setOnTouchListener true
             }
         }
@@ -687,7 +687,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
             return
         }
 
-        binding.sizeCasingIx.beGone()
+        binding.sizeCasingIxVw.beGone()
         widgetViews.firstOrNull { it.tag == resizedWidget!!.widgetId }?.apply {
             ignoreTouches = false
             setOnTouchListener(null)
@@ -1313,7 +1313,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
                             Launcher.events.onClick("google_search_widget")
                             revealGoogleLookup(voice = false)
                         }
-                        findViewById<View>(R.id.google_bar_voiceIx)?.setOnClickListener {
+                        findViewById<View>(R.id.google_bar_voiceIxVw)?.setOnClickListener {
                             Launcher.events.onClick("google_search_widget", "voice")
                             revealGoogleLookup(voice = true)
                         }
@@ -1419,7 +1419,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
         post {
             setWillNotDraw(false)
             invalidate()
-            binding.drawingAreaIx.invalidate()
+            binding.drawingAreaIxVw.invalidate()
         }
     }
 

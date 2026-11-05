@@ -37,17 +37,17 @@ class NumericTimeGadgetProvider : AppWidgetProvider() {
 
         val views = RemoteViews(context.packageName, R.layout.hp_gadget_digital_clock).apply {
             setInt(
-                R.id.widget_holderIx,
+                R.id.widget_holderIxVw,
                 "setBackgroundColor",
                 context.pullWidgetBackdropTint(appWidgetId)
             )
 
-            setViewVisibility(R.id.widget_name_timer_24Ix, if (is24Hours) View.VISIBLE else View.GONE)
-            setViewVisibility(R.id.widget_name_timer_12Ix, if (is24Hours) View.GONE else View.VISIBLE)
+            setViewVisibility(R.id.widget_name_timer_24IxVw, if (is24Hours) View.VISIBLE else View.GONE)
+            setViewVisibility(R.id.widget_name_timer_12IxVw, if (is24Hours) View.GONE else View.VISIBLE)
 
-            setTextColor(R.id.widget_name_timer_24Ix, textColor)
-            setTextColor(R.id.widget_name_timer_12Ix, textColor)
-            setTextColor(R.id.widget_dayIx, textColor)
+            setTextColor(R.id.widget_name_timer_24IxVw, textColor)
+            setTextColor(R.id.widget_name_timer_12IxVw, textColor)
+            setTextColor(R.id.widget_dayIxVw, textColor)
         }
 
         appWidgetManager.updateAppWidget(appWidgetId, views)

@@ -25,13 +25,13 @@ class LanguageActivity : AppCompatActivity() {
         val b = ScreenTongueBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
-        b.header.title.setText(R.string.language)
+        b.crest.backVw.setOnClickListener { finish() }
+        b.crest.titleVw.setText(R.string.language)
 
         val adapter = ChooseAdapter(tonguePhase(viewModel.languages), setOf(viewModel.selected.value)) { viewModel.select(it) }
-        b.list.layoutManager = LinearLayoutManager(this)
-        b.list.adapter = adapter
-        b.list.scrollToPosition(viewModel.selected.value)
+        b.listVw.layoutManager = LinearLayoutManager(this)
+        b.listVw.adapter = adapter
+        b.listVw.scrollToPosition(viewModel.selected.value)
         kitCollectWhenStarted(viewModel.selected) { adapter.kitSubmitSelection(setOf(it)) }
 
         b.apply.setOnClickListener {
@@ -42,7 +42,7 @@ class LanguageActivity : AppCompatActivity() {
                 viewModel.apply()
             }
         }
-        Spots.bottom(this, b.adSlot, PLACE)
+        Spots.bottom(this, b.adSlotVw, PLACE)
     }
 
     override fun onResume() {

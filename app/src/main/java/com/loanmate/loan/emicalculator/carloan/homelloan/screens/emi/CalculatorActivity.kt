@@ -27,14 +27,14 @@ class CalculatorActivity : AppCompatActivity() {
         val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
-        b.header.title.setText(R.string.tool_calculator)
-        b.list.layoutManager = GridLayoutManager(this, 2)
-        b.list.adapter = BrickAdapter(CalculatorOrder.entries.map { BrickTwo(getString(it.title), it.image) }, ad = listAd(PLACE)) {
+        b.crest.backVw.setOnClickListener { finish() }
+        b.crest.titleVw.setText(R.string.tool_calculator)
+        b.listVw.layoutManager = GridLayoutManager(this, 2)
+        b.listVw.adapter = BrickAdapter(CalculatorOrder.entries.map { BrickTwo(getString(it.title), it.image) }, ad = listAd(PLACE)) {
             MetricsTwo.click("calculator", CalculatorOrder.entries[it].name.lowercase())
             Spots.exit(this, PLACE) { startActivity(Intent(this, ComputeActivity::class.java).putExtra(ComputeActivity.EXTRA_CALC, it)) }
         }
-        Spots.bottom(this, b.adSlot, PLACE)
+        Spots.bottom(this, b.adSlotVw, PLACE)
     }
 
     override fun onResume() {
@@ -56,20 +56,20 @@ class ComputeActivity : AppCompatActivity() {
         val b = ScreenReckonBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
+        b.crest.backVw.setOnClickListener { finish() }
 
-        b.header.title.setText(viewModel.type.title)
-        b.inputLayout.setHint(viewModel.type.inputHint)
-        listOf(b.chip50 to 50, b.chip100 to 100, b.chip500 to 500, b.chip1000 to 1000).forEach { (chip, v) ->
-            chip.setOnClickListener { b.amount.setText(v.toString()); b.amount.setSelection(b.amount.length()) }
+        b.crest.titleVw.setText(viewModel.type.title)
+        b.inputLayoutVw.setHint(viewModel.type.inputHint)
+        listOf(b.flag50 to 50, b.flag100 to 100, b.flag500 to 500, b.flag1000 to 1000).forEach { (chip, v) ->
+            chip.setOnClickListener { b.amountVw.setText(v.toString()); b.amountVw.setSelection(b.amountVw.length()) }
         }
-        b.calculate.setOnClickListener { viewModel.onWork(b.amount.text?.toString().orEmpty()) }
+        b.calculateVw.setOnClickListener { viewModel.onWork(b.amountVw.text?.toString().orEmpty()) }
         kitCollectWhenStarted(viewModel.state) { state ->
-            b.result.text = state.result.format(this)
-            b.inputLayout.error = state.error?.let(::getString)
+            b.resultVw.text = state.result.format(this)
+            b.inputLayoutVw.error = state.error?.let(::getString)
         }
-        Spots.list(this, b.adList, "screens.calc") // above the Calculate button
-        Spots.bottom(this, b.adSlot, "screens.calc")
+        Spots.list(this, b.adListVw, "screens.calc") // above the Calculate button
+        Spots.bottom(this, b.adSlotVw, "screens.calc")
     }
 
     override fun onResume() {

@@ -259,17 +259,17 @@ class CentersLoader(
             itemView.apply {
                 val sponsored = FeaturedCards.isSponsored(launcher)
                 // A sponsored tile says so in its label: it opens a web page, not an installed app.
-                binding.homeTextIx.text =
+                binding.homeTextIxVw.text =
                     if (sponsored) context.getString(R.string.lp_sponsored_label, launcher.title)
                     else highlightedTitle(launcher.title)
 
-                binding.homeTextIx.setTextColor(Color.WHITE)
+                binding.homeTextIxVw.setTextColor(Color.WHITE)
 
-                labelTextSp.takeIf { it > 0f }?.let { binding.homeTextIx.setTextSize(TypedValue.COMPLEX_UNIT_SP, it) }
-                binding.homeTextIx.beVisibleIf(activity.launcherConfig.showDrawerAppLabels)
-                sizeGlyph(binding.homeIconIx)
+                labelTextSp.takeIf { it > 0f }?.let { binding.homeTextIxVw.setTextSize(TypedValue.COMPLEX_UNIT_SP, it) }
+                binding.homeTextIxVw.beVisibleIf(activity.launcherConfig.showDrawerAppLabels)
+                sizeGlyph(binding.homeIconIxVw)
 
-                val icon = binding.homeIconIx
+                val icon = binding.homeIconIxVw
                 // A recycled tile may still have a sponsored logo on its way in; it must not land
                 // on the app now bound here.
                 Glide.with(activity).clear(icon)
@@ -331,7 +331,7 @@ class CentersLoader(
                 setOnTouchListener { _, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
-                            binding.homeIconIx.drawable?.alpha = LAUNCHER_ALPHA_PRESSED
+                            binding.homeIconIxVw.drawable?.alpha = LAUNCHER_ALPHA_PRESSED
                             tweenSize(
                                 from = LAUNCHER_SCALE_NORMAL,
                                 to = LAUNCHER_SCALE_PRESSED,
@@ -341,7 +341,7 @@ class CentersLoader(
 
                         MotionEvent.ACTION_UP,
                         MotionEvent.ACTION_CANCEL -> {
-                            binding.homeIconIx.drawable?.alpha = LAUNCHER_ALPHA_NORMAL
+                            binding.homeIconIxVw.drawable?.alpha = LAUNCHER_ALPHA_NORMAL
                             tweenSize(
                                 from = LAUNCHER_SCALE_PRESSED,
                                 to = LAUNCHER_SCALE_NORMAL,

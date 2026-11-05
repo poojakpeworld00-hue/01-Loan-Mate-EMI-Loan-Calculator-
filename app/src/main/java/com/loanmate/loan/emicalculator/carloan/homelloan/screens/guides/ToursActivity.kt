@@ -29,23 +29,23 @@ class ToursActivity : AppCompatActivity() {
         val b = ScreenGuidesBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
+        b.crest.backVw.setOnClickListener { finish() }
 
-        b.header.title.setText(viewModel.title)
+        b.crest.titleVw.setText(viewModel.title)
         viewModel.articles.forEachIndexed { i, a ->
-            val row = RowToolBinding.inflate(layoutInflater, b.rows, true)
-            row.icon.setImageResource(viewModel.icon)
-            row.name.text = a.title
-            row.sub.text = a.summary
-            row.sub.visibility = if (a.summary.isEmpty()) View.GONE else View.VISIBLE
+            val row = RowToolBinding.inflate(layoutInflater, b.rowsVw, true)
+            row.iconVw.setImageResource(viewModel.icon)
+            row.nameVw.text = a.title
+            row.subVw.text = a.summary
+            row.subVw.visibility = if (a.summary.isEmpty()) View.GONE else View.VISIBLE
             row.root.setOnClickListener {
                 MetricsTwo.click("article", i)
                 startActivity(TourActivity.intent(this, viewModel.guides, i))
             }
         }
         listAd(if (viewModel.guides) "screens.diamond_tips" else "screens.tips")
-            ?.insertInto(b.rows, resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp))
-        wireViewSpot("screens.articles", b.adInline, b.adSlot)
+            ?.insertInto(b.rowsVw, resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp))
+        wireViewSpot("screens.articles", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {
@@ -70,17 +70,17 @@ class TourActivity : AppCompatActivity() {
         val b = ScreenGuideBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
-        b.header.back.setOnClickListener { finish() }
+        b.crest.backVw.setOnClickListener { finish() }
 
         val a = viewModel.article
-        b.header.title.setText(viewModel.title)
-        b.number.visibility = if (viewModel.showsNumber) View.VISIBLE else View.GONE
-        b.number.text = getString(R.string.tip_number, viewModel.index + 1)
-        b.title.text = a.title
-        b.body.text = a.body
+        b.crest.titleVw.setText(viewModel.title)
+        b.numberVw.visibility = if (viewModel.showsNumber) View.VISIBLE else View.GONE
+        b.numberVw.text = getString(R.string.tip_number, viewModel.index + 1)
+        b.titleVw.text = a.title
+        b.bodyVw.text = a.body
         // Diamond tips: its own place, the bottom ad pinned under the text; tips keep screens.article.
-        if (viewModel.guides) Spots.bottom(this, b.adSlot, "screens.diamond_article")
-        else wireViewSpot("screens.article", b.adInline, b.adSlot)
+        if (viewModel.guides) Spots.bottom(this, b.adSlotVw, "screens.diamond_article")
+        else wireViewSpot("screens.article", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {

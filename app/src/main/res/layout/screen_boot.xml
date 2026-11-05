@@ -7,7 +7,7 @@
     android:background="@color/sh_splash">
 
     <ImageView
-        android:id="@+id/bg"
+        android:id="@+id/bgVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
@@ -25,7 +25,7 @@
         android:background="@drawable/fill_dot_grid" />
 
     <View
-        android:id="@+id/glow"
+        android:id="@+id/glowVw"
         android:layout_width="@dimen/_350sdp"
         android:layout_height="@dimen/_240sdp"
         android:layout_gravity="top|end"
@@ -34,7 +34,7 @@
         android:background="@drawable/fill_corner_glow" />
 
     <FrameLayout
-        android:id="@+id/content"
+        android:id="@+id/contentVw"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -47,19 +47,19 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/logo"
+                android:id="@+id/logoVw"
                 android:layout_width="@dimen/_87sdp"
                 android:layout_height="@dimen/_87sdp">
 
                 <View
-                    android:id="@+id/ring1"
+                    android:id="@+id/ring1Vw"
                     android:alpha="0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/fill_logo_ring" />
 
                 <View
-                    android:id="@+id/ring2"
+                    android:id="@+id/ring2Vw"
                     android:alpha="0"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -75,7 +75,7 @@
                     android:translationY="5dp" />
 
                 <FrameLayout
-                    android:id="@+id/tile"
+                    android:id="@+id/tileVw"
                     android:layout_width="@dimen/_70sdp"
                     android:layout_height="@dimen/_70sdp"
                     android:layout_gravity="center"
@@ -90,7 +90,7 @@
                         android:src="@mipmap/ic_launcher" />
 
                     <View
-                        android:id="@+id/tileShine"
+                        android:id="@+id/tileShineVw"
                         android:layout_width="@dimen/_25sdp"
                         android:layout_height="match_parent"
                         android:background="@drawable/fill_shine"
@@ -100,7 +100,7 @@
             </FrameLayout>
 
             <LinearLayout
-                android:id="@+id/brand"
+                android:id="@+id/brandVw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_12sdp">
@@ -128,7 +128,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tag"
+                android:id="@+id/tagVw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
@@ -144,7 +144,7 @@
                 app:fontFamily="@font/brand_extrabold" />
 
             <TextView
-                android:id="@+id/motto"
+                android:id="@+id/mottoVw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -171,7 +171,7 @@
                 android:padding="2dp">
 
                 <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/progress"
+                    android:id="@+id/prog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -199,7 +199,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/percent"
+                    android:id="@+id/percentVw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/sh_muted"

@@ -48,43 +48,43 @@ class RootFabric(
     )
 
     fun bind() {
-        b.settings.setOnClickListener { open("settings") { Intent(activity, SettingsActivity::class.java) } }
-        b.headline.text = activity.getText(R.string.explore_today).kitAccentBold(b.headline)
-        b.glow.kitGlowPulse()
+        b.settingsVw.setOnClickListener { open("settings") { Intent(activity, SettingsActivity::class.java) } }
+        b.headlineVw.text = activity.getText(R.string.explore_today).kitAccentBold(b.headlineVw)
+        b.glowVw.kitGlowPulse()
 
         // Tools as a one-column list ("Skin Hub Variants" Sticker Pop home).
         val gap = resources.getDimensionPixelSize(SdpR.dimen._8sdp)
         tools.chunked(1).forEach { pair ->
             val line = LinearLayout(activity)
-            b.tools.addView(line, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = gap })
+            b.toolsVw.addView(line, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = gap })
             pair.forEachIndexed { i, tool ->
                 val card = RowToolBlockBinding.inflate(activity.layoutInflater, line, true)
                 if (i > 0) (card.root.layoutParams as LinearLayout.LayoutParams).marginStart = gap
-                card.icon.setImageResource(tool.icon)
-                card.name.setText(tool.name)
-                card.sub.setText(tool.sub)
+                card.iconVw.setImageResource(tool.icon)
+                card.nameVw.setText(tool.name)
+                card.subVw.setText(tool.sub)
                 card.root.setOnClickListener { open(resources.getResourceEntryName(tool.name)) { tool.open() } }
             }
         }
         mapOf(
-            b.tileCharacters to ShelfOrder.CHARACTERS, b.tileBundles to ShelfOrder.BUNDLES, b.tileEmotes to ShelfOrder.EMOTES,
-            b.tileWeapons to ShelfOrder.WEAPONS, b.tilePets to ShelfOrder.PETS, b.tileVehicles to ShelfOrder.VEHICLES,
+            b.tileCharactersVw to ShelfOrder.CHARACTERS, b.tileBundlesVw to ShelfOrder.BUNDLES, b.tileEmotesVw to ShelfOrder.EMOTES,
+            b.tileWeaponsVw to ShelfOrder.WEAPONS, b.tilePetsVw to ShelfOrder.PETS, b.tileVehiclesVw to ShelfOrder.VEHICLES,
         ).forEach { (tile, catalog) ->
             tile.setOnClickListener { open(catalog.name.lowercase()) { LineupActivity.intent(activity, catalog) } }
         }
         wireSpots()
 
         // Staggered entrance, as in the design's hcUp keyframes.
-        listOf(b.header, b.tileCharacters, b.tileBundles, b.tileEmotes, b.tileWeapons, b.tilePets, b.tileVehicles, b.toolsTitle, b.tools)
+        listOf(b.crest, b.tileCharactersVw, b.tileBundlesVw, b.tileEmotesVw, b.tileWeaponsVw, b.tilePetsVw, b.tileVehiclesVw, b.toolsTitleVw, b.toolsVw)
             .forEachIndexed { i, v -> v.enter(i * 70L) }
 
-        b.tileCharactersArt.loop("translationY", -resources.getDimension(SdpR.dimen._6sdp), 2000, 1000)
-        b.tileBundlesArt.loop("translationY", -resources.getDimension(SdpR.dimen._4sdp), 1750, 1200)
-        b.tileEmotesArt.loop("translationY", -resources.getDimension(SdpR.dimen._4sdp), 1300, 1400)
-        b.tileWeaponsArt.loop("rotation", -6f, 1200, 1200)
-        b.tilePetsArt.loop("translationY", -resources.getDimension(SdpR.dimen._5sdp), 1100, 1300)
+        b.tileCharactersArtVw.loop("translationY", -resources.getDimension(SdpR.dimen._6sdp), 2000, 1000)
+        b.tileBundlesArtVw.loop("translationY", -resources.getDimension(SdpR.dimen._4sdp), 1750, 1200)
+        b.tileEmotesArtVw.loop("translationY", -resources.getDimension(SdpR.dimen._4sdp), 1300, 1400)
+        b.tileWeaponsArtVw.loop("rotation", -6f, 1200, 1200)
+        b.tilePetsArtVw.loop("translationY", -resources.getDimension(SdpR.dimen._5sdp), 1100, 1300)
         // Vehicle drives in from the right, then idles with a small back-and-forth.
-        b.tileVehiclesArt.apply {
+        b.tileVehiclesArtVw.apply {
             translationX = resources.getDimension(SdpR.dimen._44sdp); alpha = 0f
             animate().translationX(0f).alpha(1f).setStartDelay(900).setDuration(900)
                 .setInterpolator(DecelerateInterpolator(2f))
@@ -94,17 +94,17 @@ class RootFabric(
 
     /** `bottom_ad` pinned under the list; `list_ad` inside the list at `list_ad_position` (after_header / after_tiles / after_tools). */
     private fun wireSpots() {
-        Spots.bottom(activity, b.adSlot, adPlace)
+        Spots.bottom(activity, b.adSlotVw, adPlace)
         val place = PromoPack.config.places[adPlace]
-        val list = b.adInline.parent as ViewGroup
-        list.removeView(b.adInline)
+        val list = b.adInlineVw.parent as ViewGroup
+        list.removeView(b.adInlineVw)
         val at = when (place?.options?.get("list_ad_position") as? String) {
-            "after_header" -> list.indexOfChild(b.header) + 1
+            "after_header" -> list.indexOfChild(b.crest) + 1
             "after_tools" -> list.childCount
-            else -> list.indexOfChild(b.toolsTitle) // after_tiles: right above the "Tools & guides" title
+            else -> list.indexOfChild(b.toolsTitleVw) // after_tiles: right above the "Tools & guides" title
         }
-        list.addView(b.adInline, at)
-        if (place?.listAd?.on == true) Spots.list(activity, b.adInline, adPlace) else b.adInline.visibility = View.GONE
+        list.addView(b.adInlineVw, at)
+        if (place?.listAd?.on == true) Spots.list(activity, b.adInlineVw, adPlace) else b.adInlineVw.visibility = View.GONE
     }
 
     /** Every Home destination runs the `screens.home` exit ad first; navigation always continues. */

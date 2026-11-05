@@ -12,14 +12,14 @@
     android:paddingBottom="@dimen/_4sdp">
 
     <LinearLayout
-        android:id="@+id/rail"
+        android:id="@+id/railVw"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_34sdp"
         android:importantForAccessibility="noHideDescendants"
         android:orientation="horizontal" />
 
     <FrameLayout
-        android:id="@+id/phone"
+        android:id="@+id/phoneVw"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/_10sdp"
@@ -38,7 +38,7 @@
 
             <!-- Home screen (k 2) -->
             <View
-                android:id="@+id/wallpaper"
+                android:id="@+id/wallpaperVw"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="0"
@@ -51,7 +51,7 @@
                 android:paddingTop="@dimen/_32sdp">
 
                 <LinearLayout
-                    android:id="@+id/clock"
+                    android:id="@+id/clockVw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:alpha="0"
@@ -59,7 +59,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/clockTime"
+                        android:id="@+id/clockTimeVw"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-light"
@@ -69,7 +69,7 @@
                         android:textSize="@dimen/_32ssp" />
 
                     <TextView
-                        android:id="@+id/clockDate"
+                        android:id="@+id/clockDateVw"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/brand_semibold"
@@ -83,7 +83,7 @@
                     android:layout_weight="1">
 
                     <LinearLayout
-                        android:id="@+id/toast"
+                        android:id="@+id/toastVw"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_26sdp"
                         android:layout_gravity="center"
@@ -120,7 +120,7 @@
                     android:paddingBottom="@dimen/_8sdp">
 
                     <LinearLayout
-                        android:id="@+id/tiles"
+                        android:id="@+id/tilesVw"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_34sdp"
                         android:orientation="horizontal" />
@@ -157,7 +157,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/search"
+                        android:id="@+id/searchVw"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_32sdp"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -187,7 +187,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/dock"
+                        android:id="@+id/dockVw"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_42sdp"
                         android:layout_marginTop="@dimen/_8sdp"
@@ -201,7 +201,7 @@
 
             <!-- Android's "Default home app" page (k 0 / 1) -->
             <FrameLayout
-                android:id="@+id/page"
+                android:id="@+id/pageVw"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/sh_bg"
@@ -238,7 +238,7 @@
                     </LinearLayout>
 
                     <include
-                        android:id="@+id/rowLauncher"
+                        android:id="@+id/rowLauncherVw"
                         layout="@layout/row_dh_leaf_strip" />
 
                     <FrameLayout
@@ -246,7 +246,7 @@
                         android:layout_height="@dimen/_38sdp">
 
                         <View
-                            android:id="@+id/highlight"
+                            android:id="@+id/highlightVw"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginHorizontal="@dimen/_6sdp"
@@ -265,14 +265,14 @@
                                 android:layout_height="@dimen/_15sdp">
 
                                 <View
-                                    android:id="@+id/radioRing"
+                                    android:id="@+id/rdoRing"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="@drawable/fill_dh_ring"
                                     android:backgroundTint="@color/sh_primary" />
 
                                 <View
-                                    android:id="@+id/radioDot"
+                                    android:id="@+id/rdoDot"
                                     android:layout_width="@dimen/_7sdp"
                                     android:layout_height="@dimen/_7sdp"
                                     android:layout_gravity="center"
@@ -299,12 +299,12 @@
                     </FrameLayout>
 
                     <include
-                        android:id="@+id/rowSystem"
+                        android:id="@+id/rowSystemVw"
                         layout="@layout/row_dh_leaf_strip" />
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/hint"
+                    android:id="@+id/tip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
@@ -320,7 +320,7 @@
                         android:layout_height="@dimen/_29sdp">
 
                         <View
-                            android:id="@+id/hintRing"
+                            android:id="@+id/tipRing"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/fill_setup_ring" />
@@ -350,7 +350,7 @@
                             android:textSize="@dimen/_7ssp" />
 
                         <TextView
-                            android:id="@+id/hintTap"
+                            android:id="@+id/tipTap"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/brand_bold"
@@ -368,7 +368,7 @@
                 android:paddingHorizontal="@dimen/_11sdp">
 
                 <TextView
-                    android:id="@+id/statusTime"
+                    android:id="@+id/statusTimeVw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|start"
@@ -386,7 +386,7 @@
             </FrameLayout>
 
             <View
-                android:id="@+id/scrim"
+                android:id="@+id/scrimVw"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:alpha="0"
@@ -394,7 +394,7 @@
 
             <!-- Android's "Select a home app" sheet (k 1) -->
             <LinearLayout
-                android:id="@+id/sheet"
+                android:id="@+id/sheetVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -509,14 +509,14 @@
                         android:layout_weight="1">
 
                         <View
-                            android:id="@+id/alwaysHalo"
+                            android:id="@+id/alwaysHaloVw"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:alpha="0"
                             android:background="@drawable/fill_dh_pill" />
 
                         <TextView
-                            android:id="@+id/always"
+                            android:id="@+id/alwaysVw"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:fontFamily="@font/brand_semibold"
@@ -530,7 +530,7 @@
             </LinearLayout>
 
             <View
-                android:id="@+id/ripple"
+                android:id="@+id/rippleVw"
                 android:layout_width="@dimen/_26sdp"
                 android:layout_height="@dimen/_26sdp"
                 android:alpha="0"
@@ -538,7 +538,7 @@
                 android:background="@drawable/fill_logo_ring" />
 
             <ImageView
-                android:id="@+id/finger"
+                android:id="@+id/fingerVw"
                 android:layout_width="@dimen/_28sdp"
                 android:layout_height="@dimen/_28sdp"
                 android:elevation="16dp"

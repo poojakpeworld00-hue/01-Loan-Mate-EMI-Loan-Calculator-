@@ -9,7 +9,7 @@
     android:padding="@dimen/_17sdp">
 
     <ImageView
-        android:id="@+id/netIcon"
+        android:id="@+id/netIconVw"
         android:layout_width="@dimen/_54sdp"
         android:layout_height="@dimen/_54sdp"
         android:background="@drawable/fill_icon_chip"
@@ -34,14 +34,14 @@
         android:text="@string/net_body" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/netRetry"
+        android:id="@+id/netRetryVw"
         style="@style/SH.Cta"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/_17sdp"
         android:text="@string/net_retry" />
 
     <TextView
-        android:id="@+id/netSettings"
+        android:id="@+id/netSettingsVw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_6sdp"

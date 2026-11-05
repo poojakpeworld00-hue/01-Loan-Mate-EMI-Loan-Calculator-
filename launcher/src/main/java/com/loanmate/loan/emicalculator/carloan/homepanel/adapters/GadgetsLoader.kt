@@ -56,20 +56,20 @@ class GadgetsLoader(
 
     private fun prepRollCluster(view: View, section: GadgetsStackCluster) {
         HpBinGadgetListGroupBinding.bind(view).apply {
-            widgetAppTitleIx.text = section.appTitle
-            widgetAppTitleIx.setTextColor(textColor)
-            widgetAppIconIx.setImageDrawable(section.appIcon)
+            widgetAppTitleIxVw.text = section.appTitle
+            widgetAppTitleIxVw.setTextColor(textColor)
+            widgetAppIconIxVw.setImageDrawable(section.appIcon)
         }
     }
 
     private fun prepRollCellsRetainer(view: View, listItem: GadgetsStackLogsSaver) {
         val binding = HpBinGadgetListEntriesKeeperBinding.bind(view)
-        binding.widgetRollCellsHolderIx.removeAllViews()
-        binding.widgetRollCellsScrollFrameIx.scrollX = 0
+        binding.widgetRollCellsHolderIxVw.removeAllViews()
+        binding.widgetRollCellsScrollFrameIxVw.scrollX = 0
         listItem.widgets.forEachIndexed { index, widget ->
             val imageSize = activity.resources.getDimension(R.dimen.launcher_widget_preview_size).toInt()
             val widgetPreview = HpBinGadgetPreviewBinding.inflate(LayoutInflater.from(activity))
-            binding.widgetRollCellsHolderIx.addView(widgetPreview.root)
+            binding.widgetRollCellsHolderIxVw.addView(widgetPreview.root)
 
             val endMargin = if (index == listItem.widgets.size - 1) {
                 activity.resources.getDimension(org.fossify.commons.R.dimen.medium_margin).toInt()
@@ -77,12 +77,12 @@ class GadgetsLoader(
                 0
             }
 
-            widgetPreview.widgetTitleIx.apply {
+            widgetPreview.widgetTitleIxVw.apply {
                 text = widget.widgetTitleUi
                 setTextColor(textColor)
             }
 
-            widgetPreview.widgetSizeIx.apply {
+            widgetPreview.widgetSizeIxVw.apply {
                 text = if (widget.isShortcut) {
                     activity.getString(org.fossify.commons.R.string.shortcut)
                 } else {
@@ -91,7 +91,7 @@ class GadgetsLoader(
                 setTextColor(textColor)
             }
 
-            (widgetPreview.widgetPicIx.layoutParams as RelativeLayout.LayoutParams).apply {
+            (widgetPreview.widgetPicIxVw.layoutParams as RelativeLayout.LayoutParams).apply {
                 marginStart = activity.resources.getDimension(org.fossify.commons.R.dimen.activity_margin).toInt()
                 marginEnd = endMargin
                 width = imageSize
@@ -100,7 +100,7 @@ class GadgetsLoader(
 
             Glide.with(activity)
                 .load(widget.widgetPreviewImage)
-                .into(widgetPreview.widgetPicIx)
+                .into(widgetPreview.widgetPicIxVw)
 
             widgetPreview.root.setOnClickListener {
                 com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("widgets_list_item")
