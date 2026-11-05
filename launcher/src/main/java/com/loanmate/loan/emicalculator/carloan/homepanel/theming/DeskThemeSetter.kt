@@ -58,12 +58,12 @@ object DeskThemeSetter {
         iconDp = DEFAULT_ICON_DP,
         dockIconDp = DEFAULT_ICON_DP,
         drawerIconDp = DEFAULT_ICON_DP,
-        rackLookupPoint = SheetFindSpot.BOTTOM,
+        rackLookupSpot = SheetFindSpot.BOTTOM,
     )
 
     fun styleFor(osStyle: Boolean): String = if (osStyle) STYLE_OS else STYLE_DEFAULT
 
-    fun commitStyle(context: Context): Boolean {
+    fun commitLook(context: Context): Boolean {
         val config = context.launcherConfig
         val want = styleFor(Launcher.settings().osStyle)
         val built = config.wasHomeScreenInit || config.homeProfileJson.isNotEmpty()
@@ -71,7 +71,7 @@ object DeskThemeSetter {
         val have = config.launcherStyle.ifEmpty { if (built) STYLE_OS else "" }
         if (have == want) {
             if (config.launcherStyle.isEmpty()) config.launcherStyle = have
-            return want == STYLE_DEFAULT && renewMain(config)
+            return want == STYLE_DEFAULT && renewPrime(config)
         }
 
         if (want == STYLE_OS) {
@@ -80,7 +80,7 @@ object DeskThemeSetter {
                 config.homeProfileJson = APPLIED_NONE
                 config.homeAndDrawer = false
             } else {
-                write(config, profile, homeAndDrawer = profile.rackStyle != SheetLook.NONE &&
+                write(config, profile, homeAndDrawer = profile.rackLook != SheetLook.NONE &&
                     profile.baseOf(DeskTheme.KEY_DRAWER_MODE) == ThemeRoot.APK)
             }
         } else {
@@ -94,7 +94,7 @@ object DeskThemeSetter {
         return true
     }
 
-    private fun renewMain(config: Config): Boolean {
+    private fun renewPrime(config: Config): Boolean {
         val json = DEFAULT_SETUP.toJson().toString()
         if (config.homeProfileJson == json) return false
         val saved = runCatching { DeskTheme.fromJson(JSONObject(config.homeProfileJson), source = ThemeRoot.STANDARD) }.getOrNull()
@@ -123,12 +123,12 @@ object DeskThemeSetter {
         config.showSearchBar = profile.drawerSearch
         config.showHomeAppLabels = profile.homeLabels
         config.showDrawerAppLabels = profile.drawerLabels
-        config.rackStyle = profile.rackStyle
-        if (profile.rackStyle != SheetLook.NONE) config.drawerStyleWhenOn = profile.rackStyle
+        config.rackLook = profile.rackLook
+        if (profile.rackLook != SheetLook.NONE) config.drawerStyleWhenOn = profile.rackLook
         if (profile.drawerRows > 0) config.drawerRowCount = profile.drawerRows.coerceIn(MIN_ROW_COUNT, MAX_ROW_COUNT)
 
         config.dockColumnCount = profile.dockSize.coerceIn(1, MAX_DOCK_SLOTS)
-        config.drawerSearchAtBottom = profile.rackLookupPoint == SheetFindSpot.BOTTOM
+        config.drawerSearchAtBottom = profile.rackLookupSpot == SheetFindSpot.BOTTOM
         config.iconScale = profile.iconScale
 
         config.iconSizeDp = profile.homeArtDp

@@ -21,11 +21,11 @@ class SceneWidgetsLoader(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bindView(getItem(position))
+        holder.attachScreen(getItem(position))
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindView(launcher: WidgetCenter) {
+        fun attachScreen(launcher: WidgetCenter) {
             itemView.findViewById<TextView>(R.id.cell_headingAltIxVw).text = launcher.title
 
             // the icons are already loaded in memory by the drawer, no need for Glide here; one that

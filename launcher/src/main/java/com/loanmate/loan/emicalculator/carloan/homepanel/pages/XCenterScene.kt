@@ -72,16 +72,16 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterLobbyAsRe
 import java.lang.ref.WeakReference
 import com.loanmate.loan.emicalculator.carloan.homepanel.overlays.RetitleItemPanel
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.getLabel
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.processGridCellOverlayTweaks
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.obtainLabel
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.processLatticeCellLayerTweaks
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.hiddenIconsDB
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.homeScreenGridItemsDB
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isPrimaryLaunchpad
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isDefaultSmsApp
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.fireApplet
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.fireAppletInfo
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isPrimaryPad
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isDefaultSmsProg
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.emitApplet
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.emitAppletInfo
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launchersDB
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.supportsDarkCaption
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.supportsDarkLabel
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.deleteApplet
 import com.loanmate.loan.emicalculator.carloan.homepanel.sheets.CenterPanel
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.ITEM_TYPE_FOLDER
@@ -162,25 +162,25 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
      * A panel that `launcher_config.panels` has just switched off must not stay on screen: the
      * gesture gates only stop it opening, so one already open would otherwise be stuck there.
      */
-    private fun closeDisabledPanels() {
-        if (isLeftStageExpanded() && !CenterAdsToggles.deckEnabled(CenterAdsToggles.LEFT_SWIPE)) {
-            concealLeftDeck()
+    private fun dismissDisabledPanels() {
+        if (isLeftSceneExpanded() && !CenterAdsToggles.deckEnabled(CenterAdsToggles.LEFT_SWIPE)) {
+            concealLeftPack()
         }
-        if (isMsgsStageExpanded() && !CenterAdsToggles.deckEnabled(CenterAdsToggles.RIGHT_SWIPE)) {
-            concealMsgsDeck()
+        if (isMsgsSceneExpanded() && !CenterAdsToggles.deckEnabled(CenterAdsToggles.RIGHT_SWIPE)) {
+            concealMsgsPack()
         }
     }
 
     /** [Launcher.refresh]: a Remote Config refresh reached the running launcher. */
-    fun onSettingsChanged() {
+    fun onConfigChanged() {
         if (isFinishing || isDestroyed) {
             return
         }
-        if (reapplyHomebaseStyle()) return
+        if (reapplyHomebaseLook()) return
 
-        closeDisabledPanels()
+        dismissDisabledPanels()
 
-        if (!isAllProgramsSectionExpanded() && IconStore.launchers.isNotEmpty()) {
+        if (!isEveryProgramsPartExpanded() && IconStore.launchers.isNotEmpty()) {
             // Same apps, but the config may have moved rows (the ad row): resubmit regardless.
             binding.allAppsBlockIxVw.root.gotLaunchers(IconStore.launchers, force = true)
             binding.startPageIxVw.root.gotLaunchers(IconStore.launchers)
@@ -189,7 +189,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         ensureBackgroundThread {
             runCatching { renewHomebases() }.onFailure { Timber.w(it, "StarterTray: renewHomebases failed") }
         }
-        perhapsSurfaceGuide()
+        perhapsSurfaceTour()
     }
 
     private var wallpaperColorChangeListener: OnColorsChangedListener? = null
@@ -232,7 +232,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         super.onCreate(savedInstanceState)
 
         // Host onboarding unfinished (e.g. the HOME role was just granted and the system started us): hand back.
-        if (CenterLobbyAsRear.onHome(this)) {
+        if (CenterLobbyAsRear.onLobby(this)) {
             finish()
             @Suppress("DEPRECATION")
             overridePendingTransition(0, 0)
@@ -240,7 +240,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
         running = WeakReference(this)
 
-        DeskThemeSetter.commitStyle(this)
+        DeskThemeSetter.commitLook(this)
         DeskThemeSetter.renewGlyphSizes(this)
         mDrawerEnabled = launcherConfig.isDrawerEnabled
 
@@ -304,7 +304,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         binding.mainShowGridIxVw.root.itemLongClickListener = {
             performCellLongTap(
-                x = binding.mainShowGridIxVw.root.getClickableRect(it).left.toFloat(),
+                x = binding.mainShowGridIxVw.root.obtainClickableRect(it).left.toFloat(),
                 clickedGridItem = it
             )
         }
@@ -313,7 +313,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         if (savedInstanceState == null) revealMsgsIfRequested(intent)
 
-        binding.baseHolderIxVw.post { perhapsSurfaceGuide() }
+        binding.baseHolderIxVw.post { perhapsSurfaceTour() }
 
         binding.baseHolderIxVw.postDelayed({
             Looper.myQueue().addIdleHandler {
@@ -329,26 +329,26 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     private var mGuideStep: CenterTourStop? = null
 
-    private fun nextGuidePhase(): CenterTourStop? = CenterTourStop.entries.firstOrNull {
-        CenterAdsToggles.guidePhaseEnabled(it) && !launcherConfig.isTutorialPhaseDone(it) &&
+    private fun nextTourStep(): CenterTourStop? = CenterTourStop.entries.firstOrNull {
+        CenterAdsToggles.guideStepEnabled(it) && !launcherConfig.isTutorialStepDone(it) &&
 
                 (it != CenterTourStop.SWIPE_UP_DRAWER || mDrawerEnabled)
     }
 
-    private fun perhapsSurfaceGuide() {
-        if (isAllProgramsSectionExpanded() || isGadgetsSectionExpanded()) return
-        if (isLeftStageExpanded() || isMsgsStageExpanded()) return
+    private fun perhapsSurfaceTour() {
+        if (isEveryProgramsPartExpanded() || isWidgetsPartExpanded()) return
+        if (isLeftSceneExpanded() || isMsgsSceneExpanded()) return
 
-        val step = nextGuidePhase()
+        val step = nextTourStep()
         if (step == null) {
-            concealSwipeHint()
+            concealSlideTip()
         } else if (mGuideStep != step || !binding.swipeHintIxVw.isVisible) {
-            surfaceGuidePhase(step)
+            surfaceTourStep(step)
         }
     }
 
-    private fun surfaceGuidePhase(step: CenterTourStop) {
-        abortGuideTween()
+    private fun surfaceTourStep(step: CenterTourStop) {
+        abortTourTween()
         mGuideStep = step
 
         val chevrons = listOf(
@@ -420,40 +420,40 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
     }
 
-    private fun doneGuidePhase(step: CenterTourStop) {
-        if (launcherConfig.isTutorialPhaseDone(step)) return
-        launcherConfig.flagGuidePhaseDone(step)
+    private fun doneTourStep(step: CenterTourStop) {
+        if (launcherConfig.isTutorialStepDone(step)) return
+        launcherConfig.flagTourStepDone(step)
         if (mGuideStep == step) {
-            concealSwipeHint()
+            concealSlideTip()
         }
     }
 
-    private fun performGuidePhase(): Boolean {
+    private fun performTourStep(): Boolean {
         val step = mGuideStep ?: return false
         if (!binding.swipeHintIxVw.isVisible) return false
 
-        concealSwipeHint()
+        concealSlideTip()
         Launcher.events.onClick("swipe_guide", step.name.lowercase())
 
         when (step) {
-            CenterTourStop.SWIPE_RIGHT_MESSAGES -> surfaceMsgsDeck()
-            CenterTourStop.SWIPE_LEFT_APPS -> surfaceLeftDeck()
+            CenterTourStop.SWIPE_RIGHT_MESSAGES -> surfaceMsgsPack()
+            CenterTourStop.SWIPE_LEFT_APPS -> surfaceLeftPack()
             CenterTourStop.SWIPE_UP_DRAWER -> displayFragment(binding.allAppsBlockIxVw)
         }
         return true
     }
 
-    private fun abortGuideTween() {
+    private fun abortTourTween() {
         mSwipeHintAnimator?.cancel()
         mSwipeHintAnimator = null
     }
 
-    private fun concealSwipeHint() {
+    private fun concealSlideTip() {
         if (!binding.swipeHintIxVw.isVisible) {
             return
         }
 
-        abortGuideTween()
+        abortTourTween()
         binding.swipeHintIxVw.beGone()
     }
 
@@ -462,14 +462,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             val wallpaperManager = WallpaperManager.getInstance(this)
             wallpaperColorChangeListener = OnColorsChangedListener { colors, which ->
                 if (which and WallpaperManager.FLAG_SYSTEM != 0) {
-                    wallpaperSupportsDarkText = colors?.wantsDarkCaption() ?: run {
-                        renewWallpaperSupportsDarkCaption()
+                    wallpaperSupportsDarkText = colors?.wantsDarkLabel() ?: run {
+                        renewWallpaperSupportsDarkLabel()
                         wallpaperSupportsDarkText
                     }
 
-                    if (livePanelTint() == null) {
+                    if (liveTrayTint() == null) {
                         runOnUiThread {
-                            reloadStatusBandGlyphs()
+                            reloadStateStripGlyphs()
                         }
                     }
                 }
@@ -479,52 +479,52 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 Handler(Looper.getMainLooper())
             )
 
-            renewWallpaperSupportsDarkCaption()
+            renewWallpaperSupportsDarkLabel()
         }
     }
 
-    private fun renewWallpaperSupportsDarkCaption() {
+    private fun renewWallpaperSupportsDarkLabel() {
         if (!isOreoMr1Plus()) return
         wallpaperSupportsDarkText = WallpaperManager.getInstance(this)
             .getWallpaperColors(WallpaperManager.FLAG_SYSTEM)
-            ?.wantsDarkCaption()
+            ?.wantsDarkLabel()
     }
 
     private fun isNightSkin(): Boolean =
         resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK ==
             android.content.res.Configuration.UI_MODE_NIGHT_YES
 
-    private fun android.app.WallpaperColors.wantsDarkCaption(): Boolean = supportsDarkCaption()
+    private fun android.app.WallpaperColors.wantsDarkLabel(): Boolean = supportsDarkLabel()
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_HOME) && CenterLobbyAsRear.onHome(this)) {
+        if (intent.action == Intent.ACTION_MAIN && intent.hasCategory(Intent.CATEGORY_HOME) && CenterLobbyAsRear.onLobby(this)) {
             setIntent(intent)
             return
         }
         // Home pressed: the long-press card goes with the rest. It is a window of its own, so
         // closing the drawer under it left it floating over the workspace.
-        closeElementActions()
+        dismissElementMoves()
 
-        val wasAnyFragmentOpen = isAllProgramsSectionExpanded() || isGadgetsSectionExpanded()
+        val wasAnyFragmentOpen = isEveryProgramsPartExpanded() || isWidgetsPartExpanded()
         if (wasJustPaused) {
-            if (isAllProgramsSectionExpanded()) {
+            if (isEveryProgramsPartExpanded()) {
                 concealFragment(binding.allAppsBlockIxVw)
             }
-            if (isGadgetsSectionExpanded()) {
+            if (isWidgetsPartExpanded()) {
                 concealFragment(binding.widgetsBlockIxVw)
             }
         } else {
-            closeAppletRack()
-            closeWidgetsBlock()
+            dismissAppletRack()
+            dismissGadgetsBrick()
         }
 
-        if (isLeftStageExpanded()) {
-            concealLeftDeck()
+        if (isLeftSceneExpanded()) {
+            concealLeftPack()
         }
 
-        if (isMsgsStageExpanded()) {
-            concealMsgsDeck()
+        if (isMsgsSceneExpanded()) {
+            concealMsgsPack()
         }
 
         binding.allAppsBlockIxVw.queryBarIxVw.closeSearch()
@@ -533,7 +533,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         val alreadyOnHome = intent.flags and FLAG_ACTIVITY_BROUGHT_TO_FRONT == 0
         if (alreadyOnHome && !wasAnyFragmentOpen) {
-            binding.mainShowGridIxVw.root.skipToPage(0)
+            binding.mainShowGridIxVw.root.skipToLeaf(0)
         }
 
         treatIntentMove(intent)
@@ -545,8 +545,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         intent.removeExtra(EXTRA_OPEN_MESSAGES)
         if (!CenterAdsToggles.deckEnabled(CenterAdsToggles.RIGHT_SWIPE)) return
         binding.baseHolderIxVw.post {
-            if (isFinishing || isDestroyed || isMsgsStageExpanded()) return@post
-            revealMsgsDeck()
+            if (isFinishing || isDestroyed || isMsgsSceneExpanded()) return@post
+            revealMsgsPack()
         }
     }
 
@@ -575,35 +575,35 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
         running = WeakReference(this)
         Launcher.events.onScreen(if (unwound) SCREEN_HOME else liveScreen())
-        reportReturn()
+        reportResult()
 
-        if (reapplyHomebaseStyle()) return
+        if (reapplyHomebaseLook()) return
         wasJustPaused = false
         mDrawerEnabled = launcherConfig.isDrawerEnabled
 
         // Binder call off the main thread; the field has no synchronous reader here.
         if (isOreoMr1Plus()) ensureBackgroundThread {
-            val dark = WallpaperManager.getInstance(this).getWallpaperColors(WallpaperManager.FLAG_SYSTEM)?.wantsDarkCaption()
+            val dark = WallpaperManager.getInstance(this).getWallpaperColors(WallpaperManager.FLAG_SYSTEM)?.wantsDarkLabel()
             runOnUiThread { wallpaperSupportsDarkText = dark }
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            reloadStatusBandGlyphs(livePanelTint())
+            reloadStateStripGlyphs(liveTrayTint())
 
-            perhapsSurfaceGuide()
+            perhapsSurfaceTour()
         }, ANIMATION_DURATION)
 
         with(binding.baseHolderIxVw) {
             onGlobalLayout {
-                binding.allAppsBlockIxVw.root.prepareViews()
-                binding.widgetsBlockIxVw.root.prepareViews()
+                binding.allAppsBlockIxVw.root.primeScreens()
+                binding.widgetsBlockIxVw.root.primeScreens()
             }
         }
 
         ensureBackgroundThread {
             runCatching {
                 if (IconStore.launchers.isEmpty()) {
-                    val hiddenIcons = hiddenIconsDB.pullHiddenGlyphs().map {
+                    val hiddenIcons = hiddenIconsDB.pullMaskedGlyphs().map {
                         it.pullGlyphIdentifier()
                     }
 
@@ -627,10 +627,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             }.onFailure { Timber.w(it, "StarterTray: onResume refresh failed") }
         }
 
-        closeDisabledPanels()
+        dismissDisabledPanels()
         syncMessagingDockCell()
 
-        binding.mainShowGridIxVw.root.resizeGrid(
+        binding.mainShowGridIxVw.root.resizeLattice(
             newRowCount = launcherConfig.homeRowCount,
             newColumnCount = launcherConfig.homeColumnCount
         )
@@ -665,29 +665,29 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         mWorkspaceUnwound = false
         // Leaving the launcher (an app, Recents, the screen going off) must not leave the card up
         // for whatever comes back to it.
-        closeElementActions()
+        dismissElementMoves()
     }
 
-    private fun closeElementActions() {
+    private fun dismissElementMoves() {
         mOpenPopupMenu?.dismiss()
         mOpenPopupMenu = null
     }
 
     override fun onBackPressedCompat(): Boolean {
         Launcher.events.onKey("back")
-        return if (isLeftStageExpanded()) {
-            concealLeftDeck()
+        return if (isLeftSceneExpanded()) {
+            concealLeftPack()
             true
-        } else if (isMsgsStageExpanded()) {
-            concealMsgsDeck()
+        } else if (isMsgsSceneExpanded()) {
+            concealMsgsPack()
             true
-        } else if (isAllProgramsSectionExpanded()) {
+        } else if (isEveryProgramsPartExpanded()) {
             binding.allAppsBlockIxVw.root.restoreLookup()
             concealFragment(binding.allAppsBlockIxVw)
             true
-        } else if (isGadgetsSectionExpanded()) {
+        } else if (isWidgetsPartExpanded()) {
             if (binding.widgetsBlockIxVw.queryBarIxVw.isSearchOpen) {
-                wipeWidgetsLookup()
+                wipeGadgetsLookup()
             } else {
                 concealFragment(binding.widgetsBlockIxVw)
             }
@@ -722,7 +722,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                         val shortcutInfo = item?.shortcutInfo ?: return
                         if (item.accept()) {
                             val shortcutId = shortcutInfo.id
-                            val label = shortcutInfo.getLabel()
+                            val label = shortcutInfo.obtainLabel()
                             val icon = launcherApps.getShortcutBadgedIconDrawable(
                                 shortcutInfo,
                                 resources.displayMetrics.densityDpi
@@ -740,7 +740,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         binding.allAppsBlockIxVw.root.onConfigurationChanged()
         binding.widgetsBlockIxVw.root.onConfigurationChanged()
 
-        reloadStatusBandGlyphs(livePanelTint())
+        reloadStateStripGlyphs(liveTrayTint())
     }
 
     /**
@@ -748,7 +748,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
      * under the fling threshold), and then settled by distance - a quarter-page flick snapped back.
      * Judged on the whole gesture instead: fast on average and not pulled back. True = next page.
      */
-    private fun quickSwipeDirection(up: MotionEvent): Boolean? {
+    private fun quickSlideDirection(up: MotionEvent): Boolean? {
         val travel = up.x - mGestureDownX
         val duration = (up.eventTime - up.downTime).coerceAtLeast(1L)
         if (abs(travel) <= 2 * mTouchSlop || abs(travel) / duration < mQuickSwipeSpeed) return null
@@ -757,7 +757,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         return travel < 0
     }
 
-    private fun resetGestureRange(x: Float) {
+    private fun restoreTouchRange(x: Float) {
         mGestureDownX = x
         mGestureMinX = x
         mGestureMaxX = x
@@ -780,7 +780,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         // Before the detector, so onFling on this UP sees the gesture's full x range.
         if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-            resetGestureRange(event.x)
+            restoreTouchRange(event.x)
         } else {
             for (i in 0 until event.historySize) {
                 mGestureMinX = min(mGestureMinX, event.getHistoricalX(i))
@@ -809,7 +809,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 val hasFingerMoved = if (mTouchDownX == -1 || mTouchDownY == -1) {
                     mTouchDownX = event.x.toInt()
                     mTouchDownY = event.y.toInt()
-                    resetGestureRange(event.x)
+                    restoreTouchRange(event.x)
                     false
                 } else {
                     hasFingerMoved(event)
@@ -827,14 +827,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 }
 
                 if (hasFingerMoved && !mIgnoreMoveEvents) {
-                    concealSwipeHint()
+                    concealSlideTip()
 
                     val diffY = mTouchDownY - event.y
                     val diffX = mTouchDownX - event.x
 
                     if (abs(diffY) > abs(diffX) && !mIgnoreYMoveEvents) {
                         mIgnoreXMoveEvents = true
-                        if (isGadgetsSectionExpanded()) {
+                        if (isWidgetsPartExpanded()) {
                             val newY = mWidgetsFragmentY - diffY
                             binding.widgetsBlockIxVw.root.y = min(
                                 a = max(0f, newY), b = mScreenHeight.toFloat()
@@ -847,7 +847,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                         }
                     } else if (abs(diffX) > abs(diffY) && !mIgnoreXMoveEvents) {
                         mIgnoreYMoveEvents = true
-                        binding.mainShowGridIxVw.root.setSwipeMovement(diffX)
+                        binding.mainShowGridIxVw.root.assignSlideMovement(diffX)
                     }
                 }
 
@@ -861,7 +861,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 mIgnoreMoveEvents = false
                 mLongPressedIcon = null
                 mLastTouchCoords = Pair(-1f, -1f)
-                reinitBlockTouches()
+                reinitBrickTouches()
                 binding.mainShowGridIxVw.root.itemDraggingStopped()
 
                 if (!mIgnoreUpEvent) {
@@ -869,15 +869,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                         if (binding.allAppsBlockIxVw.root.y < mScreenHeight * 0.5) {
                             displayFragment(
                                 fragment = binding.allAppsBlockIxVw,
-                                reloadUnits = mAllAppsFragmentY == mScreenHeight
+                                reloadPieces = mAllAppsFragmentY == mScreenHeight
                             )
-                        } else if (isAllProgramsSectionExpanded()) {
+                        } else if (isEveryProgramsPartExpanded()) {
                             concealFragment(binding.allAppsBlockIxVw)
                         }
 
                         if (binding.widgetsBlockIxVw.root.y < mScreenHeight * 0.5) {
                             displayFragment(binding.widgetsBlockIxVw)
-                        } else if (isGadgetsSectionExpanded()) {
+                        } else if (isWidgetsPartExpanded()) {
                             concealFragment(binding.widgetsBlockIxVw)
                         }
                     }
@@ -888,9 +888,9 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                     val grid = binding.mainShowGridIxVw.root
                     // No fling claimed this release, yet the swipe was quick: commit the page.
                     if (!mIgnoreUpEvent && mIgnoreYMoveEvents && event.actionMasked == MotionEvent.ACTION_UP) {
-                        quickSwipeDirection(event)?.let { grid.flingSwipe(towardsNext = it) }
+                        quickSlideDirection(event)?.let { grid.flingSlide(towardsNext = it) }
                     }
-                    grid.finalizeSwipe()
+                    grid.finalizeSlide()
                 }
 
                 mIgnoreXMoveEvents = false
@@ -903,7 +903,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putBoolean(APP_DRAWER_STATE, isAllProgramsSectionExpanded())
+        outState.putBoolean(APP_DRAWER_STATE, isEveryProgramsPartExpanded())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -922,12 +922,12 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
             ensureBackgroundThread {
                 val shortcutId = shortcutInfo.id
-                val label = shortcutInfo.getLabel()
+                val label = shortcutInfo.obtainLabel()
                 val icon = launcherApps.getShortcutBadgedIconDrawable(
                     shortcutInfo,
                     resources.displayMetrics.densityDpi
                 ) ?: return@ensureBackgroundThread
-                val (page, rect) = locateFirstBlankSlot()
+                val (page, rect) = locateFirstBlankBay()
                 val gridItem = DeskViewerGridItem(
                     id = null,
                     left = rect.left,
@@ -949,22 +949,22 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 )
 
                 runOnUiThread {
-                    binding.mainShowGridIxVw.root.skipToPage(page)
+                    binding.mainShowGridIxVw.root.skipToLeaf(page)
                 }
 
                 Thread.sleep(2000)
 
                 try {
                     item.accept()
-                    binding.mainShowGridIxVw.root.repoAndDisplayGridItem(gridItem)
+                    binding.mainShowGridIxVw.root.repoAndShowLatticeItem(gridItem)
                 } catch (_: IllegalStateException) {
                 }
             }
         }
     }
 
-    private fun locateFirstBlankSlot(): Pair<Int, Rect> {
-        val gridItems = homeScreenGridItemsDB.pullAllCells() as ArrayList<DeskViewerGridItem>
+    private fun locateFirstBlankBay(): Pair<Int, Rect> {
+        val gridItems = homeScreenGridItemsDB.pullEveryCells() as ArrayList<DeskViewerGridItem>
         // Empty grid: -1 makes the fallback below return page 0.
         val maxPage = gridItems.maxOfOrNull { it.page } ?: -1
         val occupiedCells = ArrayList<Triple<Int, Int, Int>>()
@@ -1050,16 +1050,16 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     private val refreshLock = Any()
 
     /** True while [packageName] is installed and enabled - so also for the length of its update. */
-    private fun isInstalledAndEnabled(packageName: String): Boolean =
+    private fun isPresentAndEnabled(packageName: String): Boolean =
         runCatching { packageManager.getApplicationInfo(packageName, 0).enabled }.getOrDefault(false)
 
     private fun renewHomebases(): Unit = synchronized(refreshLock) {
-        val dockEmpty = homeScreenGridItemsDB.pullAllCells().none { it.docked }
+        val dockEmpty = homeScreenGridItemsDB.pullEveryCells().none { it.docked }
         if (!launcherConfig.wasHomeScreenInit || dockEmpty) {
-            pullMainAppletPackages()
+            pullPrimeAppletPackages()
             launcherConfig.wasHomeScreenInit = true
             launcherConfig.wasSearchBarPurged = true
-            binding.mainShowGridIxVw.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullLatticeItems()
         }
 
         // First run: everything that only places apps needs their names, not their icons. Seeding
@@ -1073,26 +1073,26 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             if (!launcherConfig.isDrawerEnabled || launcherConfig.homeAndDrawer) {
                 DeskWidgetsFiller.placeMissing(this, names)
             }
-            binding.mainShowGridIxVw.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullLatticeItems()
         }
 
         val knownSignature = IconStore.installedSignature
-        val launchers = pullAllAppletHomebases()
+        val launchers = pullEveryAppletHomebases()
         // Widget providers come from the installed packages, which the scan's signature covers
         // (installs, removals, updates). Same signature, same providers: the list is not rebuilt -
         // that decoded every installed widget's preview again on every return to the home screen.
         val appsChanged = knownSignature == null || knownSignature != IconStore.installedSignature
         binding.allAppsBlockIxVw.root.gotLaunchers(launchers)
         binding.startPageIxVw.root.gotLaunchers(launchers)
-        if (appsChanged || !binding.widgetsBlockIxVw.root.hasWidgets()) {
-            binding.widgetsBlockIxVw.root.getAppWidgets()
+        if (appsChanged || !binding.widgetsBlockIxVw.root.hasGadgets()) {
+            binding.widgetsBlockIxVw.root.obtainProgGadgets()
         }
 
         // An app being updated drops out of the launcher list for a moment; deleting its rows then
         // threw away its icons and widgets (the Google search bar on every Google app update).
         // Only an app that is really gone, or disabled, loses them.
         IconStore.launchers.map { it.packageName }.forEach { packageName ->
-            if (!launchers.map { it.packageName }.contains(packageName) && !isInstalledAndEnabled(packageName)) {
+            if (!launchers.map { it.packageName }.contains(packageName) && !isPresentAndEnabled(packageName)) {
                 launchersDB.eraseApplet(packageName)
                 homeScreenGridItemsDB.eraseByPkgName(packageName)
             }
@@ -1119,37 +1119,37 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         if (!launcherConfig.wasSearchBarPurged) {
             ensureBackgroundThread {
-                purgeSeededLookupBandIfNeeded()
+                purgeSeededLookupStripIfNeeded()
 
                 binding.mainShowGridIxVw.root.deletePlacedLookupBars()
-                binding.mainShowGridIxVw.root.pullGridItems()
+                binding.mainShowGridIxVw.root.pullLatticeItems()
             }
         } else {
-            binding.mainShowGridIxVw.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullLatticeItems()
         }
     }
 
-    fun reapplyHomebaseStyle(): Boolean {
+    fun reapplyHomebaseLook(): Boolean {
         if (isFinishing || isDestroyed) return false
-        if (!DeskThemeSetter.commitStyle(this)) return false
+        if (!DeskThemeSetter.commitLook(this)) return false
         recreate()
         return true
     }
 
-    fun isAllProgramsSectionExpanded() = binding.allAppsBlockIxVw.root.y != mScreenHeight.toFloat()
+    fun isEveryProgramsPartExpanded() = binding.allAppsBlockIxVw.root.y != mScreenHeight.toFloat()
 
-    private fun isGadgetsSectionExpanded() =
+    private fun isWidgetsPartExpanded() =
         binding.widgetsBlockIxVw.root.y != mScreenHeight.toFloat()
 
-    fun isLeftStageExpanded() = binding.startPageIxVw.root.x != mScreenWidth.toFloat()
+    fun isLeftSceneExpanded() = binding.startPageIxVw.root.x != mScreenWidth.toFloat()
 
-    fun isMsgsStageExpanded() = binding.msgsPageIxVw.root.x != -mScreenWidth.toFloat()
+    fun isMsgsSceneExpanded() = binding.msgsPageIxVw.root.x != -mScreenWidth.toFloat()
 
     /** The surface in front now, as an analytics screen name; the widgets list has none of its own. */
     private fun liveScreen() = when {
-        isAllProgramsSectionExpanded() -> SCREEN_DRAWER
-        isLeftStageExpanded() -> SCREEN_SUGGESTED
-        isMsgsStageExpanded() -> SCREEN_HOST_APP
+        isEveryProgramsPartExpanded() -> SCREEN_DRAWER
+        isLeftSceneExpanded() -> SCREEN_SUGGESTED
+        isMsgsSceneExpanded() -> SCREEN_HOST_APP
         else -> SCREEN_HOME
     }
 
@@ -1157,24 +1157,24 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
      * The apps panel from a tap (the drawn search bar), wherever the workspace is paged to. Not
      * onFlingLeft: a fling opens the panel only from the last page, a tap must open it anywhere.
      */
-    fun openAppsPanel() = surfaceLeftDeck()
+    fun launchProgsTray() = surfaceLeftPack()
 
-    private fun surfaceLeftDeck() {
+    private fun surfaceLeftPack() {
         if (!CenterAdsToggles.deckEnabled(CenterAdsToggles.LEFT_SWIPE)) {
             Timber.d("StarterTray: apps panel disabled by launcher_config")
             return
         }
         CenterDealBroker.run(this, CenterAdsToggles.LEFT_SWIPE) {
-            binding.startPageIxVw.root.reloadUnits()
+            binding.startPageIxVw.root.reloadPieces()
             binding.startPageIxVw.root.onOpened()
-            surfaceSideDeck(binding.startPageIxVw.root)
+            surfaceSidePack(binding.startPageIxVw.root)
 
-            doneGuidePhase(CenterTourStop.SWIPE_LEFT_APPS)
+            doneTourStep(CenterTourStop.SWIPE_LEFT_APPS)
         }
     }
 
-    fun concealLeftDeck() {
-        concealSideDeck(binding.startPageIxVw.root, mScreenWidth.toFloat())
+    fun concealLeftPack() {
+        concealSidePack(binding.startPageIxVw.root, mScreenWidth.toFloat())
 
         Handler(Looper.getMainLooper()).postDelayed({
             binding.startPageIxVw.root.restoreLookup()
@@ -1183,7 +1183,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     /** Our own icon (dock, home, drawer, side panel) opens the app itself, never the messages panel. */
     fun wakeOwnApplet() {
-        if (isLeftStageExpanded()) concealLeftDeck()
+        if (isLeftSceneExpanded()) concealLeftPack()
         val host = Launcher.host()
         if (host != null) {
             runCatching { host.openHostApp(this) }.onFailure { Timber.e(it, "StarterTray: openHostApp failed") }
@@ -1196,57 +1196,57 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     /** Back from an app / sponsored link opened from here: the host's return moment, once the window has focus. */
-    private fun reportReturn() {
+    private fun reportResult() {
         if (hasWindowFocus()) {
-            binding.root.post { if (!isFinishing && !isDestroyed) CenterDealBroker.onHomeResume(this) }
+            binding.root.post { if (!isFinishing && !isDestroyed) CenterDealBroker.onLobbyResume(this) }
             return
         }
         binding.root.viewTreeObserver.addOnWindowFocusChangeListener(object : android.view.ViewTreeObserver.OnWindowFocusChangeListener {
             override fun onWindowFocusChanged(hasFocus: Boolean) {
                 if (!hasFocus) return
                 binding.root.viewTreeObserver.takeIf { it.isAlive }?.removeOnWindowFocusChangeListener(this)
-                binding.root.post { if (!isFinishing && !isDestroyed) CenterDealBroker.onHomeResume(this@XCenterScene) }
+                binding.root.post { if (!isFinishing && !isDestroyed) CenterDealBroker.onLobbyResume(this@XCenterScene) }
             }
         })
     }
 
-    private fun surfaceMsgsDeck() {
+    private fun surfaceMsgsPack() {
         if (!CenterAdsToggles.deckEnabled(CenterAdsToggles.RIGHT_SWIPE)) {
             Timber.d("StarterTray: messages panel disabled by launcher_config")
             return
         }
         CenterDealBroker.run(this, CenterAdsToggles.RIGHT_SWIPE) {
-            revealMsgsDeck()
-            doneGuidePhase(CenterTourStop.SWIPE_RIGHT_MESSAGES)
+            revealMsgsPack()
+            doneTourStep(CenterTourStop.SWIPE_RIGHT_MESSAGES)
         }
     }
 
-    private fun revealMsgsDeck() {
+    private fun revealMsgsPack() {
         binding.msgsPageIxVw.root.refresh()
-        surfaceSideDeck(binding.msgsPageIxVw.root) {
+        surfaceSidePack(binding.msgsPageIxVw.root) {
             // Load the inbox ribbon only once the panel has landed, so a collapsible never opens mid-slide.
-            if (mOpenSidePanel === binding.msgsPageIxVw.root) binding.msgsPageIxVw.root.onPanelSettled()
+            if (mOpenSidePanel === binding.msgsPageIxVw.root) binding.msgsPageIxVw.root.onTraySettled()
         }
 
-        binding.msgsPageIxVw.root.setPanelVisible(true)
+        binding.msgsPageIxVw.root.assignTrayVisible(true)
     }
 
-    fun concealMsgsDeck() {
-        binding.msgsPageIxVw.root.setPanelVisible(false)
-        concealSideDeck(binding.msgsPageIxVw.root, -mScreenWidth.toFloat())
+    fun concealMsgsPack() {
+        binding.msgsPageIxVw.root.assignTrayVisible(false)
+        concealSidePack(binding.msgsPageIxVw.root, -mScreenWidth.toFloat())
     }
 
-    fun closePostbox() {
-        if (isMsgsStageExpanded()) {
-            concealMsgsDeck()
+    fun dismissPostbox() {
+        if (isMsgsSceneExpanded()) {
+            concealMsgsPack()
         }
     }
 
-    private fun surfaceSideDeck(panel: View, onShown: (() -> Unit)? = null) {
+    private fun surfaceSidePack(panel: View, onShown: (() -> Unit)? = null) {
         Launcher.events.onScreen(if (panel === binding.startPageIxVw.root) SCREEN_SUGGESTED else SCREEN_HOST_APP)
-        concealSwipeHint()
+        concealSlideTip()
         mOpenSidePanel = panel
-        tweenSideDeckTo(panel, 0f, onShown)
+        tweenSidePackTo(panel, 0f, onShown)
         window.navigationBarColor = resources.getColor(R.color.launcher_semitransparent_navigation)
         binding.mainShowGridIxVw.root.fragmentExpanded()
         binding.mainShowGridIxVw.root.concealResizeLines()
@@ -1261,22 +1261,22 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             null
         )
 
-        reloadStatusBandGlyphs(sideDeckBackdropTint(panel))
+        reloadStateStripGlyphs(sidePackBackdropTint(panel))
     }
 
-    private fun concealSideDeck(panel: View, parkedX: Float) {
+    private fun concealSidePack(panel: View, parkedX: Float) {
         Launcher.events.onScreen(SCREEN_HOME)
-        tweenSideDeckTo(panel, parkedX) {
+        tweenSidePackTo(panel, parkedX) {
             mOpenSidePanel = null
-            perhapsSurfaceGuide()
+            perhapsSurfaceTour()
         }
         window.navigationBarColor = Color.TRANSPARENT
         binding.mainShowGridIxVw.root.fragmentCollapsed()
-        reloadStatusBandGlyphs()
+        reloadStateStripGlyphs()
         hideKeyboard()
     }
 
-    private fun tweenSideDeckTo(panel: View, x: Float, onEnd: (() -> Unit)? = null) {
+    private fun tweenSidePackTo(panel: View, x: Float, onEnd: (() -> Unit)? = null) {
         ObjectAnimator.ofFloat(panel, "x", x).apply {
             duration = ANIMATION_DURATION
             interpolator = DecelerateInterpolator()
@@ -1295,7 +1295,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
     fun promptTextAccess(callback: () -> Unit) = callback()
 
-    fun startHandlingTouches(touchDownY: Int) {
+    fun beginHandlingTouches(touchDownY: Int) {
         mLongPressedIcon = null
         mTouchDownY = touchDownY
         mAllAppsFragmentY = binding.allAppsBlockIxVw.root.y.toInt()
@@ -1306,7 +1306,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     private fun displayFragment(
         fragment: ViewBinding,
         animationDuration: Long = ANIMATION_DURATION,
-        reloadUnits: Boolean = true,
+        reloadPieces: Boolean = true,
     ) {
         if (animationDuration == 0L) {
             // onRestoreInstanceState after a theme flip. Placed now rather than by a 0 ms animator:
@@ -1327,13 +1327,13 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         binding.mainShowGridIxVw.root.fragmentExpanded()
         binding.mainShowGridIxVw.root.concealResizeLines()
 
-        concealSwipeHint()
+        concealSlideTip()
         if (fragment is HpAllAppsZoneBinding) {
             Launcher.events.onScreen(SCREEN_DRAWER)
-            doneGuidePhase(CenterTourStop.SWIPE_UP_DRAWER)
+            doneTourStep(CenterTourStop.SWIPE_UP_DRAWER)
 
-            if (reloadUnits) {
-                CenterDealBroker.run(this, CenterAdsToggles.DRAWER_OPEN) { fragment.root.reloadUnits() }
+            if (reloadPieces) {
+                CenterDealBroker.run(this, CenterAdsToggles.DRAWER_OPEN) { fragment.root.reloadPieces() }
             }
         }
 
@@ -1367,7 +1367,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 .start()
         }
 
-        reloadStatusBandGlyphs(slabBackgroundColor(fragment))
+        reloadStateStripGlyphs(slabBackgroundColor(fragment))
     }
 
     private fun concealFragment(fragment: ViewBinding, animationDuration: Long = ANIMATION_DURATION) {
@@ -1376,22 +1376,22 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             duration = animationDuration
             interpolator = DecelerateInterpolator()
 
-            addListener(endSentry { perhapsSurfaceGuide() })
+            addListener(endSentry { perhapsSurfaceTour() })
             start()
         }
 
         window.navigationBarColor = Color.TRANSPARENT
         binding.mainShowGridIxVw.root.fragmentCollapsed()
-        reloadStatusBandGlyphs()
+        reloadStateStripGlyphs()
 
         hideKeyboard()
         if (fragment is HpGadgetsZoneBinding) {
-            wipeWidgetsLookup()
+            wipeGadgetsLookup()
         }
         Handler(Looper.getMainLooper()).postDelayed({
             if (fragment is HpAllAppsZoneBinding) {
                 fragment.allAppsGridIxVw.scrollToPosition(0)
-                fragment.root.restoreToFirstPage()
+                fragment.root.restoreToFirstLeaf()
                 fragment.root.touchDownY = -1
             } else if (fragment is HpGadgetsZoneBinding) {
                 fragment.widgetsRollIxVw.scrollToPosition(0)
@@ -1401,15 +1401,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     fun atriumViewerLongPressed(eventX: Float, eventY: Float) {
-        if (isAllProgramsSectionExpanded() || isGadgetsSectionExpanded()) {
+        if (isEveryProgramsPartExpanded() || isWidgetsPartExpanded()) {
             return
         }
 
-        concealSwipeHint()
+        concealSlideTip()
 
-        val (x, y) = binding.mainShowGridIxVw.root.intoViewSpaceCoords(eventX, eventY)
+        val (x, y) = binding.mainShowGridIxVw.root.intoScreenSpaceCoords(eventX, eventY)
         mIgnoreMoveEvents = true
-        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingGridItem(x.toInt(), y.toInt())
+        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingLatticeItem(x.toInt(), y.toInt())
         if (clickedGridItem != null) {
             performCellLongTap(x, clickedGridItem)
         }
@@ -1424,20 +1424,20 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
      * whatever icon sat at that spot (on a page with icons there, so only "sometimes").
      */
     private fun isWorkspaceCovered() =
-        isAllProgramsSectionExpanded() || isGadgetsSectionExpanded() || isLeftStageExpanded() || isMsgsStageExpanded()
+        isEveryProgramsPartExpanded() || isWidgetsPartExpanded() || isLeftSceneExpanded() || isMsgsSceneExpanded()
 
     fun atriumViewerTapped(eventX: Float, eventY: Float) {
         if (isWorkspaceCovered()) {
             return
         }
 
-        if (performGuidePhase()) {
+        if (performTourStep()) {
             return
         }
 
         binding.mainShowGridIxVw.root.concealResizeLines()
-        val (x, y) = binding.mainShowGridIxVw.root.intoViewSpaceCoords(eventX, eventY)
-        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingGridItem(x.toInt(), y.toInt())
+        val (x, y) = binding.mainShowGridIxVw.root.intoScreenSpaceCoords(eventX, eventY)
+        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingLatticeItem(x.toInt(), y.toInt())
         if (clickedGridItem != null) {
             performElementTap(clickedGridItem)
         }
@@ -1452,8 +1452,8 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             return
         }
 
-        val (x, y) = binding.mainShowGridIxVw.root.intoViewSpaceCoords(eventX, eventY)
-        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingGridItem(x.toInt(), y.toInt())
+        val (x, y) = binding.mainShowGridIxVw.root.intoScreenSpaceCoords(eventX, eventY)
+        val clickedGridItem = binding.mainShowGridIxVw.root.isClickingLatticeItem(x.toInt(), y.toInt())
         if (clickedGridItem != null) {
             return
         }
@@ -1469,18 +1469,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
     }
 
-    fun closeAppletRack(delayed: Boolean = false) {
-        if (isAllProgramsSectionExpanded()) {
+    fun dismissAppletRack(delayed: Boolean = false) {
+        if (isEveryProgramsPartExpanded()) {
             val close = {
                 Launcher.events.onScreen(SCREEN_HOME)
                 binding.allAppsBlockIxVw.root.y = mScreenHeight.toFloat()
                 binding.allAppsBlockIxVw.allAppsGridIxVw.scrollToPosition(0)
-                binding.allAppsBlockIxVw.root.restoreToFirstPage()
+                binding.allAppsBlockIxVw.root.restoreToFirstLeaf()
                 binding.allAppsBlockIxVw.root.touchDownY = -1
                 binding.mainShowGridIxVw.root.fragmentCollapsed()
-                reloadStatusBandGlyphs()
+                reloadStateStripGlyphs()
 
-                perhapsSurfaceGuide()
+                perhapsSurfaceTour()
             }
             if (delayed) {
                 Handler(Looper.getMainLooper()).postDelayed(close, APP_DRAWER_CLOSE_DELAY)
@@ -1490,18 +1490,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
     }
 
-    fun closeWidgetsBlock(delayed: Boolean = false) {
-        if (isGadgetsSectionExpanded()) {
+    fun dismissGadgetsBrick(delayed: Boolean = false) {
+        if (isWidgetsPartExpanded()) {
             val close = {
                 Launcher.events.onScreen(SCREEN_HOME)
                 binding.widgetsBlockIxVw.root.y = mScreenHeight.toFloat()
                 binding.widgetsBlockIxVw.widgetsRollIxVw.scrollToPosition(0)
-                wipeWidgetsLookup()
+                wipeGadgetsLookup()
                 binding.widgetsBlockIxVw.root.touchDownY = -1
                 binding.mainShowGridIxVw.root.fragmentCollapsed()
-                reloadStatusBandGlyphs()
+                reloadStateStripGlyphs()
 
-                perhapsSurfaceGuide()
+                perhapsSurfaceTour()
             }
             if (delayed) {
                 Handler(Looper.getMainLooper()).postDelayed(close, APP_DRAWER_CLOSE_DELAY)
@@ -1511,7 +1511,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
     }
 
-    fun wipeWidgetsLookup() {
+    fun wipeGadgetsLookup() {
         binding.widgetsBlockIxVw.queryBarIxVw.closeSearch()
     }
 
@@ -1530,14 +1530,14 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             ITEM_TYPE_ICON -> if (clickedGridItem.packageName == packageName) {
                 wakeOwnApplet()
             } else {
-                fireApplet(clickedGridItem.packageName, clickedGridItem.activityName)
+                emitApplet(clickedGridItem.packageName, clickedGridItem.activityName)
             }
             ITEM_TYPE_FOLDER -> wakeFolder(clickedGridItem)
             ITEM_TYPE_SHORTCUT -> {
                 val id = clickedGridItem.shortcutId
                 val packageName = clickedGridItem.packageName
                 val userHandle = android.os.Process.myUserHandle()
-                val shortcutBounds = binding.mainShowGridIxVw.root.getClickableRect(clickedGridItem)
+                val shortcutBounds = binding.mainShowGridIxVw.root.obtainClickableRect(clickedGridItem)
                 val launcherApps =
                     applicationContext.getSystemService(LAUNCHER_APPS_SERVICE) as LauncherApps
                 runCatching {
@@ -1583,7 +1583,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                 Triple(gridOnScreen[0] + x, top, top + gridItem.pullTallnessInCells() * grid.cellHeight)
             }
             else -> {
-                val rect = grid.getClickableRect(gridItem)
+                val rect = grid.obtainClickableRect(gridItem)
                 Triple(gridOnScreen[0] + rect.exactCenterX(), gridOnScreen[1] + rect.top.toFloat(), gridOnScreen[1] + rect.bottom.toFloat())
             }
         }
@@ -1599,7 +1599,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
                     else -> "app_icon"
                 }
             )
-            mOpenPopupMenu = processGridCellOverlayTweaks(
+            mOpenPopupMenu = processLatticeCellLayerTweaks(
                 anchorView = binding.root,
                 gridItem = gridItem,
                 isOnAllAppsFragment = isOnAllAppsFragment,
@@ -1617,7 +1617,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         binding.mainShowGridIxVw.root.itemDraggingStarted(mLongPressedIcon!!)
     }
 
-    private fun reinitBlockTouches() {
+    private fun reinitBrickTouches() {
         binding.widgetsBlockIxVw.root.apply {
             touchDownY = -1
             ignoreTouches = false
@@ -1629,33 +1629,33 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
     }
 
-    private fun concealGlyphDisplay(item: DeskViewerGridItem) {
+    private fun concealGlyphShow(item: DeskViewerGridItem) {
         ensureBackgroundThread {
             val hiddenIconUi = MaskedIcon(null, item.packageName, item.activityName, item.title, null)
             hiddenIconsDB.insert(hiddenIconUi)
 
             runOnUiThread {
-                binding.allAppsBlockIxVw.root.onIconHidden(item)
+                binding.allAppsBlockIxVw.root.onIconMasked(item)
             }
         }
     }
 
     private fun renameCell(homeScreenGridItem: DeskViewerGridItem) {
         RetitleItemPanel(this, homeScreenGridItem) {
-            binding.mainShowGridIxVw.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullLatticeItems()
         }
     }
 
     val menuListener: ItemSettingsKeeper = object : ItemSettingsKeeper {
         override fun onAnyClick() {
-            reinitBlockTouches()
+            reinitBrickTouches()
         }
 
         override fun hide(gridItem: DeskViewerGridItem) {
             Launcher.events.onClick("menu_hide")
             // Our own icon: the host hides it from home and drawer at once (StarterBridge.settings icon flags).
             if (gridItem.packageName == packageName && Launcher.events.onHideHostApp(this@XCenterScene)) return
-            concealGlyphDisplay(gridItem)
+            concealGlyphShow(gridItem)
         }
 
         override fun rename(gridItem: DeskViewerGridItem) {
@@ -1670,12 +1670,12 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         override fun appInfoUi(gridItem: DeskViewerGridItem) {
             Launcher.events.onClick("menu_app_info")
-            fireAppletInfo(gridItem.packageName)
+            emitAppletInfo(gridItem.packageName)
         }
 
         override fun remove(gridItem: DeskViewerGridItem) {
             Launcher.events.onClick("menu_remove")
-            binding.mainShowGridIxVw.root.deleteAppIcon(gridItem)
+            binding.mainShowGridIxVw.root.deleteProgIcon(gridItem)
         }
 
         override fun uninstall(gridItem: DeskViewerGridItem) {
@@ -1685,7 +1685,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
 
         override fun onDismiss() {
             mOpenPopupMenu = null
-            reinitBlockTouches()
+            reinitBrickTouches()
         }
     }
 
@@ -1753,7 +1753,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             return
         }
 
-        if (!isGadgetsSectionExpanded()) {
+        if (!isWidgetsPartExpanded()) {
             mIgnoreUpEvent = true
             displayFragment(binding.allAppsBlockIxVw)
         }
@@ -1766,9 +1766,9 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
 
         mIgnoreUpEvent = true
-        if (isAllProgramsSectionExpanded()) {
+        if (isEveryProgramsPartExpanded()) {
             concealFragment(binding.allAppsBlockIxVw)
-        } else if (isGadgetsSectionExpanded()) {
+        } else if (isWidgetsPartExpanded()) {
             concealFragment(binding.widgetsBlockIxVw)
         } else {
             try {
@@ -1790,15 +1790,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         // Paging owns the fling while a page is dragged or still settling (see flingSwipe). The
         // messages panel sits left of the home page, so it opens only from there, at rest;
         // anywhere else a rightward fling is just the previous page.
-        if (binding.mainShowGridIxVw.root.flingSwipe(towardsNext = false)) {
+        if (binding.mainShowGridIxVw.root.flingSlide(towardsNext = false)) {
             return
         }
-        if (!isAllProgramsSectionExpanded() && !isGadgetsSectionExpanded() &&
-            binding.mainShowGridIxVw.root.isOnFirstPage()
+        if (!isEveryProgramsPartExpanded() && !isWidgetsPartExpanded() &&
+            binding.mainShowGridIxVw.root.isOnFirstLeaf()
         ) {
-            surfaceMsgsDeck()
+            surfaceMsgsPack()
         } else {
-            binding.mainShowGridIxVw.root.prevPage(redraw = true)
+            binding.mainShowGridIxVw.root.prevLeaf(redraw = true)
         }
     }
 
@@ -1810,20 +1810,20 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         mIgnoreUpEvent = true
 
         // see onFlingRight: the apps panel sits right of the last page and opens only from it
-        if (binding.mainShowGridIxVw.root.flingSwipe(towardsNext = true)) {
+        if (binding.mainShowGridIxVw.root.flingSlide(towardsNext = true)) {
             return
         }
-        if (!isAllProgramsSectionExpanded() && !isGadgetsSectionExpanded() &&
-            binding.mainShowGridIxVw.root.isOnLastPage()
+        if (!isEveryProgramsPartExpanded() && !isWidgetsPartExpanded() &&
+            binding.mainShowGridIxVw.root.isOnLastLeaf()
         ) {
-            surfaceLeftDeck()
+            surfaceLeftPack()
         } else {
-            binding.mainShowGridIxVw.root.nextPage(redraw = true)
+            binding.mainShowGridIxVw.root.nextLeaf(redraw = true)
         }
     }
 
     /** The launcher list, built by [AppScan]; the drawer and apps panel get it in stages on a cold start. */
-    fun pullAllAppletHomebases(): ArrayList<WidgetCenter> = AppScan.scan(
+    fun pullEveryAppletHomebases(): ArrayList<WidgetCenter> = AppScan.scan(
         this,
         onQuick = { quick ->
             binding.allAppsBlockIxVw.root.gotLaunchers(quick)
@@ -1835,7 +1835,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         },
     )
 
-    private fun purgeSeededLookupBandIfNeeded() {
+    private fun purgeSeededLookupStripIfNeeded() {
         if (launcherConfig.wasSearchBarPurged) {
             return
         }
@@ -1849,7 +1849,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     private fun liveCopyPkg(): String? =
-        Telephony.Sms.getDefaultSmsPackage(this) ?: packageName.takeIf { isDefaultSmsApp() }
+        Telephony.Sms.getDefaultSmsPackage(this) ?: packageName.takeIf { isDefaultSmsProg() }
 
     private fun dockMessagingPkg(): String? = liveCopyPkg()
 
@@ -1894,12 +1894,12 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         val placed = launcherConfig.dockSmsPackage.ifEmpty { packageName }
         if (wanted == placed && launcherConfig.dockSmsPackage.isNotEmpty()) return
         ensureBackgroundThread {
-            val items = homeScreenGridItemsDB.pullAllCells()
+            val items = homeScreenGridItemsDB.pullEveryCells()
             if (wanted == placed) {
                 val slotFilled = items.any { it.docked && it.left == DOCK_SMS_SLOT && it.parentId == null }
                 if (!slotFilled) {
                     messagingDockCell(wanted)?.let { homeScreenGridItemsDB.insert(it) }
-                    binding.mainShowGridIxVw.root.pullGridItems()
+                    binding.mainShowGridIxVw.root.pullLatticeItems()
                 }
                 launcherConfig.dockSmsPackage = placed
                 return@ensureBackgroundThread
@@ -1914,11 +1914,11 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             }
             launcherConfig.dockSmsPackage = wanted
             Timber.d("StarterTray: dock messaging slot $placed -> $wanted (slotTaken=$slotTaken)")
-            binding.mainShowGridIxVw.root.pullGridItems()
+            binding.mainShowGridIxVw.root.pullLatticeItems()
         }
     }
 
-    private fun pullMainAppletPackages() {
+    private fun pullPrimeAppletPackages() {
         val homeScreenGridItems = ArrayList<DeskViewerGridItem>()
 
         try {
@@ -2039,10 +2039,10 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             }
         }
 
-        homeScreenGridItemsDB.insertAll(homeScreenGridItems)
+        homeScreenGridItemsDB.insertEvery(homeScreenGridItems)
     }
 
-    fun processWidgetBinding(
+    fun processGadgetBinding(
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
         appWidgetInfo: AppWidgetProviderInfo,
@@ -2063,7 +2063,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         }
     }
 
-    fun processWidgetTuneViewer(
+    fun processGadgetTuneViewer(
         appWidgetHost: AppWidgetHost,
         appWidgetId: Int,
         callback: (canBind: Boolean) -> Unit,
@@ -2104,18 +2104,18 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
             getProperBackgroundColor()
         }
 
-    private fun sideDeckBackdropTint(panel: View): Int =
+    private fun sidePackBackdropTint(panel: View): Int =
         (panel.background as? ColorDrawable)?.color ?: getProperBackgroundColor()
 
-    private fun livePanelTint(): Int? = when {
-        isAllProgramsSectionExpanded() -> slabBackgroundColor(binding.allAppsBlockIxVw)
-        isGadgetsSectionExpanded() -> slabBackgroundColor(binding.widgetsBlockIxVw)
-        isLeftStageExpanded() -> sideDeckBackdropTint(binding.startPageIxVw.root)
-        isMsgsStageExpanded() -> sideDeckBackdropTint(binding.msgsPageIxVw.root)
+    private fun liveTrayTint(): Int? = when {
+        isEveryProgramsPartExpanded() -> slabBackgroundColor(binding.allAppsBlockIxVw)
+        isWidgetsPartExpanded() -> slabBackgroundColor(binding.widgetsBlockIxVw)
+        isLeftSceneExpanded() -> sidePackBackdropTint(binding.startPageIxVw.root)
+        isMsgsSceneExpanded() -> sidePackBackdropTint(binding.msgsPageIxVw.root)
         else -> null
     }
 
-    private fun reloadStatusBandGlyphs(backgroundColor: Int? = null) {
+    private fun reloadStateStripGlyphs(backgroundColor: Int? = null) {
         val isLightBackground = when {
             backgroundColor != null -> backgroundColor.getContrastColor() == DARK_GREY
             else -> false

@@ -28,7 +28,7 @@ internal object LoanAdvanceTracker : Application.ActivityLifecycleCallbacks {
         started++
         if (started == 1 && wentToBackground) {
             wentToBackground = false
-            main.post { if (!activity.isFinishing && !activity.isDestroyed) Spots.toolProceed(activity) }
+            main.post { if (!activity.isFinishing && !activity.isDestroyed) Spots.toolAdvance(activity) }
         }
     }
 

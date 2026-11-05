@@ -1,6 +1,6 @@
 package com.loanmate.loan.emicalculator.carloan.homelloan.screens.guides
 
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.wireViewSpot
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.wireScreenPromo
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
@@ -14,21 +14,21 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenGuideBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenGuidesBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.listAd
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.insertInto
 
 /** Tips & Tricks and Diamond Tips: a list of articles. */
 class ToursActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { handle -> ToursScreenModel(catalogRepository, handle) }
+    private val viewModel by toolScreenModel { handle -> ToursScreenModel(catalogRepository, handle) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
         val b = ScreenGuidesBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
 
         b.crest.titleVw.setText(viewModel.title)
@@ -45,7 +45,7 @@ class ToursActivity : AppCompatActivity() {
         }
         listAd(if (viewModel.guides) "screens.diamond_tips" else "screens.tips")
             ?.insertInto(b.rowsVw, resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._7sdp))
-        wireViewSpot("screens.articles", b.adInlineVw, b.adSlotVw)
+        wireScreenPromo("screens.articles", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {
@@ -62,14 +62,14 @@ class ToursActivity : AppCompatActivity() {
 }
 
 class TourActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { handle -> ToursScreenModel(catalogRepository, handle) }
+    private val viewModel by toolScreenModel { handle -> ToursScreenModel(catalogRepository, handle) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
         val b = ScreenGuideBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
 
         val a = viewModel.article
@@ -80,7 +80,7 @@ class TourActivity : AppCompatActivity() {
         b.bodyVw.text = a.body
         // Diamond tips: its own place, the bottom ad pinned under the text; tips keep screens.article.
         if (viewModel.guides) Spots.bottom(this, b.adSlotVw, "screens.diamond_article")
-        else wireViewSpot("screens.article", b.adInlineVw, b.adSlotVw)
+        else wireScreenPromo("screens.article", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {

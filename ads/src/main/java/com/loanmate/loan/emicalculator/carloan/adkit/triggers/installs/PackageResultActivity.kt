@@ -51,10 +51,10 @@ class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
     override fun initView() {
         lifecycle.addObserver(SysDialogLoan(this) { finishAndRemoveTask() })
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        applyInsets()
+        commitInsets()
         wireHeader()
         kitWireButtons()
-        fillSpot()
+        fillPromo()
         kitPlayEntrance()
         runTest()
     }
@@ -70,7 +70,7 @@ class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
         super.onDestroy()
     }
 
-    private fun applyInsets() {
+    private fun commitInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.pkgresContentVw) { _, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             binding.pkgresHeroVw.updatePadding(top = bars.top)
@@ -239,7 +239,7 @@ class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
             pkgresOpenVw.isEnabled = false
             pkgresOpenVw.setOnClickListener {
                 MetricsTwo.click("privacy_review")
-                enterNewToolOptions()
+                enterNewLoanSettings()
             }
         } else {
             pkgresOpenVw.visibility = View.GONE
@@ -250,14 +250,14 @@ class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
         }
     }
 
-    private fun enterNewToolOptions() {
+    private fun enterNewLoanSettings() {
         runCatching {
             startActivity(
                 Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", affectedPackage, null))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
-        kitFinishSafely()
+        kitDoneSafely()
     }
 
     private fun kitPlayEntrance() = with(binding) {
@@ -284,7 +284,7 @@ class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
 
     private val placeKey: String get() = if (installed) Spots.APP_INSTALLED else Spots.APP_UNINSTALLED
 
-    private fun fillSpot() {
+    private fun fillPromo() {
         binding.adShimmerVw.visibility = View.GONE // FootPromoFetcher brings its own shimmer
         Spots.bottom(this, binding.adNativeFrameVw, placeKey)
     }
@@ -295,12 +295,12 @@ class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
         binding.pkgresCloseVw.isEnabled = false
         binding.pkgresDoneVw.isEnabled = false
         binding.pkgresOpenVw.isEnabled = false
-        Spots.exit(this, placeKey) { kitFinishSafely() }
+        Spots.exit(this, placeKey) { kitDoneSafely() }
     }
 
     override fun performBack() = close()
 
-    private fun kitFinishSafely() {
+    private fun kitDoneSafely() {
         if (!isFinishing) finish()
     }
 

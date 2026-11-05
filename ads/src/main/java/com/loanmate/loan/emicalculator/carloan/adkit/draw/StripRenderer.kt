@@ -26,7 +26,7 @@ interface StripLifeTap {
     fun onAdLoaded() {}
     fun onAdFailed() {}
     /** Banner intentionally not shown (switched off or frequency skip): callers must not fall back. */
-    fun onSpotSkipped() {}
+    fun onPromoSkipped() {}
 }
 
 /** [place] = the RC place key this banner runs for (`ad` / `ad_impression` events). */
@@ -37,7 +37,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         var bannerCounter = 0
     }
 
-    fun presentBand(
+    fun presentStrip(
         activity: Activity,
         container: FrameLayout,
         type: StripLook = StripLook.AUTO,
@@ -52,10 +52,10 @@ class StripRenderer(private val place: String = PromoSignals.place) {
 
         if (!pref.getBoolean("IsAdsON") || !pref.getBoolean("BannerAdPresenter")) {
             hide(container)
-            observer?.onSpotSkipped()
+            observer?.onPromoSkipped()
             return
         }
-        if (!kitHasNetwork(activity)) {
+        if (!kitHasNet(activity)) {
             hide(container)
             observer?.onAdFailed()
             return
@@ -64,7 +64,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         if (bannerCounter < pref.getInt("BannerCounter")) {
             bannerCounter++
             hide(container)
-            observer?.onSpotSkipped()
+            observer?.onPromoSkipped()
             return
         }
         bannerCounter = 0
@@ -72,7 +72,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         when (type) {
             StripLook.AUTO -> {
                 when (PromoBayType.fromString(pref.getString("IsAdType"))) {
-                    PromoBayType.GOOGLE -> obtainGmsBand(
+                    PromoBayType.GOOGLE -> obtainGmsStrip(
                         activity,
                         container,
                         size,
@@ -87,7 +87,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
                         if (disableInternalFallback) {
                             observer?.onAdFailed()
                         } else {
-                            NativePromoLead(place).obtainInhouseSpot(
+                            NativePromoLead(place).obtainNativePromo(
                                 activity,
                                 container,
                                 NativePromoLead.NativePromoLook.BANNER
@@ -97,7 +97,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
                 }
             }
 
-            StripLook.GOOGLE -> obtainGmsBand(
+            StripLook.GOOGLE -> obtainGmsStrip(
                 activity,
                 container,
                 size,
@@ -112,7 +112,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
                 if (disableInternalFallback) {
                     observer?.onAdFailed()
                 } else {
-                    NativePromoLead(place).obtainInhouseSpot(
+                    NativePromoLead(place).obtainNativePromo(
                         activity,
                         container,
                         NativePromoLead.NativePromoLook.BANNER
@@ -122,7 +122,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         }
     }
 
-    private fun obtainGmsBand(
+    private fun obtainGmsStrip(
         activity: Activity,
         container: FrameLayout,
         size: StripDims,
@@ -135,12 +135,12 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         val pref = PromoSettingsBox.getInstance(activity)
         val adUnitId = customAdUnitId ?: pref.getString("googleBanner")
 
-        if (!PromoBayWall.isOpen(container)) return // slot off screen (PromoBayWall)
-        if (!adUnitId.isNullOrEmpty() && !PromoBayWall.beginPull(container)) return // this slot is already loading
+        if (!PromoBayWall.isLaunch(container)) return // slot off screen (PromoBayWall)
+        if (!adUnitId.isNullOrEmpty() && !PromoBayWall.beginFetch(container)) return // this slot is already loading
 
         if (adUnitId.isNullOrEmpty()) {
             if (disableInternalFallback) observer?.onAdFailed()
-            else degradeToFanOrInhouse(activity, container, shimmer, observer)
+            else degradeToFanOrNative(activity, container, shimmer, observer)
             return
         }
 
@@ -158,9 +158,9 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         googleBanner?.adUnitId = adUnitId
 
         if (isCollapsable) {
-            googleBanner?.setAdSize(getAdSize(activity, container))
+            googleBanner?.setAdSize(obtainAdDim(activity, container))
         } else {
-            googleBanner?.setAdSize(gmsBandSize(activity, container, size, isCollapsable))
+            googleBanner?.setAdSize(gmsStripDim(activity, container, size, isCollapsable))
         }
 
         googleBanner?.adListener = object : PromoSignals.PackListener(PromoSignals.BANNER, place) {
@@ -172,10 +172,10 @@ class StripRenderer(private val place: String = PromoSignals.place) {
             }
 
             private fun kitAttachLoaded() {
-                PromoBayWall.endPull(container)
+                PromoBayWall.endFetch(container)
                 // The slot closed meanwhile (panel slid away, side menu opened): drop the ad instead of
                 // letting a collapsible open its expanded popup over another screen.
-                if (!PromoBayWall.isOpen(container) || activity.isFinishing || activity.isDestroyed) {
+                if (!PromoBayWall.isLaunch(container) || activity.isFinishing || activity.isDestroyed) {
                     runCatching { googleBanner?.destroy() }
                     googleBanner = null
                     return
@@ -190,26 +190,26 @@ class StripRenderer(private val place: String = PromoSignals.place) {
 
                 shimmer?.stopShimmer()
                 shimmer?.visibility = View.GONE
-                PromoBayWall.destroySpots(container) // a ribbon from an earlier load may still sit here; removed-but-live keeps its popup
+                PromoBayWall.destroyPromos(container) // a ribbon from an earlier load may still sit here; removed-but-live keeps its popup
                 container.removeAllViews()
 
-                container.addView(PromoFrameLooks.bandStrip(activity, banner))
+                container.addView(PromoFrameLooks.bandBar(activity, banner))
                 container.visibility = View.VISIBLE
                 PromoSignals.send(PromoSignals.BANNER, "show", place)
                 // Any screen: the slot (and an expanded ad's popup) goes away with its screen.
-                PromoBayWall.dismissWithView(activity, container)
+                PromoBayWall.dismissWithScreen(activity, container)
                 observer?.onAdLoaded()
             }
 
             override fun onAdFailedToLoad(error: LoadAdError) {
                 super.onAdFailedToLoad(error)
-                PromoBayWall.endPull(container)
+                PromoBayWall.endFetch(container)
                 shimmer?.stopShimmer()
                 shimmer?.visibility = View.GONE
                 Log.e("BannerRenderer", "Google Banner Failed: ${error.message}")
                 observer?.onAdFailed()
                 if (!disableInternalFallback) {
-                    degradeToFanOrInhouse(activity, container, shimmer, observer)
+                    degradeToFanOrNative(activity, container, shimmer, observer)
                 }
             }
 
@@ -236,7 +236,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         googleBanner?.loadAd(request)
     }
 
-    private fun getAdSize(
+    private fun obtainAdDim(
         activity: Activity,
         sponsorContainer: FrameLayout
     ): com.google.android.gms.ads.AdSize {
@@ -252,7 +252,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(activity, adWidth)
     }
 
-    private fun gmsBandSize(
+    private fun gmsStripDim(
         activity: Activity,
         container: FrameLayout,
         size: StripDims,
@@ -262,23 +262,23 @@ class StripRenderer(private val place: String = PromoSignals.place) {
             StripDims.NORMAL -> AdSize.BANNER
             StripDims.INLINE -> AdSize.getCurrentOrientationInlineAdaptiveBannerAdSize(
                 activity,
-                kitDisplayWidthDp(activity)
+                kitShowWidthDp(activity)
             )
 
             StripDims.ADAPTIVE -> AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
                 activity,
-                kitDisplayWidthDp(activity)
+                kitShowWidthDp(activity)
             )
         }
     }
 
-    private fun kitDisplayWidthDp(activity: Activity): Int {
+    private fun kitShowWidthDp(activity: Activity): Int {
         val display = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(display)
         return (display.widthPixels / display.density).toInt()
     }
 
-    private fun degradeToFanOrInhouse(
+    private fun degradeToFanOrNative(
         activity: Activity,
         container: FrameLayout,
         shimmer: ShimmerFrameLayout? = null,
@@ -286,7 +286,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
     ) {
         shimmer?.startShimmer()
         shimmer?.visibility = View.VISIBLE
-        NativePromoLead(place).obtainInhouseSpot(
+        NativePromoLead(place).obtainNativePromo(
             activity,
             container,
             NativePromoLead.NativePromoLook.BANNER
@@ -295,7 +295,7 @@ class StripRenderer(private val place: String = PromoSignals.place) {
 
     private fun hide(container: FrameLayout) {
         CollapsibleVeil.maskFor(container.context)
-        PromoBayWall.destroySpots(container) // the banner being replaced must not keep drawing (half-and-half look)
+        PromoBayWall.destroyPromos(container) // the banner being replaced must not keep drawing (half-and-half look)
         container.removeAllViews()
         container.visibility = View.GONE
     }

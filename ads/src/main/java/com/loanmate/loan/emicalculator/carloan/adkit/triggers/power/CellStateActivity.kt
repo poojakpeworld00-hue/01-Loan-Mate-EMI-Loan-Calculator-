@@ -58,7 +58,7 @@ class CellStateActivity : AppCompatActivity() {
             close()
         }
         render(registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED)))
-        fillSpot()
+        fillPromo()
     }
 
     override fun onResume() {
@@ -93,7 +93,7 @@ class CellStateActivity : AppCompatActivity() {
 
         findViewById<CellPowerScreen>(R.id.chargingEnergyView).apply {
             kitSetConnected(connected)
-            setProgress(level, animate = true)
+            assignProgress(level, animate = true)
         }
         findViewById<TextView>(R.id.chargingPercentage).text =
             getString(R.string.charging_percentage_value, level)
@@ -104,7 +104,7 @@ class CellStateActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.chargingSubtitle).text =
                 getString(R.string.charging_connected_subtitle, feedLabel(plugged))
             findViewById<TextView>(R.id.chargingMetricLeftLabel).setText(R.string.charging_until_full)
-            findViewById<TextView>(R.id.chargingMetricLeftValue).text = kitTimeToFull(level)
+            findViewById<TextView>(R.id.chargingMetricLeftValue).text = kitTimeToWhole(level)
             findViewById<TextView>(R.id.chargingMetricRightLabel).setText(R.string.charging_power_source)
             findViewById<TextView>(R.id.chargingMetricRightValue).text = feedLabel(plugged)
             findViewById<TextView>(R.id.chargingStatusText).setText(R.string.charging_power_flow_active)
@@ -119,7 +119,7 @@ class CellStateActivity : AppCompatActivity() {
         }
     }
 
-    private fun kitTimeToFull(level: Int): String {
+    private fun kitTimeToWhole(level: Int): String {
         if (level >= 100) return getString(R.string.charging_time_full)
         val remainingMs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             (getSystemService(BATTERY_SERVICE) as? BatteryManager)?.computeChargeTimeRemaining() ?: -1L
@@ -145,7 +145,7 @@ class CellStateActivity : AppCompatActivity() {
         else -> getString(R.string.charging_source_power)
     }
 
-    private fun fillSpot() {
+    private fun fillPromo() {
         Spots.bottom(this, findViewById<FrameLayout>(R.id.chargingAdSlot), placeKey)
     }
 
@@ -153,10 +153,10 @@ class CellStateActivity : AppCompatActivity() {
         if (closed) return
         closed = true
         findViewById<ImageButton>(R.id.btnCloseCharging).isEnabled = false
-        Spots.exit(this, placeKey) { kitFinishSafely() }
+        Spots.exit(this, placeKey) { kitDoneSafely() }
     }
 
-    private fun kitFinishSafely() {
+    private fun kitDoneSafely() {
         if (!isFinishing) finish()
     }
 

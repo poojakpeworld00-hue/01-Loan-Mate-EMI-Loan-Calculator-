@@ -62,9 +62,9 @@ object PromoDelays {
  * ads.loader_wait_sec the slot collapses (no empty box). Slots never block input, so nothing else waits.
  * A slot whose ad is still [loading] keeps its shimmer instead: it fills when the ad arrives, with no jump.
  */
-internal fun kitSlotCollapsesOnTimeout(showing: Boolean, loading: Boolean): Boolean = !showing && !loading
+internal fun kitBayCollapsesOnTimeout(showing: Boolean, loading: Boolean): Boolean = !showing && !loading
 
-internal fun kitGuardSlot(
+internal fun kitShieldBay(
     context: Context,
     container: android.widget.FrameLayout,
     shimmer: android.view.View?,
@@ -81,7 +81,7 @@ internal fun kitGuardSlot(
     wait.start {
         // An ad already on screen (e.g. kept from a previous load) is never collapsed.
         val showing = (0 until container.childCount).any { container.getChildAt(it) !== shimmer }
-        if (!kitSlotCollapsesOnTimeout(showing, loading())) return@start
+        if (!kitBayCollapsesOnTimeout(showing, loading())) return@start
         container.removeAllViews()
         container.minimumHeight = 0
         container.visibility = android.view.View.GONE

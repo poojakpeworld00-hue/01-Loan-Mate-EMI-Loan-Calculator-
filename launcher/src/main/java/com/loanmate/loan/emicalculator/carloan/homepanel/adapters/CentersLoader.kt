@@ -26,7 +26,7 @@ import org.fossify.commons.extensions.realScreenSize
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.CenterBaseScene
 import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpBinHomeTitleBinding
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.tweenSize
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.tweenDim
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.EveryWidgetsKeeper
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.WidgetCenter
@@ -80,13 +80,13 @@ class CentersLoader(
     }
 
     override fun getItemViewType(position: Int) =
-        if (isPromoSlot(getItem(position))) VIEW_TYPE_AD else VIEW_TYPE_LAUNCHER
+        if (isAdBay(getItem(position))) VIEW_TYPE_AD else VIEW_TYPE_LAUNCHER
 
-    fun isPromoSlotSpot(position: Int) =
-        position in 0 until itemCount && isPromoSlot(getItem(position))
+    fun isAdBayPromo(position: Int) =
+        position in 0 until itemCount && isAdBay(getItem(position))
 
-    fun fireFirstApplet(): Boolean {
-        val launcher = currentList.firstOrNull { !isPromoSlot(it) } ?: return false
+    fun emitFirstApplet(): Boolean {
+        val launcher = currentList.firstOrNull { !isAdBay(it) } ?: return false
         itemClick(launcher)
         return true
     }
@@ -137,13 +137,13 @@ class CentersLoader(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is AdViewHolder -> holder.wireSlot()
-            is ViewHolder -> holder.bindView(getItem(position))
+            is AdViewHolder -> holder.wireBay()
+            is ViewHolder -> holder.attachScreen(getItem(position))
         }
     }
 
     inner class AdViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun wireSlot() {
+        fun wireBay() {
             val slot = adSlot ?: return
             val host = itemView as FrameLayout
             if (slot.parent !== host) {
@@ -243,7 +243,7 @@ class CentersLoader(
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private fun fitToSlot() {
+        private fun fitToBay() {
             val holder = itemView as? RelativeLayout ?: return
             val height = if (cellHeightPx > 0) cellHeightPx else ViewGroup.LayoutParams.WRAP_CONTENT
             val gravity = if (cellHeightPx > 0) Gravity.CENTER else Gravity.START or Gravity.TOP
@@ -253,11 +253,11 @@ class CentersLoader(
         }
 
         @SuppressLint("ClickableViewAccessibility")
-        fun bindView(launcher: WidgetCenter): View {
+        fun attachScreen(launcher: WidgetCenter): View {
             val binding = HpBinHomeTitleBinding.bind(itemView)
-            fitToSlot()
+            fitToBay()
             itemView.apply {
-                val sponsored = FeaturedCards.isSponsored(launcher)
+                val sponsored = FeaturedCards.isPartner(launcher)
                 // A sponsored tile says so in its label: it opens a web page, not an installed app.
                 binding.homeTextIxVw.text =
                     if (sponsored) context.getString(R.string.lp_sponsored_label, launcher.title)
@@ -332,7 +332,7 @@ class CentersLoader(
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
                             binding.homeIconIxVw.drawable?.alpha = LAUNCHER_ALPHA_PRESSED
-                            tweenSize(
+                            tweenDim(
                                 from = LAUNCHER_SCALE_NORMAL,
                                 to = LAUNCHER_SCALE_PRESSED,
                                 duration = LAUNCHER_SCALE_UP_DURATION
@@ -342,7 +342,7 @@ class CentersLoader(
                         MotionEvent.ACTION_UP,
                         MotionEvent.ACTION_CANCEL -> {
                             binding.homeIconIxVw.drawable?.alpha = LAUNCHER_ALPHA_NORMAL
-                            tweenSize(
+                            tweenDim(
                                 from = LAUNCHER_SCALE_PRESSED,
                                 to = LAUNCHER_SCALE_NORMAL,
                                 duration = LAUNCHER_SCALE_DOWN_DURATION
@@ -357,7 +357,7 @@ class CentersLoader(
         }
     }
 
-    override fun onChange(position: Int) = currentList.getOrNull(position)?.pullBubbleCaption() ?: ""
+    override fun onChange(position: Int) = currentList.getOrNull(position)?.pullBubbleLabel() ?: ""
 
     companion object {
         private const val LAUNCHER_SCALE_NORMAL = 1f
@@ -382,7 +382,7 @@ class CentersLoader(
             drawable = null
         )
 
-        fun isPromoSlot(item: WidgetCenter) = item.packageName == AD_SLOT_PACKAGE
+        fun isAdBay(item: WidgetCenter) = item.packageName == AD_SLOT_PACKAGE
     }
 }
 
@@ -393,8 +393,8 @@ class WidgetCenterDeltaHook : DiffUtil.ItemCallback<WidgetCenter>() {
     }
 
     override fun areContentsTheSame(oldItem: WidgetCenter, newItem: WidgetCenter): Boolean {
-        if (CentersLoader.isPromoSlot(oldItem) || CentersLoader.isPromoSlot(newItem)) {
-            return CentersLoader.isPromoSlot(oldItem) && CentersLoader.isPromoSlot(newItem)
+        if (CentersLoader.isAdBay(oldItem) || CentersLoader.isAdBay(newItem)) {
+            return CentersLoader.isAdBay(oldItem) && CentersLoader.isAdBay(newItem)
         }
 
         return oldItem.title == newItem.title &&

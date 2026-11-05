@@ -117,10 +117,10 @@ class RootBootGallery(private val b: PieceBaseShowcaseBinding) {
 
         // Home screen, rising in at k 2.
         fade(b.wallpaperVw, d, 800, if (d) 250 else 0)
-        kitFadeUp(b.clockVw, d, -8, 600, if (d) 250 else 0)
-        kitFadeUp(b.toastVw, d, 10, 450, if (d) 1000 else 0)
-        kitFadeUp(b.searchVw, d, 12, 550, if (d) 500 else 0)
-        kitFadeUp(b.dockVw, d, 24, 600, if (d) 400 else 0)
+        kitDimUp(b.clockVw, d, -8, 600, if (d) 250 else 0)
+        kitDimUp(b.toastVw, d, 10, 450, if (d) 1000 else 0)
+        kitDimUp(b.searchVw, d, 12, 550, if (d) 500 else 0)
+        kitDimUp(b.dockVw, d, 24, 600, if (d) 400 else 0)
         tiles.forEachIndexed { i, t ->
             val s = if (d) 1f else 0.55f
             t.animate().alpha(if (d) 1f else 0f).scaleX(s).scaleY(s).setStartDelay(if (d) 500L + i * 50 else 0)
@@ -209,7 +209,7 @@ class RootBootGallery(private val b: PieceBaseShowcaseBinding) {
     private fun fade(v: View, show: Boolean, ms: Long, delay: Int) =
         v.animate().alpha(if (show) 1f else 0f).setStartDelay(delay.toLong()).setDuration(ms).start()
 
-    private fun kitFadeUp(v: View, show: Boolean, fromDp: Int, ms: Long, delay: Int) =
+    private fun kitDimUp(v: View, show: Boolean, fromDp: Int, ms: Long, delay: Int) =
         v.animate().alpha(if (show) 1f else 0f).translationY(if (show) 0f else fromDp * dp).setStartDelay(delay.toLong())
             .setDuration(ms).setInterpolator(emphasized).start()
 

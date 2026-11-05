@@ -57,9 +57,9 @@ object LatestPromoTracker {
                     armed.clear()
                     if (armedForPlayStore) {
                         armedForPlayStore = false
-                        launchPlayKeeperFrom(activity)
+                        launchPlayHolderFrom(activity)
                     } else {
-                        launchSpotLeaf(activity)
+                        launchPromoLeaf(activity)
                     }
                 }
             }
@@ -79,7 +79,7 @@ object LatestPromoTracker {
             override fun onReceive(context: Context, intent: Intent) {
                 if (intent.action != Intent.ACTION_CLOSE_SYSTEM_DIALOGS) return
                 when (intent.getStringExtra("reason")) {
-                    "recentapps", "recent_apps" -> Spots.playKeeperReturn(context)
+                    "recentapps", "recent_apps" -> Spots.runHolderResult(context)
                     "homekey" -> kitDisarm()
                 }
             }
@@ -93,8 +93,8 @@ object LatestPromoTracker {
     }
 
     /** A Recents press (see the class doc). */
-    internal fun onSwitcher(context: Context) {
-        if (!armPlayKeeperIfOpeningSession(context)) kitArmIfAllowed(context)
+    internal fun onToggle(context: Context) {
+        if (!armPlayHolderIfLaunchSession(context)) kitArmIfAllowed(context)
     }
 
     private fun kitArmIfAllowed(context: Context) {
@@ -143,11 +143,11 @@ object LatestPromoTracker {
      * the app's own Recents handling then stands down.
      */
     fun kitClaimsPress(context: Context): Boolean =
-        armedForPlayStore || SystemClock.uptimeMillis() - firedAt < CLAIM_MS || playKeeperDue(context)
+        armedForPlayStore || SystemClock.uptimeMillis() - firedAt < CLAIM_MS || runHolderDue(context)
 
     /** `on`, not fired yet and inside `window_sec` after install. */
-    fun playKeeperDue(context: Context): Boolean = runCatching {
-        if (!Spots.kitPlaceOn(Spots.PLAY_STORE_RETURN)) return false
+    fun runHolderDue(context: Context): Boolean = runCatching {
+        if (!Spots.kitSlotOn(Spots.PLAY_STORE_RETURN)) return false
         val vault = PromoSettingsBox.getInstance(context)
         if (vault.getBoolean(PLAY_STORE_FIRED_KEY)) return false
         val windowSec = (PromoPack.config.places[Spots.PLAY_STORE_RETURN]?.int("window_sec", 180) ?: 180).toLong()
@@ -161,15 +161,15 @@ object LatestPromoTracker {
         armedForPlayStore = false
     }
 
-    private fun armPlayKeeperIfOpeningSession(context: Context): Boolean {
+    private fun armPlayHolderIfLaunchSession(context: Context): Boolean {
         return runCatching {
-            if (!playKeeperDue(context)) return false
+            if (!runHolderDue(context)) return false
             val activity = top.get() ?: return false
             if (activity.isFinishing || activity.isDestroyed || armedForPlayStore) return false
 
             if (!topResumed) {
                 log("play store: top already paused — starting now")
-                launchPlayKeeperFrom(activity)
+                launchPlayHolderFrom(activity)
                 return true
             }
             armedForPlayStore = true
@@ -181,7 +181,7 @@ object LatestPromoTracker {
                     armed.clear()
                     if (!activity.isFinishing && !activity.isDestroyed) {
                         log("play store: no pause (screen live behind Recents) — starting now")
-                        launchPlayKeeperFrom(activity)
+                        launchPlayHolderFrom(activity)
                     }
                 }
             }, NO_PAUSE_MS)
@@ -189,7 +189,7 @@ object LatestPromoTracker {
         }.getOrElse { Log.w(TAG, "play_store_return failed", it); PromoPack.onError(it, "recent.play_store_return"); false }
     }
 
-    private fun launchPlayKeeperFrom(activity: Activity) {
+    private fun launchPlayHolderFrom(activity: Activity) {
         runCatching {
             // Play Store's home page, never our own listing: from our page, uninstalling us is one tap away.
             val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER).setPackage("com.android.vending")
@@ -209,13 +209,13 @@ object LatestPromoTracker {
             firedAt = SystemClock.uptimeMillis()
             log("play store: fired (one-shot spent)")
         }.onFailure {
-            Spots.resetOwnLaunch()
+            Spots.restoreOwnLaunch()
             Log.w(TAG, "launchPlayStoreFrom failed", it)
             PromoPack.onError(it, "recent.play_store")
         }
     }
 
-    private fun launchSpotLeaf(from: Activity) {
+    private fun launchPromoLeaf(from: Activity) {
         runCatching {
             PromoSettingsBox.getInstance(from).putLong(GATE_KEY, System.currentTimeMillis())
             from.startActivity(

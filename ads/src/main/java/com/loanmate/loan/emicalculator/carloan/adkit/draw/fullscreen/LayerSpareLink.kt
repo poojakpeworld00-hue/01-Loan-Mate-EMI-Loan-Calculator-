@@ -28,30 +28,30 @@ object LayerSpareLink {
 
 
 
-    internal fun fullEmbedded(
+    internal fun fullInline(
         activity: Activity,
         placement: String?,
         next: () -> Unit,
         done: () -> Unit,
         loadIfMissing: Boolean = false,
     ) {
-        if (!InlinePromoRenderer.holdsCachedSpot()) {
+        if (!InlinePromoRenderer.holdsCachedPromo()) {
             // On-load natives: load this step's full native now; a miss moves to the next step.
             if (!loadIfMissing && PromoFetchStyle.preload(activity, PromoFetchStyle.PackShape.NATIVE)) return next()
-            return InlinePromoRenderer().presentFullEmbeddedWithUnit(
-                activity, PromoPieceKeys.pickFullEmbedded(activity, placement), onClose = done, onMiss = next,
+            return InlinePromoRenderer().presentWholeInlineWithPiece(
+                activity, PromoPieceKeys.chooseWholeInline(activity, placement), onClose = done, onMiss = next,
             )
         }
-        val overlay = kitAddOverlay(activity, dark = true)
-        InlinePromoRenderer().presentFullEmbedded(activity, overlay, onClose = {
-            dropOverlay(activity, overlay)
+        val overlay = kitAddLayer(activity, dark = true)
+        InlinePromoRenderer().presentWholeInline(activity, overlay, onClose = {
+            dropLayer(activity, overlay)
             done()
         })
     }
 
     internal fun custom(activity: Activity, next: () -> Unit, done: () -> Unit) {
         if (!PromoSettingsBox.getInstance(activity).getBoolean("IsCustomADS")) return next()
-        val overlay = kitAddOverlay(activity, dark = true)
+        val overlay = kitAddLayer(activity, dark = true)
         // The house ad gets its own slot: fetchHouseAd clears its container, which used to delete the close button.
         val slot = FrameLayout(activity).apply {
             layoutParams = FrameLayout.LayoutParams(
@@ -61,18 +61,18 @@ object LayerSpareLink {
         }
         overlay.addView(slot)
         val place = PromoSignals.place
-        val close = attachDismissTrigger(overlay) {
+        val close = mountCloseTrigger(overlay) {
             MetricsTwo.click("custom_ad_close")
             PromoSignals.send(PromoSignals.CUSTOM, "close", place)
-            dropOverlay(activity, overlay)
+            dropLayer(activity, overlay)
             done()
         }
-        NativePromoLead(place).obtainInhouseSpot(
+        NativePromoLead(place).obtainNativePromo(
             context = activity,
             container = slot,
             type = NativePromoLead.NativePromoLook.FULLSCREEN_NATIVE,
             onFail = {
-                dropOverlay(activity, overlay)
+                dropLayer(activity, overlay)
                 next()
             },
         )
@@ -82,7 +82,7 @@ object LayerSpareLink {
 
 
 
-    private fun kitAddOverlay(activity: Activity, dark: Boolean): FrameLayout {
+    private fun kitAddLayer(activity: Activity, dark: Boolean): FrameLayout {
         val content = activity.findViewById<ViewGroup>(android.R.id.content)
         val overlay = FrameLayout(activity).apply {
             layoutParams = ViewGroup.LayoutParams(
@@ -97,11 +97,11 @@ object LayerSpareLink {
         return overlay
     }
 
-    private fun dropOverlay(activity: Activity, overlay: FrameLayout) {
+    private fun dropLayer(activity: Activity, overlay: FrameLayout) {
         (overlay.parent as? ViewGroup)?.removeView(overlay)
     }
 
-    private fun attachDismissTrigger(overlay: FrameLayout, onClick: () -> Unit): View {
+    private fun mountCloseTrigger(overlay: FrameLayout, onClick: () -> Unit): View {
         val density = overlay.resources.displayMetrics.density
         val size = (40 * density).toInt()
         val margin = (10 * density).toInt()

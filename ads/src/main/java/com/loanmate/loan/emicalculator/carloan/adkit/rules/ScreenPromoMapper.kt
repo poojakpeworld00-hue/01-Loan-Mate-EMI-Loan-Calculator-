@@ -33,7 +33,7 @@ object ScreenPromoMapper {
 
 
 
-    fun embeddedUnitId(context: Context): String {
+    fun embeddedPieceId(context: Context): String {
         val pref = PromoSettingsBox.getInstance(context)
         val globalNative = pref.getString("googleNative").orEmpty()
         val screenWise = pref.getBoolean("screen_wise_ad")

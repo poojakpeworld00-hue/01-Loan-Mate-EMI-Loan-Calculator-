@@ -33,7 +33,7 @@ data class WidgetCenter(
     // Must agree with equals: two launchers of one package are equal, so they hash alike.
     override fun hashCode() = packageName.lowercase().hashCode()
 
-    fun pullBubbleCaption() = title
+    fun pullBubbleLabel() = title
 
     fun pullHomebaseIdentifier() = "$packageName/$activityName"
 

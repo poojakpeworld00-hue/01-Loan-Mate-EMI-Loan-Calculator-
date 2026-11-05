@@ -20,11 +20,11 @@ import kotlinx.coroutines.launch
  * `by appViewModel { handle -> MyViewModel(repo, handle) }`: builds the screen's ViewModel from the [LoanCenter].
  * The SavedStateHandle carries the activity's intent extras and survives recreation (e.g. a language change).
  */
-inline fun <reified VM : ViewModel> ComponentActivity.toolViewForm(
+inline fun <reified VM : ViewModel> ComponentActivity.toolScreenModel(
     crossinline create: LoanCenter.(SavedStateHandle) -> VM,
 ): Lazy<VM> = viewModels {
     viewModelFactory {
-        initializer { (this@toolViewForm.application as LoanTwo).container.create(createSavedStateHandle()) }
+        initializer { (this@toolScreenModel.application as LoanTwo).container.create(createSavedStateHandle()) }
     }
 }
 

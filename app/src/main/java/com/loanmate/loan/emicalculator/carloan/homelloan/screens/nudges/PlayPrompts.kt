@@ -121,12 +121,12 @@ object RateQuery {
     @Volatile private var askedThisRun = false
 
     /** One app open (the splash created fresh). */
-    fun countEnter(context: Context) {
+    fun countJoin(context: Context) {
         val p = prefs(context)
         p.edit { putInt(KEY_OPENS, p.getInt(KEY_OPENS, 0) + 1) }
     }
 
-    fun maybeQuery(activity: Activity, prompts: Asks, nowMs: Long = System.currentTimeMillis()) {
+    fun perhapsQuery(activity: Activity, prompts: Asks, nowMs: Long = System.currentTimeMillis()) {
         if (askedThisRun || ExitPromoRunner.busy() || activity.isFinishing) return
         val p = prefs(activity)
         if (!kitDue(p.getInt(KEY_OPENS, 0), p.getLong(KEY_ASKED_AT, 0L), nowMs, prompts)) return

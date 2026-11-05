@@ -98,7 +98,7 @@ object LoanSpecHolder {
                 }
             }.onFailure { e -> Log.w(TAG, "Remote Config apply failed", e) }
             readyState.value = true
-            scheduleOnwardAlign(app, rc)
+            planAheadSync(app, rc)
             done.trySetResult(null)
         }
         return done.task.also { inFlight = it }
@@ -119,7 +119,7 @@ object LoanSpecHolder {
     }
 
     /** The next [sync] in `base.rc_sync_hours` while the app keeps running; 0 = none (app starts only). */
-    private fun scheduleOnwardAlign(app: Context, rc: FirebaseRemoteConfig) {
+    private fun planAheadSync(app: Context, rc: FirebaseRemoteConfig) {
         nextSync?.let(main::removeCallbacks)
         val hours = state.value.base.rcSyncHours
         if (hours <= 0) return
@@ -127,7 +127,7 @@ object LoanSpecHolder {
     }
 
     /** Re-resolves the last config for the current track (organic / paid verdict just changed); no-op before one. */
-    fun renewFollow() {
+    fun renewTrail() {
         last?.let { (json, rules, probes) -> publish(json, rules, probes) }
     }
 

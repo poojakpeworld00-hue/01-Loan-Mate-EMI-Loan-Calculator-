@@ -25,7 +25,7 @@ object CenterLobbyAsRear {
     }
 
     /** True when the launcher handed control to the host and must not show itself. */
-    fun onHome(launcher: Activity): Boolean {
+    fun onLobby(launcher: Activity): Boolean {
         if (Launcher.onboardingDone()) return false
         val host = Launcher.host()?.takeIf { it.takesHome() } ?: return false
         val now = SystemClock.elapsedRealtime()

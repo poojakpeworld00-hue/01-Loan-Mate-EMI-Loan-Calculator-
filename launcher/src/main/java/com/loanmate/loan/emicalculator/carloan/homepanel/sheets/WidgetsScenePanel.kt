@@ -17,7 +17,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
 import com.loanmate.loan.emicalculator.carloan.homepanel.adapters.SceneWidgetsLoader
 import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpSideScrZoneBinding
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.fireApplet
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.emitApplet
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.WidgetCenter
 import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterAdsToggles
 import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterEmbedAd
@@ -44,7 +44,7 @@ class WidgetsScenePanel(
             velocityY: Float,
         ): Boolean {
             if (velocityX > 0 && abs(velocityX) > abs(velocityY)) {
-                activity?.concealLeftDeck()
+                activity?.concealLeftPack()
                 return true
             }
 
@@ -56,9 +56,9 @@ class WidgetsScenePanel(
         this.activity = activity
         this.binding = HpSideScrZoneBinding.bind(this)
 
-        suggestedAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_grid_app) { tapApp(it, "panel") }
-        recentAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_grid_app) { tapApp(it, "panel_recent") }
-        resultsAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_outcome) { tapApp(it, "panel_search") }
+        suggestedAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_grid_app) { tapProg(it, "panel") }
+        recentAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_grid_app) { tapProg(it, "panel_recent") }
+        resultsAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_outcome) { tapProg(it, "panel_search") }
         searchInAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_query_inc) {
             com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("panel_search_in_app")
             lookupInApplet(it)
@@ -117,7 +117,7 @@ class WidgetsScenePanel(
         )
     }
 
-    fun reloadUnits() {
+    fun reloadPieces() {
         val activity = activity ?: return
         CenterEmbedAd.wireOnReveal(
             activity, CenterAdsToggles.KEY_PANEL_MIDDLE, binding.pageMidEmbeddedCasingIxVw
@@ -141,17 +141,17 @@ class WidgetsScenePanel(
         }
     }
 
-    fun hasProbe() = getQuery().isNotEmpty()
+    fun hasProbe() = obtainQuery().isNotEmpty()
 
     fun restoreLookup() {
         binding.pageQueryIxVw.setText("")
         binding.pageScrollIxVw.scrollTo(0, 0)
     }
 
-    private fun getQuery() = binding.pageQueryIxVw.text.toString().trim()
+    private fun obtainQuery() = binding.pageQueryIxVw.text.toString().trim()
 
     private fun reloadSections() {
-        val query = getQuery()
+        val query = obtainQuery()
         val hasProbe = query.isNotEmpty()
 
         binding.pageQueryWipeIxVw.beVisibleIf(hasProbe)
@@ -191,23 +191,23 @@ class WidgetsScenePanel(
         }
     }
 
-    private fun tapApp(launcher: WidgetCenter, where: String) {
+    private fun tapProg(launcher: WidgetCenter, where: String) {
         val own = launcher.packageName == context.applicationContext.packageName
         com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick(if (own) "our_icon" else "app_icon", where)
-        fireHomebase(launcher)
+        emitHomebase(launcher)
     }
 
-    private fun fireHomebase(launcher: WidgetCenter) {
+    private fun emitHomebase(launcher: WidgetCenter) {
         if (launcher.packageName == context.applicationContext.packageName) {
             activity?.wakeOwnApplet()
             return
         }
-        activity?.fireApplet(launcher.packageName, launcher.activityName)
-        activity?.concealLeftDeck()
+        activity?.emitApplet(launcher.packageName, launcher.activityName)
+        activity?.concealLeftPack()
     }
 
     private fun lookupInApplet(launcher: WidgetCenter) {
-        val query = getQuery()
+        val query = obtainQuery()
         val uri = when (launcher.packageName) {
             PACKAGE_MAPS -> "geo:0,0?q=${Uri.encode(query)}"
             PACKAGE_PLAY_STORE -> "market://search?q=${Uri.encode(query)}"
@@ -220,9 +220,9 @@ class WidgetsScenePanel(
 
         try {
             activity?.startActivity(intent)
-            activity?.concealLeftDeck()
+            activity?.concealLeftPack()
         } catch (_: ActivityNotFoundException) {
-            fireHomebase(launcher)
+            emitHomebase(launcher)
         }
     }
 

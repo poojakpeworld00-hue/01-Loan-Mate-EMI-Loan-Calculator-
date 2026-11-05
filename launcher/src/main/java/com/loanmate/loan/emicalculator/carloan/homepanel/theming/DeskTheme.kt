@@ -13,14 +13,14 @@ data class DeskTheme(
     val homeCols: Int,
     val homeRows: Int,
     val dockSize: Int,
-    val rackStyle: SheetLook,
+    val rackLook: SheetLook,
     val drawerCols: Int,
     val drawerRows: Int,
     val drawerSearch: Boolean,
     val homeLabels: Boolean,
     val drawerLabels: Boolean,
     val source: ThemeRoot,
-    val rackLookupPoint: SheetFindSpot = SheetFindSpot.TOP,
+    val rackLookupSpot: SheetFindSpot = SheetFindSpot.TOP,
     val iconScale: Float = 1f,
     val iconDp: Int = 0,
     val dockIconDp: Int = 0,
@@ -43,11 +43,11 @@ data class DeskTheme(
         val labelSp: Float? = null,
         val drawerIconDp: Int? = null,
         val dockIconDp: Int? = null,
-        val rackStyle: SheetLook? = null,
+        val rackLook: SheetLook? = null,
     ) {
         val isEmpty: Boolean
             get() = homeCols == null && homeRows == null && dockSize == null && drawerCols == null && iconSizeDp == null &&
-                labelSp == null && drawerIconDp == null && dockIconDp == null && rackStyle == null
+                labelSp == null && drawerIconDp == null && dockIconDp == null && rackLook == null
 
         fun fill(other: Numbers) = Numbers(
             homeCols = homeCols ?: other.homeCols,
@@ -58,7 +58,7 @@ data class DeskTheme(
             labelSp = labelSp ?: other.labelSp,
             drawerIconDp = drawerIconDp ?: other.drawerIconDp,
             dockIconDp = dockIconDp ?: other.dockIconDp,
-            rackStyle = rackStyle ?: other.rackStyle,
+            rackLook = rackLook ?: other.rackLook,
         )
     }
 
@@ -84,7 +84,7 @@ data class DeskTheme(
         if (dockDp != null) tagged[KEY_DOCK_ICON_DP] = ThemeRoot.APK
         val drawerDp = numbers.drawerIconDp?.takeIf { it in MIN_ICON_DP..MAX_ICON_DP }
         if (drawerDp != null) tagged[KEY_DRAWER_ICON_DP] = ThemeRoot.APK
-        if (numbers.rackStyle != null) tagged[KEY_DRAWER_MODE] = ThemeRoot.APK
+        if (numbers.rackLook != null) tagged[KEY_DRAWER_MODE] = ThemeRoot.APK
         return copy(
             homeCols = cols,
             homeRows = numbers.homeRows ?: homeRows,
@@ -95,7 +95,7 @@ data class DeskTheme(
             iconDp = dp ?: iconDp,
             dockIconDp = dockDp ?: dockIconDp,
             drawerIconDp = drawerDp ?: drawerIconDp,
-            rackStyle = numbers.rackStyle ?: rackStyle,
+            rackLook = numbers.rackLook ?: rackLook,
             source = ThemeRoot.APK,
             fieldSources = tagged,
         )
@@ -140,13 +140,13 @@ data class DeskTheme(
         put(KEY_HOME_COLS, homeCols)
         put(KEY_HOME_ROWS, homeRows)
         put(KEY_DOCK_SIZE, dockSize)
-        put(KEY_DRAWER_MODE, rackStyle.name.lowercase())
+        put(KEY_DRAWER_MODE, rackLook.name.lowercase())
         put(KEY_DRAWER_COLS, drawerCols)
         put(KEY_DRAWER_ROWS, drawerRows)
         put(KEY_DRAWER_SEARCH, drawerSearch)
         put(KEY_HOME_LABELS, homeLabels)
         put(KEY_DRAWER_LABELS, drawerLabels)
-        put(KEY_DRAWER_SEARCH_POSITION, rackLookupPoint.name.lowercase())
+        put(KEY_DRAWER_SEARCH_POSITION, rackLookupSpot.name.lowercase())
         put(KEY_ICON_SCALE, iconScale.toDouble())
         put(KEY_LABEL_SP, labelSp.toDouble())
         put(KEY_ICON_DP, iconDp)
@@ -208,7 +208,7 @@ data class DeskTheme(
             homeCols = 5,
             homeRows = 5,
             dockSize = 5,
-            rackStyle = SheetLook.VERTICAL,
+            rackLook = SheetLook.VERTICAL,
             drawerCols = 5,
             drawerRows = 0,
             drawerSearch = true,
@@ -225,14 +225,14 @@ data class DeskTheme(
                 homeCols = o.optInt(KEY_HOME_COLS, defaults.homeCols),
                 homeRows = o.optInt(KEY_HOME_ROWS, defaults.homeRows),
                 dockSize = o.optInt(KEY_DOCK_SIZE, defaults.dockSize),
-                rackStyle = rackStyle(o.optString(KEY_DRAWER_MODE)) ?: defaults.rackStyle,
+                rackLook = rackLook(o.optString(KEY_DRAWER_MODE)) ?: defaults.rackLook,
                 drawerCols = o.optInt(KEY_DRAWER_COLS, defaults.drawerCols),
                 drawerRows = o.optInt(KEY_DRAWER_ROWS, defaults.drawerRows),
                 drawerSearch = o.optBoolean(KEY_DRAWER_SEARCH, defaults.drawerSearch),
                 homeLabels = o.optBoolean(KEY_HOME_LABELS, defaults.homeLabels),
                 drawerLabels = o.optBoolean(KEY_DRAWER_LABELS, defaults.drawerLabels),
                 source = source,
-                rackLookupPoint = rackLookupPoint(o.optString(KEY_DRAWER_SEARCH_POSITION)) ?: defaults.rackLookupPoint,
+                rackLookupSpot = rackLookupSpot(o.optString(KEY_DRAWER_SEARCH_POSITION)) ?: defaults.rackLookupSpot,
                 iconScale = o.optDouble(KEY_ICON_SCALE, defaults.iconScale.toDouble()).toFloat(),
                 labelSp = o.optDouble(KEY_LABEL_SP, defaults.labelSp.toDouble()).toFloat(),
                 iconDp = o.optInt(KEY_ICON_DP, defaults.iconDp),
@@ -252,10 +252,10 @@ data class DeskTheme(
             return profile.takeIf { it.isSane() }
         }
 
-        private fun rackStyle(raw: String): SheetLook? =
+        private fun rackLook(raw: String): SheetLook? =
             SheetLook.entries.firstOrNull { it.name.equals(raw.trim(), ignoreCase = true) }
 
-        private fun rackLookupPoint(raw: String): SheetFindSpot? =
+        private fun rackLookupSpot(raw: String): SheetFindSpot? =
             SheetFindSpot.entries.firstOrNull { it.name.equals(raw.trim(), ignoreCase = true) }
 
         const val MIN_CELLS = 2

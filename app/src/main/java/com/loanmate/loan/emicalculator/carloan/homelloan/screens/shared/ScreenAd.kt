@@ -32,7 +32,7 @@ fun LineupPromo.insertInto(rows: android.widget.LinearLayout, topMargin: Int, at
     ).apply { this.topMargin = topMargin })
 }
 
-fun Activity.wireViewSpot(place: String, inScroll: FrameLayout, pinned: FrameLayout) {
+fun Activity.wireScreenPromo(place: String, inScroll: FrameLayout, pinned: FrameLayout) {
     val type = PromoPack.config.places[place]?.bottomAd?.type ?: BayOrder.BANNER
     val scrolling = type.key.startsWith("native") && type != BayOrder.NATIVE_BANNER
     val (use, other) = if (scrolling) inScroll to pinned else pinned to inScroll

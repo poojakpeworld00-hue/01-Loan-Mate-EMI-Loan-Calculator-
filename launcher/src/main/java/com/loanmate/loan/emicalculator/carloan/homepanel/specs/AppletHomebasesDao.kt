@@ -12,7 +12,7 @@ interface appletHomebasesDao {
     fun pullAppletHomebases(): List<WidgetCenter>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(appLaunchers: List<WidgetCenter>)
+    fun insertEvery(appLaunchers: List<WidgetCenter>)
 
     @Query("DELETE FROM apps WHERE package_name = :packageName")
     fun eraseApplet(packageName: String)

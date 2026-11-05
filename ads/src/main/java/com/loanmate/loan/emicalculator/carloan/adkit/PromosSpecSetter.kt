@@ -26,7 +26,7 @@ object PromosSpecSetter {
         val units = config.units
         vault.update {
             // One editor: keys of the last config are removed and the new ones written in one apply().
-            vault.resetManagedIn(this)
+            vault.restoreManagedIn(this)
             putBoolean("IsAdsON", config.on && adsAllowed)
             putString("IsAdType", if (config.network == PromoNet.GOOGLE) "Google" else "Custom")
             putInt("inter_load_timeout_sec", config.loaderWaitSec)
@@ -44,7 +44,7 @@ object PromosSpecSetter {
             putBoolean("is_preload_rewarded", config.preload.rewarded)
 
             putString("googleInter", units.inter)
-            putString("googleS_Inter", units.interForBoot())
+            putString("googleS_Inter", units.interForStart())
             putString("googleBackInter", units.interForPrior())
             putString("googleAppopen", units.appOpen)
             putString("googleNative", units.native)
@@ -56,7 +56,7 @@ object PromosSpecSetter {
                 NativePromoTile(it.icon, it.title, it.description, it.bannerImage, it.buttonText)
             }))
             putString("DirectLink", JSONArray(config.links).toString())
-            putString("link_open_in", config.linksOpenIn.key)
+            putString("link_open_in", config.linksLaunchIn.key)
             putBoolean("IsBack", config.places["launcher.back_button"]?.exitAd?.on == true)
             // A launcher place's own `preload` (its interstitial over ads.preload), read by PromoFetchStyle.
             val placements = JSONObject()
@@ -65,12 +65,12 @@ object PromosSpecSetter {
             }
             putString(PromoPieceKeys.PLACEMENTS_KEY, placements.toString())
         }
-        NativePromoLead.clearCache()
-        kitWritePalette(context, config)
+        NativePromoLead.wipeStore()
+        kitPutSwatch(context, config)
     }
 
     /** Native colours of the current light / dark mode (`ads.colors`); called again before each slot. */
-    fun kitWritePalette(context: Context, config: PromosSpec) {
+    fun kitPutSwatch(context: Context, config: PromosSpec) {
         val p: PromoSwatch = if (isDark(context)) config.colors.dark else config.colors.light
         PromoSettingsBox.getInstance(context).update {
             putString("NativeBgColor", p.background)

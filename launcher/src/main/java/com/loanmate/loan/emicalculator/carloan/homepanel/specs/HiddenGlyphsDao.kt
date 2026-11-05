@@ -6,11 +6,11 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.models.MaskedIcon
 @Dao
 interface hiddenGlyphsDao {
     @Query("SELECT * FROM hidden_icons")
-    fun pullHiddenGlyphs(): List<MaskedIcon>
+    fun pullMaskedGlyphs(): List<MaskedIcon>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(hiddenIconUi: MaskedIcon): Long
 
     @Delete
-    fun dropHiddenGlyphs(icons: List<MaskedIcon>)
+    fun dropMaskedGlyphs(icons: List<MaskedIcon>)
 }

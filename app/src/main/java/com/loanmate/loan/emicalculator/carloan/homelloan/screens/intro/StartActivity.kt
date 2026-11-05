@@ -20,9 +20,9 @@ import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.LoanSpecHolder
 import com.loanmate.loan.emicalculator.carloan.homelloan.kit.device.NoConnected
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBootBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitShine
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.OnboardActivity
@@ -42,7 +42,7 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.access.Grants
 
 /** Splash, Sticker Pop "Sticker Stack": bobbing logo sticker over the art while consent, config and the splash ad run, then routes. */
 class StartActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { StartScreenModel(settingsRepository) }
+    private val viewModel by toolScreenModel { StartScreenModel(settingsRepository) }
 
     private fun route(resume: Boolean = false) {
         if (isFinishing) return
@@ -59,11 +59,11 @@ class StartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
         // Our task was removed for Recents (ToggleShield): the app reopens where the user was, without the splash.
-        if (savedInstanceState == null && ToggleShield.takeProceed()) return route(resume = true)
-        if (savedInstanceState == null) RateQuery.countEnter(this)
+        if (savedInstanceState == null && ToggleShield.takeAdvance()) return route(resume = true)
+        if (savedInstanceState == null) RateQuery.countJoin(this)
         val b = ScreenBootBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.contentVw.padForOsBars()
+        b.contentVw.padForSysBars()
 
         b.glowVw.kitGlowPulse()
         b.bgVw.scaleX = 1.1f; b.bgVw.scaleY = 1.1f
@@ -76,8 +76,8 @@ class StartActivity : AppCompatActivity() {
             v.alpha = 0f
             v.animate().alpha(1f).setStartDelay(delay).setDuration(600).start()
         }
-        b.ring1Vw.kitRingOut(0)
-        b.ring2Vw.kitRingOut(800)
+        b.ring1Vw.kitRingExit(0)
+        b.ring2Vw.kitRingExit(800)
         b.tileShineVw.kitShine(b.tileVw, 2400)
         b.tileVw.clipToOutline = true
         // The whole logo bobs, so the sticker's hard shadow moves with it.
@@ -102,7 +102,7 @@ class StartActivity : AppCompatActivity() {
                 LoanSpecHolder.alignIfNeverFetched(this@StartActivity)
             }
             val consent = CompletableDeferred<Unit>()
-            PromoPack.requestAgree(this@StartActivity) {
+            PromoPack.askAccept(this@StartActivity) {
                 PromoPack.preload(this@StartActivity)
                 consent.complete(Unit)
             }
@@ -130,7 +130,7 @@ class StartActivity : AppCompatActivity() {
     }
 
     /** Design "ringOut": the outline grows from 0.8× to 1.5× while fading out, every 2 s. */
-    private fun View.kitRingOut(delayMs: Long) {
+    private fun View.kitRingExit(delayMs: Long) {
         ObjectAnimator.ofPropertyValuesHolder(
             this,
             PropertyValuesHolder.ofFloat(View.SCALE_X, 0.8f, 1.5f),

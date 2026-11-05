@@ -26,7 +26,7 @@ class InboxScenePanel(
     private val gestureDetector = GestureDetectorCompat(context, object : SimpleOnGestureListener() {
         override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (velocityX < 0 && abs(velocityX) > abs(velocityY)) {
-                activity?.concealMsgsDeck()
+                activity?.concealMsgsPack()
                 return true
             }
             return false
@@ -62,12 +62,12 @@ class InboxScenePanel(
     fun warmUp() = refresh()
 
     /** Off-screen (or sliding out): back to STARTED, so the fragment's on-screen work stops. */
-    fun setPanelVisible(visible: Boolean) {
+    fun assignTrayVisible(visible: Boolean) {
         if (!visible) cap(Lifecycle.State.STARTED)
     }
 
     /** The slide-in finished: the panel is fully on screen. */
-    fun onPanelSettled() = cap(Lifecycle.State.RESUMED)
+    fun onTraySettled() = cap(Lifecycle.State.RESUMED)
 
     private fun cap(state: Lifecycle.State) {
         val fm = activity?.supportFragmentManager ?: return

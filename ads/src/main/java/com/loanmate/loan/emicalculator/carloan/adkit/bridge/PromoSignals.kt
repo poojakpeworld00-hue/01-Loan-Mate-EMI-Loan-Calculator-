@@ -35,10 +35,10 @@ object PromoSignals {
         "error_code" to errorCode,
     )
 
-    fun loadFailed(format: String, code: Int, place: String) = send(format, failPhase(code), place, code)
+    fun fetchFailed(format: String, code: Int, place: String) = send(format, failStep(code), place, code)
 
     /** AdMob error code 3 (ERROR_CODE_NO_FILL) is `no_fill`, any other code `failed`. */
-    fun failPhase(code: Int) = if (code == 3) "no_fill" else "failed"
+    fun failStep(code: Int) = if (code == 3) "no_fill" else "failed"
 
     /** AdMob paid event → `ad_impression`. [label] = engine placement (banner, native_big, inter_chain, app_open_resume…). */
     fun paid(value: AdValue, label: String, unitId: String?, info: ResponseInfo?, place: String) = MetricsTwo.log(
@@ -76,7 +76,7 @@ object PromoSignals {
 
     /** Banner / native AdListener: failed or no_fill, impression, click. Overrides must call super. */
     open class PackListener(private val format: String, var place: String) : AdListener() {
-        override fun onAdFailedToLoad(error: LoadAdError) = loadFailed(format, error.code, place)
+        override fun onAdFailedToLoad(error: LoadAdError) = fetchFailed(format, error.code, place)
         override fun onAdImpression() = send(format, "impression", place)
         override fun onAdClicked() = send(format, "click", place)
     }

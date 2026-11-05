@@ -77,7 +77,7 @@ object PkgThemeParser {
         val sources = ArrayList<String>()
 
         var numbers = DeskTheme.Numbers()
-        runCatching { scanLaunchpad3(context, resources, fp.homePackage) }
+        runCatching { scanPad3(context, resources, fp.homePackage) }
             .onFailure { Timber.d(it, "ApkProfileReader: device_profiles unreadable for ${fp.homePackage}") }
             .getOrNull()?.let { n -> numbers = n; sources.add("device_profiles") }
         if (index != null) {
@@ -111,12 +111,12 @@ object PkgThemeParser {
         val hotseatIconSize: Float?,
     )
 
-    private fun scanLaunchpad3(context: Context, resources: Resources, packageName: String): DeskTheme.Numbers? {
+    private fun scanPad3(context: Context, resources: Resources, packageName: String): DeskTheme.Numbers? {
         val id = resources.getIdentifier(DEVICE_PROFILES, "xml", packageName)
         if (id == 0) return null
         val parser = resources.getXml(id)
         val options = try {
-            decodeGridChoices(parser)
+            decodeLatticePicks(parser)
         } finally {
             parser.close()
         }
@@ -149,7 +149,7 @@ object PkgThemeParser {
         )
     }
 
-    private fun decodeGridChoices(parser: XmlResourceParser): List<LatticeChoice> {
+    private fun decodeLatticePicks(parser: XmlResourceParser): List<LatticeChoice> {
         val options = mutableListOf<LatticeChoice>()
         var current: LatticeChoice? = null
         var event = parser.eventType
@@ -200,7 +200,7 @@ object PkgThemeParser {
     private fun XmlResourceParser.float(name: String): Float? = str(name)?.trim()?.toFloatOrNull()
     private fun XmlResourceParser.bool(name: String): Boolean? = str(name)?.trim()?.toBooleanStrictOrNull()
 
-    private fun readInt(resources: Resources, packageName: String, name: String): Int? {
+    private fun pullInt(resources: Resources, packageName: String, name: String): Int? {
         val intId = resources.getIdentifier(name, "integer", packageName)
         if (intId != 0) return runCatching { resources.getInteger(intId) }.getOrNull()
         val dimenId = resources.getIdentifier(name, "dimen", packageName)
@@ -210,7 +210,7 @@ object PkgThemeParser {
         return null
     }
 
-    fun rackStyleOf(value: Int, values: JSONObject?): SheetLook? {
+    fun rackLookOf(value: Int, values: JSONObject?): SheetLook? {
         val name = values?.optString(value.toString())?.trim().orEmpty()
         if (name.isEmpty()) return null
         return SheetLook.entries.firstOrNull { it.name.equals(name, ignoreCase = true) }
@@ -225,21 +225,21 @@ object PkgThemeParser {
             for (i in 0 until names.length()) {
                 val name = names.optString(i).trim()
                 if (name.isEmpty()) continue
-                val value = readInt(resources, packageName, name) ?: continue
+                val value = pullInt(resources, packageName, name) ?: continue
                 if (value in range) return value
             }
             return null
         }
 
-        val rackStyle = probes.optJSONArray(KEY_DRAWER_MODE)?.let { names ->
+        val rackLook = probes.optJSONArray(KEY_DRAWER_MODE)?.let { names ->
             val values = probes.optJSONObject(KEY_DRAWER_MODE_VALUES)
             val live = probes.optString(KEY_DRAWER_MODE_SETTING).trim().takeIf { it.isNotEmpty() }?.let { key ->
                 runCatching { Settings.Global.getInt(context.contentResolver, key) }.getOrNull()
             }
-            live?.let { rackStyleOf(it, values) } ?: (0 until names.length()).asSequence()
+            live?.let { rackLookOf(it, values) } ?: (0 until names.length()).asSequence()
                 .map { names.optString(it).trim() }.filter { it.isNotEmpty() }
                 .firstNotNullOfOrNull { name ->
-                    readInt(resources, packageName, name)?.let { rackStyleOf(it, values) }
+                    pullInt(resources, packageName, name)?.let { rackLookOf(it, values) }
                 }
         }
 
@@ -248,7 +248,7 @@ object PkgThemeParser {
                 .firstNotNullOfOrNull { name ->
                     val id = resources.getIdentifier(name, "dimen", packageName)
                     if (id == 0) null
-                    else CommonGridParser.scanCaptionDimsSp(resources, id)?.takeIf { it in DeskTheme.MIN_LABEL_SP..DeskTheme.MAX_LABEL_SP }
+                    else CommonGridParser.scanLabelDimsSp(resources, id)?.takeIf { it in DeskTheme.MIN_LABEL_SP..DeskTheme.MAX_LABEL_SP }
                 }
         }
         return DeskTheme.Numbers(
@@ -259,7 +259,7 @@ object PkgThemeParser {
 
             iconSizeDp = probe(KEY_ICON_SIZE_DP, 24..120),
             labelSp = labelSp,
-            rackStyle = rackStyle,
+            rackLook = rackLook,
         )
     }
 }

@@ -84,14 +84,14 @@ object ChargeSignalTracker {
     }
 
     private fun kitGatesPass(context: Context, placeKey: String): Boolean {
-        if (!Spots.kitPlaceOn(placeKey)) return false
+        if (!Spots.kitSlotOn(placeKey)) return false
         val gapSec = (PromoPack.config.places[placeKey]?.int("gap_sec") ?: 0).toLong()
         val passed = SlotChecks.kitGapPassed(prefs(context).getLong(lastKey(placeKey), 0L), gapSec, System.currentTimeMillis())
         if (!passed) Log.d(TAG, "'$placeKey' throttled (gap_sec $gapSec)")
         return passed
     }
 
-    private fun takePending(context: Context): String? {
+    private fun takeQueued(context: Context): String? {
         val store = prefs(context)
         val placeKey = store.getString(KEY_PENDING, null) ?: return null
         val at = store.getLong(KEY_PENDING_AT, 0L)
@@ -108,7 +108,7 @@ object ChargeSignalTracker {
         override fun onActivityResumed(activity: Activity) {
             if (activity is CellStateActivity) return
             resumed = WeakReference(activity)
-            val placeKey = takePending(activity.applicationContext) ?: return
+            val placeKey = takeQueued(activity.applicationContext) ?: return
             runCatching {
                 if (kitGatesPass(activity.applicationContext, placeKey)) fire(activity, placeKey)
             }.onFailure { Log.w(TAG, "drain('$placeKey') failed", it); PromoPack.onError(it, "charging.drain") }

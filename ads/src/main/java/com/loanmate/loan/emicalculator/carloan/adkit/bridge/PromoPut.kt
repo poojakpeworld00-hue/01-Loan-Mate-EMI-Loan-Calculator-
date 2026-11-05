@@ -16,5 +16,5 @@ object PromoPut {
     fun read(source: String, key: String?, value: Any?) = Unit
 
     @Suppress("UNUSED_PARAMETER")
-    fun dumpChest(context: Context, reason: String) = d("VAULT", reason)
+    fun dumpBox(context: Context, reason: String) = d("VAULT", reason)
 }

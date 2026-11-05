@@ -54,7 +54,7 @@ object ExitPromoRunner {
         if (gapped && !SlotChecks.kitGapPassed(kitLastRun(activity, placeKey), gapSec, System.currentTimeMillis())) return done()
         if (gapped) kitMarkRun(activity, placeKey)
 
-        PromosSpecSetter.kitWritePalette(activity, config)
+        PromosSpecSetter.kitPutSwatch(activity, config)
         val watcher = DoneTracker(activity)
         val flow = ExitPromoPath(
             config, exit, CoreSource(activity, placeKey),
@@ -123,16 +123,16 @@ object ExitPromoRunner {
             when (step) {
                 PromoStep.INTER -> {
                     val unit = when (placeKey) {
-                        Spots.SPLASH -> units.interForBoot()
+                        Spots.SPLASH -> units.interForStart()
                         Spots.BACK_BUTTON -> units.interForPrior()
                         else -> units.inter
                     }
                     LinkLayer.show(activity, unit, placeKey, onMiss = onNotReady, loadIfMissing = loadIfMissing) { onShown() }
                 }
-                PromoStep.REWARDED -> RewardPromoRenderer.presentOrPull(activity, onShown, onNotReady, loadIfMissing = loadIfMissing)
+                PromoStep.REWARDED -> RewardPromoRenderer.presentOrFetch(activity, onShown, onNotReady, loadIfMissing = loadIfMissing)
                 PromoStep.APP_OPEN -> AdvancePromoLead.presentLoaded(activity, onShown, onNotReady, loadIfMissing = loadIfMissing)
                 PromoStep.FULL_NATIVE ->
-                    LayerSpareLink.fullEmbedded(activity, placeKey, next = onNotReady, done = onShown, loadIfMissing = loadIfMissing)
+                    LayerSpareLink.fullInline(activity, placeKey, next = onNotReady, done = onShown, loadIfMissing = loadIfMissing)
                 PromoStep.CUSTOM -> LayerSpareLink.custom(activity, next = onNotReady, done = onShown)
                 PromoStep.LINK -> onNotReady() // never asked: ExitPromoPath opens links itself
             }
@@ -142,7 +142,7 @@ object ExitPromoRunner {
             // Our own return: the app-open / resume ad must not fire on it (cleared after the return settles).
             AdvancePromoLead.skipNextAppOpenAd = true
             PromoSignals.send(PromoSignals.CUSTOM, "link_open", placeKey)
-            NavLayer.enterPatronLink(activity, placeKey, urls) {
+            NavLayer.enterSponsorUrl(activity, placeKey, urls) {
                 main.postDelayed({ AdvancePromoLead.skipNextAppOpenAd = false }, 1_000L)
                 onBack()
             }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBaseBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootFabric
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootAllows
 
@@ -23,7 +23,7 @@ class HostSheetFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         ScreenBaseBinding.inflate(inflater, container, false).also {
             binding = it
-            it.screen.padForOsBars()
+            it.screen.padForSysBars()
         }.root
 
     override fun onResume() {
@@ -33,7 +33,7 @@ class HostSheetFragment : Fragment() {
         if (!shown) {
             shown = true
             RootFabric(requireActivity(), b, adPlace = "launcher.host_app_panel").bind()
-            RootAllows.queryOnOpeningCall(requireActivity()) // first visit, one still missing
+            RootAllows.queryOnLaunchCall(requireActivity()) // first visit, one still missing
         }
     }
 

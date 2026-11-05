@@ -15,7 +15,7 @@ class NumericTimeGadgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray,
     ) {
-        appWidgetIds.forEach { reloadWidget(context, appWidgetManager, it) }
+        appWidgetIds.forEach { reloadGadget(context, appWidgetManager, it) }
     }
 
     override fun onAppWidgetOptionsChanged(
@@ -24,22 +24,22 @@ class NumericTimeGadgetProvider : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle?,
     ) {
-        reloadWidget(context, appWidgetManager, appWidgetId)
+        reloadGadget(context, appWidgetManager, appWidgetId)
     }
 
-    private fun reloadWidget(
+    private fun reloadGadget(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
     ) {
-        val textColor = context.pullWidgetCaptionTint(appWidgetId)
+        val textColor = context.pullGadgetLabelTint(appWidgetId)
         val is24Hours = DateFormat.is24HourFormat(context)
 
         val views = RemoteViews(context.packageName, R.layout.hp_gadget_digital_clock).apply {
             setInt(
                 R.id.widget_holderIxVw,
                 "setBackgroundColor",
-                context.pullWidgetBackdropTint(appWidgetId)
+                context.pullGadgetBackdropTint(appWidgetId)
             )
 
             setViewVisibility(R.id.widget_name_timer_24IxVw, if (is24Hours) View.VISIBLE else View.GONE)

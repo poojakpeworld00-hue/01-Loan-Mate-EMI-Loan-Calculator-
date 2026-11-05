@@ -21,7 +21,7 @@ object PromoPieceKeys {
         return if (name.startsWith("onboarding_")) listOf(name, "onboarding") else listOf(name)
     }
 
-    private fun kitPlacementsBlock(pref: PromoSettingsBox): JSONObject? {
+    private fun kitPlacementsBrick(pref: PromoSettingsBox): JSONObject? {
         val raw = runCatching { pref.getString(PLACEMENTS_KEY) }.getOrNull().orEmpty()
         synchronized(this) {
             if (raw != placementsRaw) {
@@ -35,10 +35,10 @@ object PromoPieceKeys {
 
     /** Every place that has a block of its own in `placements`. */
     fun kitPlacementNames(context: Context): List<String> =
-        kitPlacementsBlock(PromoSettingsBox.getInstance(context))?.keys()?.asSequence()?.toList().orEmpty()
+        kitPlacementsBrick(PromoSettingsBox.getInstance(context))?.keys()?.asSequence()?.toList().orEmpty()
 
     private fun nested(pref: PromoSettingsBox, name: String, key: String): String? =
-        kitPlacementsBlock(pref)?.optJSONObject(name)
+        kitPlacementsBrick(pref)?.optJSONObject(name)
             ?.takeIf { it.has(key) && !it.isNull(key) }
             ?.get(key)?.toString()?.takeIf { it.isNotBlank() }
 
@@ -57,12 +57,12 @@ object PromoPieceKeys {
     fun resolve(pref: PromoSettingsBox, placement: String?, globalKey: String): String =
         own(pref, placement, globalKey) ?: pref.getString(globalKey).orEmpty()
 
-    fun pickFullEmbedded(context: Context, placement: String?): String {
+    fun chooseWholeInline(context: Context, placement: String?): String {
         val pref = PromoSettingsBox.getInstance(context)
         return own(pref, placement, "googleFullNative") ?: pref.getString("googleNative").orEmpty()
     }
 
-    fun kitSlotEnabled(context: Context, placement: String?): Boolean {
+    fun kitBayEnabled(context: Context, placement: String?): Boolean {
         val pref = PromoSettingsBox.getInstance(context)
         for (name in names(placement)) {
             nested(pref, name, "ads_on")?.let { return it.trim().lowercase() != "false" }

@@ -60,11 +60,11 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
     private var started = 0 // our started screens; 0 = another app is in front
     private var leftViaHome = false // Home pressed since our last screen: a task of ours is no longer in front
 
-    /** Our task was removed for Recents: the next screen opens where the user was, not on the splash ([takeProceed]). */
+    /** Our task was removed for Recents: the next screen opens where the user was, not on the splash ([takeAdvance]). */
     private var resumeOnReopen = false
 
     /** True once after our task was removed for Recents (this app session only; a cold start shows the splash). */
-    fun takeProceed(): Boolean = resumeOnReopen.also { resumeOnReopen = false }
+    fun takeAdvance(): Boolean = resumeOnReopen.also { resumeOnReopen = false }
 
     /** Our task was removed and the next screen should resume: our launcher must hand back even if Home is `""`. */
     val resuming: Boolean get() = resumeOnReopen
@@ -78,10 +78,10 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
     private var handBackAt = 0L // our launcher handed back during onboarding without a Home press (yet)
 
     /** A real Home press came in just now: our launcher passes it on to onboarding. */
-    fun baseHotkeyJustPressed(): Boolean = SystemClock.uptimeMillis() - homeKeyAt < HOME_KEY_MS
+    fun baseShortcutJustPressed(): Boolean = SystemClock.uptimeMillis() - homeKeyAt < HOME_KEY_MS
 
     /** Our launcher handed back without a Home press: if the "homekey" broadcast follows, the step gets its Home then. */
-    fun handPriorWithoutHotkey() {
+    fun handPriorWithoutShortcut() {
         handBackAt = SystemClock.uptimeMillis()
     }
 
@@ -89,11 +89,11 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
      * Onboarding goes on in the home task, which Recents never lists, so there is no race with Recents' own list (MIUI
      * draws it before our broadcast). The icon task closes and our launcher hands back to the same step, no splash.
      */
-    fun moveToBaseTask(activity: Activity) {
+    fun moveToRootJob(activity: Activity) {
         if (activity.isFinishing || activity.isDestroyed || !Launcher.isDefaultHome(activity)) return
-        if (selfTasks(activity).none { runCatching { PrimeScreens.isToolTaskBase(it.taskInfo?.baseIntent?.component?.className) }.getOrDefault(false) }) return
+        if (selfTasks(activity).none { runCatching { PrimeScreens.isLoanJobRoot(it.taskInfo?.baseIntent?.component?.className) }.getOrDefault(false) }) return
         resumeOnReopen = true
-        if (runCatching { activity.startActivity(PrimeScreens.deckBaseIntent(activity).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)) }.isFailure) {
+        if (runCatching { activity.startActivity(PrimeScreens.deckRootIntent(activity).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)) }.isFailure) {
             resumeOnReopen = false
             return
         }
@@ -136,28 +136,28 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
             // In the home task Recents never lists us and Android lets our screen come back over it, so the RC actions
             // run there. Anywhere else Android always lists the task on screen and may refuse the comeback: our tasks
             // are removed instead (only that drops the card) and the app reopens where it was.
-            val homeTask = inBaseTask(context)
+            val homeTask = inRootJob(context)
             val activity = top.get()?.takeIf { started > 0 && !it.isFinishing && !it.isDestroyed }
             if (activity == null) {
                 if (homeTask && !onboardingDone() && ExitPromoRunner.busy() && Launcher.isDefaultHome(context)) {
                     // Onboarding exit ad with its link (a Chrome tab in our task) in front: bring that back over Recents.
                     val app = context.applicationContext
-                    main.postDelayed({ PrimeScreens.toolTaskToFront(app) }, NO_PAUSE_MS)
-                    main.postDelayed({ PrimeScreens.toolTaskToFront(app) }, NO_PAUSE_MS + CHECK_MS) // Recents kept the front while animating in
-                } else if (!leftViaHome && otherToolOnSelfTask(context)) {
-                    removeSelfTasks(context) // an ad's link tab on top of our task is the one listed
+                    main.postDelayed({ PrimeScreens.toolJobToFront(app) }, NO_PAUSE_MS)
+                    main.postDelayed({ PrimeScreens.toolJobToFront(app) }, NO_PAUSE_MS + CHECK_MS) // Recents kept the front while animating in
+                } else if (!leftViaHome && otherLoanOnOwnJob(context)) {
+                    dropOwnTasks(context) // an ad's link tab on top of our task is the one listed
                 }
                 return
             }
             when {
-                !homeTask -> removeSelfTasks(context)
+                !homeTask -> dropOwnTasks(context)
                 // shortcut: an ad skipped by its `every` leaves the overview open (our card isn't listed in the home task); add a "would run" check if `every` is used here.
-                onboardingDone() -> if (Launcher.isDefaultHome(context) && Spots.switcherSpotOn() && !ExitPromoRunner.busy()) Spots.systemKey(activity, "recents") {}
+                onboardingDone() -> if (Launcher.isDefaultHome(context) && Spots.switcherPromoOn() && !ExitPromoRunner.busy()) Spots.systemKey(activity, "recents") {}
                 else -> {
                     val keys = LoanSpecHolder.current.value.systemKeys
                     val home = Launcher.isDefaultHome(context)
                     // `""` that doesn't open the bottom sheet: the overview stays, as Android's own Recents.
-                    if (home && keys.recents == ShortcutJob.DEFAULT && !keys.opensTray(SysShortcut.RECENTS)) return
+                    if (home && keys.recents == ShortcutJob.DEFAULT && !keys.opensDock(SysShortcut.RECENTS)) return
                     // Every press brings our screen back. It also acts only when nothing is in progress: no earlier press
                     // waiting for the screen, no exit ad (ad or links) running. Otherwise it just brings that back.
                     if (home && activity is SysShortcutAim && !ExitPromoRunner.busy() && !pending(now)) pendingAt = now
@@ -179,13 +179,13 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
         stayOn.clear()
         if (activity.isFinishing || activity.isDestroyed) return@Runnable
         // Starting our screen closes the Recents overview; moving the task to front covers the other screens (ads, hints).
-        if (PrimeScreens.kitIsMain(activity)) runCatching { PrimeScreens.open(activity) }
+        if (PrimeScreens.kitIsPrime(activity)) runCatching { PrimeScreens.open(activity) }
         runCatching { activity.getSystemService(ActivityManager::class.java)?.moveTaskToFront(activity.taskId, 0) }
         main.postDelayed({
             if (activity.isFinishing || activity.isDestroyed || activity.hasWindowFocus() || ExitPromoRunner.busy()) return@postDelayed
             if (Launcher.isDefaultHome(activity)) {
                 // Recents was still animating in and kept the front: one more try, so the user isn't left in Recents.
-                if (PrimeScreens.kitIsMain(activity)) runCatching { PrimeScreens.open(activity) }
+                if (PrimeScreens.kitIsPrime(activity)) runCatching { PrimeScreens.open(activity) }
                 runCatching { activity.getSystemService(ActivityManager::class.java)?.moveTaskToFront(activity.taskId, 0) }
             } else {
                 // Refused (some devices block it before we're the default home): step behind, so Recents doesn't list us.
@@ -198,9 +198,9 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
      * Removes every task of ours but our launcher home's: as the default home it is never listed, and removing it would
      * close the home screen. Views, ad screens and link tabs in those tasks close with them.
      */
-    private fun removeSelfTasks(context: Context) {
+    private fun dropOwnTasks(context: Context) {
         resumeOnReopen = true
-        val home = deckBaseClass(context)
+        val home = deckRootClass(context)
         selfTasks(context).forEach { task ->
             if (runCatching { task.taskInfo?.baseIntent?.component?.className == home }.getOrDefault(false)) return@forEach
             runCatching { task.finishAndRemoveTask() }
@@ -208,18 +208,18 @@ object ToggleShield : Application.ActivityLifecycleCallbacks {
     }
 
     /** No task of ours was started on an app screen: our screens run in the home task (ToggleShield.moveToHomeTask). */
-    private fun inBaseTask(context: Context): Boolean =
-        selfTasks(context).none { runCatching { PrimeScreens.isToolTaskBase(it.taskInfo?.baseIntent?.component?.className) }.getOrDefault(true) }
+    private fun inRootJob(context: Context): Boolean =
+        selfTasks(context).none { runCatching { PrimeScreens.isLoanJobRoot(it.taskInfo?.baseIntent?.component?.className) }.getOrDefault(true) }
 
     /** One of our tasks has another app's screen on top (an ad's link in a Chrome tab). */
-    private fun otherToolOnSelfTask(context: Context): Boolean = selfTasks(context).any { task ->
+    private fun otherLoanOnOwnJob(context: Context): Boolean = selfTasks(context).any { task ->
         runCatching { task.taskInfo?.topActivity?.packageName.let { it != null && it != context.packageName } }.getOrDefault(false)
     }
 
     private fun selfTasks(context: Context): List<ActivityManager.AppTask> =
         runCatching { context.getSystemService(ActivityManager::class.java)?.appTasks.orEmpty() }.getOrDefault(emptyList())
 
-    private fun deckBaseClass(context: Context): String? = runCatching {
+    private fun deckRootClass(context: Context): String? = runCatching {
         val home = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).setPackage(context.packageName)
         context.packageManager.resolveActivity(home, 0)?.activityInfo?.name
     }.getOrNull()

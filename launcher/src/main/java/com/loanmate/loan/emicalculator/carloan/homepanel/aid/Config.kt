@@ -32,10 +32,10 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(WAS_SEARCH_BAR_PURGED, false)
         set(wasSearchBarPurged) = prefs.edit().putBoolean(WAS_SEARCH_BAR_PURGED, wasSearchBarPurged).apply()
 
-    fun isTutorialPhaseDone(step: CenterTourStop): Boolean =
+    fun isTutorialStepDone(step: CenterTourStop): Boolean =
         prefs.getBoolean(GUIDE_STEP_DONE_PREFIX + step.name, false)
 
-    fun flagGuidePhaseDone(step: CenterTourStop) =
+    fun flagTourStepDone(step: CenterTourStop) =
         prefs.edit().putBoolean(GUIDE_STEP_DONE_PREFIX + step.name, true).apply()
 
     var updateDeclinedAt: Long
@@ -50,12 +50,12 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getString(HOME_PROFILE_JSON, "") ?: ""
         set(homeProfileJson) = prefs.edit().putString(HOME_PROFILE_JSON, homeProfileJson).apply()
 
-    var rackStyle: SheetLook
+    var rackLook: SheetLook
         get() = SheetLook.entries.firstOrNull { it.name.equals(prefs.getString(DRAWER_MODE, ""), ignoreCase = true) }
             ?: SheetLook.VERTICAL
-        set(rackStyle) = prefs.edit().putString(DRAWER_MODE, rackStyle.name.lowercase()).apply()
+        set(rackLook) = prefs.edit().putString(DRAWER_MODE, rackLook.name.lowercase()).apply()
 
-    val isDrawerEnabled: Boolean get() = rackStyle != SheetLook.NONE
+    val isDrawerEnabled: Boolean get() = rackLook != SheetLook.NONE
 
     var drawerStyleWhenOn: SheetLook
         get() = if (prefs.getString(DRAWER_STYLE_WHEN_ON, "").equals(SheetLook.PAGED.name, ignoreCase = true)) SheetLook.PAGED else SheetLook.VERTICAL
@@ -113,9 +113,9 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(SHOW_SEARCH_BAR, true)
         set(showSearchBar) = prefs.edit().putBoolean(SHOW_SEARCH_BAR, showSearchBar).apply()
 
-    var closeAppletRack: Boolean
+    var dismissAppletRack: Boolean
         get() = prefs.getBoolean(CLOSE_APP_DRAWER, false)
-        set(closeAppletRack) = prefs.edit().putBoolean(CLOSE_APP_DRAWER, closeAppletRack).apply()
+        set(dismissAppletRack) = prefs.edit().putBoolean(CLOSE_APP_DRAWER, dismissAppletRack).apply()
 
     var autoShowKeyboardInAppDrawer: Boolean
         get() = prefs.getBoolean(AUTO_SHOW_KEYBOARD_IN_APP_DRAWER, false)
@@ -160,7 +160,7 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getBoolean(SEARCH_WIDGET_SHOWN, true)
         set(searchWidgetShown) = prefs.edit().putBoolean(SEARCH_WIDGET_SHOWN, searchWidgetShown).apply()
 
-    /** True once the time widget sits on the top row, above the default-home ribbon - see DeskGadgetPlacer.moveTimeWidgetToTop. */
+    /** True once the time widget sits on the top row, above the default-home ribbon - see DeskGadgetPlacer.moveTimeGadgetToTop. */
     var timeWidgetAtTop: Boolean
         get() = prefs.getBoolean(TIME_WIDGET_AT_TOP, false)
         set(timeWidgetAtTop) = prefs.edit().putBoolean(TIME_WIDGET_AT_TOP, timeWidgetAtTop).apply()

@@ -21,11 +21,11 @@ class LoanPackSignals : StarterSignals {
 
     override fun onDrawerOpened(activity: Activity, proceed: () -> Unit) = Spots.chestOpened(activity, proceed)
 
-    override fun onAppIconTapped(activity: Activity, packageName: String, proceed: () -> Unit) = Spots.toolBadgeTapped(activity, proceed)
+    override fun onAppIconTapped(activity: Activity, packageName: String, proceed: () -> Unit) = Spots.toolMarkTapped(activity, proceed)
 
-    override fun onReturnedFromApp(activity: Activity) = Spots.returnedFromTool(activity)
+    override fun onReturnedFromApp(activity: Activity) = Spots.returnedFromLoan(activity)
 
-    override fun onSponsoredTileTapped(activity: Activity, tile: PartnerProg, proceed: () -> Unit) = Spots.paidBlockTapped(activity, proceed)
+    override fun onSponsoredTileTapped(activity: Activity, tile: PartnerProg, proceed: () -> Unit) = Spots.paidBrickTapped(activity, proceed)
 
     override fun onReturnedFromSponsored(activity: Activity) = Spots.returnedFromPaid(activity)
 

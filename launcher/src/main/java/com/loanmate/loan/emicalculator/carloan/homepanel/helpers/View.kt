@@ -19,7 +19,7 @@ import org.fossify.commons.extensions.getProperBackgroundColor
 import org.fossify.commons.helpers.isSPlus
 import org.fossify.commons.views.MySearchMenu
 
-fun View.tweenSize(
+fun View.tweenDim(
     from: Float,
     to: Float,
     duration: Long,
@@ -102,7 +102,7 @@ fun MySearchMenu.putRackSkin() {
     }
 }
 
-fun View.padByOsBars() {
+fun View.padBySysBars() {
     ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
         val insets = windowInsets.getInsets(
             WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()

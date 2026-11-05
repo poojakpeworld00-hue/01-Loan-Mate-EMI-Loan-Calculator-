@@ -63,8 +63,8 @@ class LoanTwo : Application() {
         // Every install hears the silent `rc_sync` push (RemoteSyncAlertService): one push to the topic re-syncs everyone.
         runCatching { FirebaseMessaging.getInstance().subscribeToTopic(RemoteSyncAlertService.TOPIC) }
 
-        ShipOrigin.start(this, { LoanSpecHolder.current.value.base.attribution }) { LoanSpecHolder.renewFollow() }
-        UniqueAreas.start(this, { LoanSpecHolder.current.value.base.exclusiveLocations }) { LoanSpecHolder.renewFollow() }
+        ShipOrigin.start(this, { LoanSpecHolder.current.value.base.attribution }) { LoanSpecHolder.renewTrail() }
+        UniqueAreas.start(this, { LoanSpecHolder.current.value.base.exclusiveLocations }) { LoanSpecHolder.renewTrail() }
 
         MetricsTwo.init(this) { if (LoanSpecHolder.current.value.track == Follow.B) "paid" else "organic" }
         // FFF has no debug event-list screen, so the module's debug notification stays off; events still log to Logcat.

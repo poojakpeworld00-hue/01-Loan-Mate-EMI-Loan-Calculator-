@@ -10,7 +10,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.models.WidgetActivity
 @Dao
 interface appletActivityDao {
     @Query("SELECT * FROM app_usage")
-    fun getAll(): List<WidgetActivity>
+    fun obtainEvery(): List<WidgetActivity>
 
     @Query("SELECT * FROM app_usage WHERE package_name = :packageName")
     fun get(packageName: String): WidgetActivity?

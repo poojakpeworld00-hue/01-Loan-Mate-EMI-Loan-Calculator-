@@ -1,6 +1,6 @@
 package com.loanmate.loan.emicalculator.carloan.homelloan.screens.prefs
 
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.wireViewSpot
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.wireScreenPromo
 import com.loanmate.loan.emicalculator.carloan.adkit.PromoPack
 import androidx.activity.addCallback
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
@@ -24,15 +24,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenOptionsBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.listAd
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.insertInto
 
 /** Settings: language, plus share, rate, privacy policy and terms. */
 class SettingsActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { SettingsScreenModel(settingsRepository) }
+    private val viewModel by toolScreenModel { SettingsScreenModel(settingsRepository) }
     private lateinit var languageRow: RowToolBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class SettingsActivity : AppCompatActivity() {
         kitEnableDarkEdgeToEdge()
         val b = ScreenOptionsBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         // As the reference: leaving Settings (arrow or Back) runs its `screens.settings` exit ad first.
         val close = { Spots.exit(this, "screens.settings") { finish() } }
         b.crest.backVw.setOnClickListener { close() }
@@ -64,8 +64,8 @@ class SettingsActivity : AppCompatActivity() {
             at = b.appearanceVw.indexOfChild(languageRow.root) + 1,
         )
 
-        profileStrip(b.profileVw, R.drawable.glyph_person, R.string.step_gender, "OB_2")
-        profileStrip(b.profileVw, R.drawable.glyph_cake, R.string.step_age, "OB_3")
+        profileBar(b.profileVw, R.drawable.glyph_person, R.string.step_gender, "OB_2")
+        profileBar(b.profileVw, R.drawable.glyph_cake, R.string.step_age, "OB_3")
 
         // Remote Config `settings`: each of these four rows can be turned off per track (and country).
         val rows = (application as LoanTwo).container.config.value.settingsRows
@@ -73,7 +73,7 @@ class SettingsActivity : AppCompatActivity() {
         if (rows.rate) row(b.aboutVw, R.drawable.glyph_star, R.string.rate_app, getString(R.string.rate_app_sub)) { rate() }
         if (rows.feedback) row(b.aboutVw, R.drawable.glyph_mail, R.string.feedback, getString(R.string.feedback_sub)) { feedback() }
         if (rows.update) row(b.aboutVw, R.drawable.glyph_update, R.string.update_app, getString(R.string.update_app_sub)) {
-            open(base.updateLink.ifBlank { storeUrl() })
+            open(base.updateLink.ifBlank { storeLink() })
         }
         row(b.aboutVw, R.drawable.glyph_shield, R.string.privacy_policy, null) { open(base.privacyLink.ifBlank { getString(R.string.privacy_policy_url) }) }
         row(b.aboutVw, R.drawable.glyph_document, R.string.terms, null) { open(base.termsLink.ifBlank { getString(R.string.terms_url) }) }
@@ -87,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
         kitCollectWhenStarted(viewModel.state) { state ->
             languageRow.subVw.text = "${state.language.flag}  ${getString(state.language.nativeName)}"
         }
-        wireViewSpot("screens.settings", b.adInlineVw, b.adSlotVw)
+        wireScreenPromo("screens.settings", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {
@@ -110,7 +110,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     /** Gender / age: the onboarding answer, editable here (single choice from the same options). */
-    private fun profileStrip(parent: ViewGroup, @DrawableRes icon: Int, @StringRes name: Int, stepKey: String) {
+    private fun profileBar(parent: ViewGroup, @DrawableRes icon: Int, @StringRes name: Int, stepKey: String) {
         val settings = (application as LoanTwo).container.settingsRepository
         val step = setupPhases(settings.languages).first { it.key == stepKey }
         val labels = step.opts.map { getString(it.name) }
@@ -135,13 +135,13 @@ class SettingsActivity : AppCompatActivity() {
             .putExtra(Intent.EXTRA_SUBJECT, "${getString(R.string.store_name)} ${packageManager.getPackageInfo(packageName, 0).versionName}")
         Spots.kitMarkOwnLaunch()
         runCatching { startActivity(intent) }.onFailure {
-            Spots.resetOwnLaunch()
+            Spots.restoreOwnLaunch()
             Toast.makeText(this, R.string.link_unavailable, Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun share() {
-        val text = getString(R.string.share_message, getString(R.string.store_name), storeUrl())
+        val text = getString(R.string.share_message, getString(R.string.store_name), storeLink())
         Spots.kitMarkOwnLaunch() // no resume ad when the user comes back from the share sheet
         startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, text), null))
     }
@@ -151,7 +151,7 @@ class SettingsActivity : AppCompatActivity() {
             Spots.kitMarkOwnLaunch()
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
         } catch (_: ActivityNotFoundException) {
-            open(storeUrl())
+            open(storeLink())
         }
     }
 
@@ -164,12 +164,12 @@ class SettingsActivity : AppCompatActivity() {
             Spots.kitMarkOwnLaunch()
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
         } catch (_: ActivityNotFoundException) {
-            Spots.resetOwnLaunch()
+            Spots.restoreOwnLaunch()
             Toast.makeText(this, R.string.link_unavailable, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun storeUrl() = base.storeLink.ifBlank { "https://play.google.com/store/apps/details?id=$packageName" }
+    private fun storeLink() = base.storeLink.ifBlank { "https://play.google.com/store/apps/details?id=$packageName" }
 
     private val base get() = (application as LoanTwo).container.config.value.base
 }

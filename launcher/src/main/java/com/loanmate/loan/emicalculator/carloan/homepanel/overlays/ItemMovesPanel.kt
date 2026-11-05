@@ -119,7 +119,7 @@ class ItemMovesPanel(
 
         binding.trayActionsVwVw.removeAllViews()
         actions.forEach {
-            binding.trayActionsVwVw.addView(actionControl(it), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+            binding.trayActionsVwVw.addView(actionSteer(it), LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
         }
         binding.trayActionsVwVw.visibility = if (actions.isEmpty()) View.GONE else View.VISIBLE
     }
@@ -143,7 +143,7 @@ class ItemMovesPanel(
         setOnClickListener { dismiss(); shortcut.onClick() }
     }
 
-    private fun actionControl(action: Action): View = LinearLayout(activity).apply {
+    private fun actionSteer(action: Action): View = LinearLayout(activity).apply {
         orientation = LinearLayout.VERTICAL
         gravity = Gravity.CENTER_HORIZONTAL
         setPadding(dp(2), dp(10), dp(2), dp(8))

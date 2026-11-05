@@ -11,20 +11,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenRosterBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.ShelfOrder
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.listAd
 
 /** Category grid (weapon types, maps, emote rarities) or item grid for one catalog section. */
 class LineupActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { handle -> LineupScreenModel(catalogRepository, handle) }
+    private val viewModel by toolScreenModel { handle -> LineupScreenModel(catalogRepository, handle) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
         val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
 
         val vm = viewModel

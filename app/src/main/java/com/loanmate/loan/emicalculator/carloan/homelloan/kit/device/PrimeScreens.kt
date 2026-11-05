@@ -18,33 +18,33 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.intro.StartActi
 object PrimeScreens {
     private val classes = setOf(StartActivity::class.java.name, OnboardActivity::class.java.name, RootActivity::class.java.name)
 
-    fun kitIsMain(activity: Activity) = activity is OnboardActivity || activity is RootActivity
+    fun kitIsPrime(activity: Activity) = activity is OnboardActivity || activity is RootActivity
 
-    fun isToolTaskBase(className: String?) = className in classes
+    fun isLoanJobRoot(className: String?) = className in classes
 
     fun onboardingDone(context: Context) = (context.applicationContext as LoanTwo).container.settingsRepository.isOnboarded()
 
-    private fun kitMainClass(context: Context): Class<out Activity> =
+    private fun kitPrimeClass(context: Context): Class<out Activity> =
         if (onboardingDone(context)) RootActivity::class.java else OnboardActivity::class.java
 
     /** Our launcher home through Android's own Home intent, so it is the one in the system's home stack. */
-    fun deckBaseIntent(context: Context): Intent =
+    fun deckRootIntent(context: Context): Intent =
         Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).setPackage(context.packageName).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
     /** Brings the task of our app screens to the front as it is, whatever is on top of it. */
-    fun toolTaskToFront(context: Context): Boolean {
+    fun toolJobToFront(context: Context): Boolean {
         val task = context.getSystemService(ActivityManager::class.java)?.appTasks?.firstOrNull {
             val info = it.taskInfo
-            isToolTaskBase(info?.baseIntent?.component?.className) || isToolTaskBase(info?.baseActivity?.className)
+            isLoanJobRoot(info?.baseIntent?.component?.className) || isLoanJobRoot(info?.baseActivity?.className)
         } ?: return false
         return runCatching { task.moveToFront() }.isSuccess
     }
 
     fun open(context: Context, systemKey: String? = null) {
         // An exit ad (its ad screen or link tabs) is on top of our screen: bring the task back as it is, so the ad finishes.
-        if (ExitPromoRunner.busy() && toolTaskToFront(context)) return
+        if (ExitPromoRunner.busy() && toolJobToFront(context)) return
         context.startActivity(
-            Intent(context, kitMainClass(context))
+            Intent(context, kitPrimeClass(context))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
                 .apply { if (systemKey != null) putExtra(SysShortcutAim.EXTRA_SYSTEM_KEY, systemKey) }
         )

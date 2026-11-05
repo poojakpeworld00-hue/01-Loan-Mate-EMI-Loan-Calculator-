@@ -12,34 +12,34 @@ import com.loanmate.loan.emicalculator.carloan.adkit.R
  * otherwise stay over whatever is now in front).
  */
 object PromoBayWall {
-    fun isOpen(slot: View): Boolean = slot.getTag(R.id.tag_ad_slot_closed) != true
+    fun isLaunch(slot: View): Boolean = slot.getTag(R.id.tag_ad_slot_closed) != true
 
     fun open(slot: View) = slot.setTag(R.id.tag_ad_slot_closed, null)
 
     fun close(slot: ViewGroup) {
         slot.setTag(R.id.tag_ad_slot_closed, true)
-        endPull(slot)
+        endFetch(slot)
         CollapsibleVeil.maskFor(slot.context)
         // Hide and detach first: Google's expanded popup is pinned to the banner view, and destroy() alone
         // only removes it ~1 s later (seen on device: popup lingering over the launcher home).
-        val ads = spotViewsIn(slot)
+        val ads = spotScreensIn(slot)
         ads.forEach { runCatching { it.visibility = View.GONE } }
         slot.visibility = View.GONE
-        val natives = embeddedSpotsIn(slot)
+        val natives = embeddedPromosIn(slot)
         slot.removeAllViews()
         ads.forEach { runCatching { it.destroy() } }
         natives.forEach { runCatching { it.destroy() } }
     }
 
     /** Native ads bound in [view] (renderers tag each NativeAdView with its ad); destroyed with their slot. */
-    private fun embeddedSpotsIn(view: View): List<com.google.android.gms.ads.nativead.NativeAd> {
+    private fun embeddedPromosIn(view: View): List<com.google.android.gms.ads.nativead.NativeAd> {
         val own = (view.getTag(R.id.tag_native_ad) as? com.google.android.gms.ads.nativead.NativeAd)?.let(::listOf).orEmpty()
-        return if (view is ViewGroup) own + (0 until view.childCount).flatMap { embeddedSpotsIn(view.getChildAt(it)) } else own
+        return if (view is ViewGroup) own + (0 until view.childCount).flatMap { embeddedPromosIn(view.getChildAt(it)) } else own
     }
 
-    private fun spotViewsIn(view: View): List<BaseAdView> = when (view) {
+    private fun spotScreensIn(view: View): List<BaseAdView> = when (view) {
         is BaseAdView -> listOf(view)
-        is ViewGroup -> (0 until view.childCount).flatMap { spotViewsIn(view.getChildAt(it)) }
+        is ViewGroup -> (0 until view.childCount).flatMap { spotScreensIn(view.getChildAt(it)) }
         else -> emptyList()
     }
 
@@ -48,16 +48,16 @@ object PromoBayWall {
      * (Google collapsible or a rich-media expandable creative) never outlives its screen. Registered once per slot.
      * Also pauses / resumes the slot's ads with the screen, as the banner guide recommends.
      */
-    fun dismissWithView(activity: android.app.Activity, slot: ViewGroup) {
+    fun dismissWithScreen(activity: android.app.Activity, slot: ViewGroup) {
         if (slot.getTag(R.id.tag_ad_slot_watched) == true) return
         slot.setTag(R.id.tag_ad_slot_watched, true)
         activity.application.registerActivityLifecycleCallbacks(object : android.app.Application.ActivityLifecycleCallbacks {
             override fun onActivityPaused(a: android.app.Activity) {
                 if (a !== activity) return
-                if (a.isFinishing) close(slot) else spotViewsIn(slot).forEach { runCatching { it.pause() } }
+                if (a.isFinishing) close(slot) else spotScreensIn(slot).forEach { runCatching { it.pause() } }
             }
             override fun onActivityResumed(a: android.app.Activity) {
-                if (a === activity) spotViewsIn(slot).forEach { runCatching { it.resume() } }
+                if (a === activity) spotScreensIn(slot).forEach { runCatching { it.resume() } }
             }
             override fun onActivityDestroyed(a: android.app.Activity) {
                 if (a !== activity) return
@@ -75,25 +75,25 @@ object PromoBayWall {
     const val STALE_LOAD_MS = 30_000L
 
     /** One load per slot at a time: a second request while one is loading would stack two creatives. */
-    fun mayKickPull(loadingSinceMs: Long?, nowMs: Long): Boolean =
+    fun mayKickFetch(loadingSinceMs: Long?, nowMs: Long): Boolean =
         loadingSinceMs == null || nowMs - loadingSinceMs >= STALE_LOAD_MS
 
     /** Marks a load as started; false when the slot is already loading (the caller then does nothing). */
-    fun beginPull(slot: View): Boolean {
+    fun beginFetch(slot: View): Boolean {
         val now = android.os.SystemClock.elapsedRealtime()
-        if (!mayKickPull(slot.getTag(R.id.tag_ad_slot_loading) as? Long, now)) return false
+        if (!mayKickFetch(slot.getTag(R.id.tag_ad_slot_loading) as? Long, now)) return false
         slot.setTag(R.id.tag_ad_slot_loading, now)
         return true
     }
 
-    fun endPull(slot: View) = slot.setTag(R.id.tag_ad_slot_loading, null)
+    fun endFetch(slot: View) = slot.setTag(R.id.tag_ad_slot_loading, null)
 
     /** Destroys (not just removes) every ad view in [view]: a removed but live banner keeps drawing its popup. */
-    fun destroySpots(view: View) {
+    fun destroyPromos(view: View) {
         if (view is BaseAdView) {
             runCatching { view.destroy() }
             return
         }
-        if (view is ViewGroup) (0 until view.childCount).map(view::getChildAt).forEach(::destroySpots)
+        if (view is ViewGroup) (0 until view.childCount).map(view::getChildAt).forEach(::destroyPromos)
     }
 }

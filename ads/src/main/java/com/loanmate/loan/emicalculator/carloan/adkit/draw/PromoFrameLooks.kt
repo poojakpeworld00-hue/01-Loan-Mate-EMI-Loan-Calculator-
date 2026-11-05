@@ -28,7 +28,7 @@ object PromoFrameLooks {
     /** Card: tint the layout's own background shape; default white. */
     @JvmStatic
     @Suppress("UNUSED_PARAMETER")
-    fun paintSlabBackground(context: Context, view: View?, configured: String?) {
+    fun paintTileBackground(context: Context, view: View?, configured: String?) {
         view ?: return
         view.backgroundTintList = ColorStateList.valueOf(PromoTints.card(configured))
     }
@@ -51,7 +51,7 @@ object PromoFrameLooks {
 
     /** CTA text: RC colour, default white. */
     @JvmStatic
-    fun ctaCaptionColor(context: Context, configured: String?): Int =
+    fun ctaLabelColor(context: Context, configured: String?): Int =
         PromoTints.ctaText(configured, PromoTints.cta(PromoSettingsBox.getInstance(context).getString("NativebtnColor")))
 
     /**
@@ -64,7 +64,7 @@ object PromoFrameLooks {
         val cta = PromoTints.cta(vault.getString("NativebtnColor"))
         root.findViewById<TextView>(R.id.ad_badge)?.apply {
             backgroundTintList = ColorStateList.valueOf(cta)
-            setTextColor(ctaCaptionColor(context, vault.getString("NativebtntxtColor")))
+            setTextColor(ctaLabelColor(context, vault.getString("NativebtntxtColor")))
         }
         val text = headlineColor2(context, vault.getString("NativetxtColor"))
         val dp = context.resources.displayMetrics.density
@@ -80,7 +80,7 @@ object PromoFrameLooks {
      * Strip = RC `background`, hairline = RC `text` at low alpha.
      */
     @JvmStatic
-    fun bandStrip(context: Context, banner: View): FrameLayout {
+    fun bandBar(context: Context, banner: View): FrameLayout {
         val vault = PromoSettingsBox.getInstance(context)
         val dp = context.resources.displayMetrics.density
         val text = headlineColor2(context, vault.getString("NativetxtColor"))

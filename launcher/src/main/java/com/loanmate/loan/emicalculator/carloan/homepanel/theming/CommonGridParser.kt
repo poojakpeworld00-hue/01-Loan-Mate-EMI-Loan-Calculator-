@@ -83,14 +83,14 @@ object CommonGridParser {
     fun read(resources: Resources, packageName: String, index: PkgResIndex): DeskTheme.Numbers {
         val integers = index.names("integer")
         val dimens = index.names("dimen")
-        fun readInt(name: String): Int? {
+        fun pullInt(name: String): Int? {
             val id = resources.getIdentifier(name, "integer", packageName)
             if (id == 0) return null
             return runCatching { resources.getInteger(id) }.getOrNull()
         }
         fun firstSane(field: Field, range: IntRange): Int? {
             for (name in rank(field, integers)) {
-                val value = readInt(name) ?: continue
+                val value = pullInt(name) ?: continue
                 if (value in range) return value
             }
             return null
@@ -101,8 +101,8 @@ object CommonGridParser {
         for (colsName in rank(Field.HOME_COLS, integers)) {
             val rowsName = rowSibling(colsName) ?: continue
             if (rowsName !in integers) continue
-            val cols = readInt(colsName) ?: continue
-            val rows = readInt(rowsName) ?: continue
+            val cols = pullInt(colsName) ?: continue
+            val rows = pullInt(rowsName) ?: continue
             if (cols in 3..8 && rows in 3..9) { homeCols = cols; homeRows = rows; break }
         }
         val iconDp = run {
@@ -123,7 +123,7 @@ object CommonGridParser {
         }
         val labelSp = rank(Field.LABEL_SP, dimens).firstNotNullOfOrNull { name ->
             val id = resources.getIdentifier(name, "dimen", packageName)
-            if (id == 0) null else scanCaptionDimsSp(resources, id)?.takeIf { it in DeskTheme.MIN_LABEL_SP..DeskTheme.MAX_LABEL_SP }
+            if (id == 0) null else scanLabelDimsSp(resources, id)?.takeIf { it in DeskTheme.MIN_LABEL_SP..DeskTheme.MAX_LABEL_SP }
         }
         return DeskTheme.Numbers(
             homeCols = homeCols,
@@ -134,7 +134,7 @@ object CommonGridParser {
         )
     }
 
-    fun scanCaptionDimsSp(resources: Resources, id: Int): Float? = runCatching {
+    fun scanLabelDimsSp(resources: Resources, id: Int): Float? = runCatching {
         val value = TypedValue()
         resources.getValue(id, value, true)
         if (value.type != TypedValue.TYPE_DIMENSION) return null

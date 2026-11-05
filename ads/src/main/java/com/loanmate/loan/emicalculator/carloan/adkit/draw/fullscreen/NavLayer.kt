@@ -21,9 +21,9 @@ import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoSettingsBox
 import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoFetchStyle
 import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoDelays
 import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoPieceKeys
-import com.loanmate.loan.emicalculator.carloan.adkit.draw.kitHasNetwork
-import com.loanmate.loan.emicalculator.carloan.adkit.draw.linksOpenIn
-import com.loanmate.loan.emicalculator.carloan.adkit.draw.enterInBrowserTool
+import com.loanmate.loan.emicalculator.carloan.adkit.draw.kitHasNet
+import com.loanmate.loan.emicalculator.carloan.adkit.draw.linksLaunchIn
+import com.loanmate.loan.emicalculator.carloan.adkit.draw.enterInBrowserLoan
 import com.loanmate.loan.emicalculator.carloan.adkit.draw.AdvancePromoLead
 import com.loanmate.loan.emicalculator.carloan.adkit.draw.RewardPromoRenderer
 import com.loanmate.loan.emicalculator.carloan.adkit.bridge.kitOnceWindowFocused
@@ -66,8 +66,8 @@ class NavLayer {
         private var covered = false
         /** The links have been started: only a stop after this is them covering us (not a Recents press while opening). */
         private var launched = false
-        fun onToolCovered() { if (isOpened && launched) covered = true }
-        fun onReturnFromOptions(context: Context, force: Boolean = false) {
+        fun onLoanCovered() { if (isOpened && launched) covered = true }
+        fun onResultFromSettings(context: Context, force: Boolean = false) {
             if (!isOpened || (!covered && !force)) return
 
             if (context is SponsorBrowserActivity) return
@@ -79,14 +79,14 @@ class NavLayer {
             covered = false
             launched = false
             onTabClosed = null
-            closeSession(context)
+            dismissSession(context)
             closed?.invoke()
         }
         private var customTabsClient: CustomTabsClient? = null
         private var customTabsSession: CustomTabsSession? = null
         private var serviceConnection: CustomTabsServiceConnection? = null
 
-        fun closeSession(context: Context) {
+        fun dismissSession(context: Context) {
             serviceConnection?.let {
                 try {
                     context.unbindService(it)
@@ -97,10 +97,10 @@ class NavLayer {
             customTabsSession = null
         }
 
-        fun enterPatronLink(
+        fun enterSponsorUrl(
             context: Activity,
             placement: String? = null,
-            urls: List<String> = PromoSettingsBox.getInstance(context).patronLinks(placement),
+            urls: List<String> = PromoSettingsBox.getInstance(context).patronUrls(placement),
             onClosed: () -> Unit,
         ) {
             if (urls.isEmpty()) {
@@ -109,7 +109,7 @@ class NavLayer {
                 return
             }
 
-            val openIn = PromoSettingsBox.getInstance(context).linksOpenIn(placement)
+            val openIn = PromoSettingsBox.getInstance(context).linksLaunchIn(placement)
             Log.d(LINK_TAG, "opening ${urls.size} link(s) in $openIn for placement=$placement: $urls")
             isOpened = true
             covered = false
@@ -120,13 +120,13 @@ class NavLayer {
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                 if (isOpened && onTabClosed === onClosed && context.hasWindowFocus()) {
                     Log.w(LINK_TAG, "link never covered the app → treating it as closed")
-                    onReturnFromOptions(context, force = true)
+                    onResultFromSettings(context, force = true)
                 }
             }, NOT_COVERED_MS)
 
             if (openIn == "browser") {
                 // The phone's browser app; onReturnFromSettings fires onClosed when the user is back in the app.
-                val opened = urls.asReversed().count { context.enterInBrowserTool(Uri.parse(it)) }
+                val opened = urls.asReversed().count { context.enterInBrowserLoan(Uri.parse(it)) }
                 Log.d(LINK_TAG, "browser app: $opened/${urls.size} launched")
                 launched = true
                 if (opened == 0) {
@@ -145,13 +145,13 @@ class NavLayer {
                         launched = true
                     } catch (e: Exception) {
                         Log.w(LINK_TAG, "webview ${i + 1}/${urls.size} failed: $url — ${e.message}")
-                        if (i == 0) return kitViewInBrowser(context, Uri.parse(url), onClosed)
+                        if (i == 0) return kitScreenInBrowser(context, Uri.parse(url), onClosed)
                     }
                 }
                 return
             }
 
-            getSession(context) { session ->
+            obtainSession(context) { session ->
                 Log.d(LINK_TAG, "custom tabs session=${if (session == null) "null (no Chrome bind)" else "ok"}")
 
                 val customTab = CustomTabsIntent.Builder(session)
@@ -167,13 +167,13 @@ class NavLayer {
                     } catch (e: Exception) {
                         Log.w(LINK_TAG, "tab ${i + 1}/${urls.size} failed: $url — ${e.message}")
 
-                        if (i == 0) return@getSession kitViewInBrowser(context, Uri.parse(url), onClosed)
+                        if (i == 0) return@obtainSession kitScreenInBrowser(context, Uri.parse(url), onClosed)
                     }
                 }
             }
         }
 
-        private fun getSession(
+        private fun obtainSession(
             context: Context,
             onReady: (CustomTabsSession?) -> Unit
         ) {
@@ -213,7 +213,7 @@ class NavLayer {
             else android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({ deliver(null) }, SESSION_WAIT_MS)
         }
 
-        private fun kitViewInBrowser(
+        private fun kitScreenInBrowser(
             context: Activity,
             uri: Uri,
             onClosed: () -> Unit
@@ -242,7 +242,7 @@ class NavLayer {
         // Places set to preload are warmed even when interstitials are on-load overall. With
         // preload on overall the shared unit is warmed below, so only their own units go here.
         val globalPreload = PromoFetchStyle.preload(activity, PromoFetchStyle.PackShape.INTER)
-        PromoFetchStyle.kitInterPreloadPlaces(activity).forEach { place ->
+        PromoFetchStyle.kitInterPrefetchPlaces(activity).forEach { place ->
             val unit = PromoPieceKeys.resolve(pref, place, "googleInter")
             if (!globalPreload || unit != pref.getString("googleInter")) LinkLayer.preload(activity, unit, place)
         }
@@ -252,7 +252,7 @@ class NavLayer {
 
         if (adType == PromoBayType.GOOGLE) {
             if (hasPreloadedGoogle || googleInterLoading) return
-            activity.quietWrite("google_inter_load_start")
+            activity.quietPut("google_inter_load_start")
             val id = pref.getString("googleInter") ?: return
             googleInterLoading = true
             PromoSignals.send(PromoSignals.INTER, "request", "") // a warm-up preload has no place
@@ -260,10 +260,10 @@ class NavLayer {
                 activity, id, AdRequest.Builder().build(),
                 object : InterstitialAdLoadCallback() {
                     override fun onAdFailedToLoad(error: LoadAdError) {
-                        PromoSignals.loadFailed(PromoSignals.INTER, error.code, "")
+                        PromoSignals.fetchFailed(PromoSignals.INTER, error.code, "")
                         googleInterAd = null
                         googleInterLoading = false
-                        activity.quietWrite("google_inter_load_failed_${error.code}")
+                        activity.quietPut("google_inter_load_failed_${error.code}")
                         Log.e("NavigationInterstitial", "Load Failed: ${error.message}")
                     }
                     override fun onAdLoaded(ad: InterstitialAd) {
@@ -271,7 +271,7 @@ class NavLayer {
                         googleInterAd = ad
                         googleInterAt = PromoEra.now()
                         googleInterLoading = false
-                        activity.quietWrite("google_inter_loaded")
+                        activity.quietPut("google_inter_loaded")
                         Log.d("NavigationInterstitial", "Google inter loaded")
                     }
                 })
@@ -290,7 +290,7 @@ class NavLayer {
 
 
 
-    private fun Context.quietWrite(event: String) {
+    private fun Context.quietPut(event: String) {
         Log.d("InterADsLog", event)
     }
 }

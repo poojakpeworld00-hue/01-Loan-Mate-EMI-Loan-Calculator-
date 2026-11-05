@@ -28,7 +28,7 @@ object DeskWidgetsFiller {
         if (columns <= 0 || rows <= 0 || apps.isEmpty()) return 0
 
         val db = context.homeScreenGridItemsDB
-        val items = db.pullAllCells()
+        val items = db.pullEveryCells()
 
         val placedIds = HashSet<String>()
         val placedPackages = HashSet<String>()
@@ -119,7 +119,7 @@ object DeskWidgetsFiller {
             placedOnPage++
             advance()
         }
-        db.insertAll(added)
+        db.insertEvery(added)
         Timber.i("HomeAppsFiller: placed ${added.size} apps on the workspace (pages up to $page)")
         return added.size
     }

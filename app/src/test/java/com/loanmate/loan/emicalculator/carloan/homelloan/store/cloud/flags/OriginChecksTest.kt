@@ -36,11 +36,11 @@ class OriginChecksTest {
     }
 
     @Test fun kitGoogleNetwork_matchesField() {
-        assertTrue(OriginChecks.kitGoogleNetwork("""{"ip":"1.2.3.4","asn_org":"Google LLC"}""", spec))
-        assertTrue(OriginChecks.kitGoogleNetwork("""{"asn_org":" google llc "}""", spec))
-        assertFalse(OriginChecks.kitGoogleNetwork("""{"asn_org":"Reliance Jio"}""", spec))
-        assertFalse(OriginChecks.kitGoogleNetwork("not json", spec))
-        assertFalse(OriginChecks.kitGoogleNetwork("""{"asn_org":""}""", spec.copy(ipMatch = listOf(""))))
+        assertTrue(OriginChecks.kitGoogleNet("""{"ip":"1.2.3.4","asn_org":"Google LLC"}""", spec))
+        assertTrue(OriginChecks.kitGoogleNet("""{"asn_org":" google llc "}""", spec))
+        assertFalse(OriginChecks.kitGoogleNet("""{"asn_org":"Reliance Jio"}""", spec))
+        assertFalse(OriginChecks.kitGoogleNet("not json", spec))
+        assertFalse(OriginChecks.kitGoogleNet("""{"asn_org":""}""", spec.copy(ipMatch = listOf(""))))
     }
 
     @Test fun deployFeedReason() {

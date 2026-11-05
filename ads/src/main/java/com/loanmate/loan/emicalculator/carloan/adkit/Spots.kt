@@ -62,10 +62,10 @@ object Spots {
     private val slots = java.util.WeakHashMap<FrameLayout, () -> Unit>()
 
     /** Back online: [activity]'s slots that came up empty (offline) load again; filled or closed ones are left alone. */
-    fun kitRefillEmptySlots(activity: Activity) {
+    fun kitRefillBlankSlots(activity: Activity) {
         slots.entries.toList().forEach { (slot, load) ->
             if (slot.context === activity && slot.isAttachedToWindow && slot.childCount == 0 &&
-                com.loanmate.loan.emicalculator.carloan.adkit.draw.PromoBayWall.isOpen(slot)) load()
+                com.loanmate.loan.emicalculator.carloan.adkit.draw.PromoBayWall.isLaunch(slot)) load()
         }
     }
 
@@ -76,11 +76,11 @@ object Spots {
     fun backButton(activity: Activity, onDone: () -> Unit) = exit(activity, BACK_BUTTON, onDone)
 
     /** `launcher.back_button` / `home_button` / `recents_button` with `during_onboarding: true`: its ad also runs during onboarding. */
-    fun hotkeySpotDuringSetup(key: String): Boolean =
+    fun hotkeyPromoDuringOnboard(key: String): Boolean =
         outOn("launcher.${key}_button") && PromoPack.config.places["launcher.${key}_button"]?.bool("during_onboarding") == true
 
     /** `launcher.recents_button` is on (after onboarding: Recents on our screen shows it). */
-    fun switcherSpotOn(): Boolean = outOn("launcher.recents_button")
+    fun switcherPromoOn(): Boolean = outOn("launcher.recents_button")
 
     /** `launcher.home_button` / `launcher.recents_button`; [key] = "home" | "recents". */
     fun systemKey(activity: Activity, key: String, onDone: () -> Unit) = exit(activity, "launcher.${key}_button", onDone)
@@ -94,7 +94,7 @@ object Spots {
      * launches ([kitMarkOwnLaunch], links), while a full-screen ad shows, on module screens and [PromoPack.noResumeAdOn],
      * and when `launcher.app_exit` / `sponsored_app_exit` runs for the same return.
      */
-    fun toolProceed(activity: Activity) {
+    fun toolAdvance(activity: Activity) {
         val pending = pendingReturn
         pendingReturn = PackResultX.NONE
         val ownReturn = AdvancePromoLead.skipNextAppOpenAd
@@ -102,13 +102,13 @@ object Spots {
         // A return from a launched app / sponsored tile has its own place, even when its launch marked it as ours.
         if (ownReturn && pending == PackResultX.NONE) return
         if (SystemClock.elapsedRealtime() - returnHandledAt < RETURN_HANDLED_MS) return
-        if (isModuleView(activity) || PromoPack.noResumeAdOn(activity) || ExitPromoRunner.busy()) return
+        if (isModuleScreen(activity) || PromoPack.noResumeAdOn(activity) || ExitPromoRunner.busy()) return
         activity.kitOnceWindowFocused {
             if (activity.isFinishing || activity.isDestroyed) return@kitOnceWindowFocused
             when {
                 pending == PackResultX.APP && outOn(APP_EXIT) -> exit(activity, APP_EXIT) {}
                 pending == PackResultX.SPONSORED && outOn(SPONSORED_APP_EXIT) -> exit(activity, SPONSORED_APP_EXIT) {}
-                LaunchPromoTracker.claimsProceed(activity) -> Unit // the unlock ad (inter → rewarded) shows instead
+                LaunchPromoTracker.claimsAdvance(activity) -> Unit // the unlock ad (inter → rewarded) shows instead
                 else -> exit(activity, APP_RESUME) {}
             }
         }
@@ -120,7 +120,7 @@ object Spots {
     }
 
     /** Undo [kitMarkOwnLaunch] when the launch did not happen. */
-    fun resetOwnLaunch() {
+    fun restoreOwnLaunch() {
         AdvancePromoLead.skipNextAppOpenAd = false
     }
 
@@ -132,23 +132,23 @@ object Spots {
     fun chestOpened(activity: Activity, proceed: () -> Unit) = exit(activity, APP_DRAWER, proceed)
 
     /** User tapped an app icon: `launcher.app_open`, then [proceed] opens it; the return runs `app_exit`. */
-    fun toolBadgeTapped(activity: Activity, proceed: () -> Unit) = exit(activity, APP_OPEN) {
+    fun toolMarkTapped(activity: Activity, proceed: () -> Unit) = exit(activity, APP_OPEN) {
         pendingReturn = PackResultX.APP
         proceed()
     }
 
-    /** Back from an app opened from the launcher (also detected on its own after [toolBadgeTapped]). */
-    fun returnedFromTool(activity: Activity) = kitRunReturn(activity, APP_EXIT)
+    /** Back from an app opened from the launcher (also detected on its own after [toolMarkTapped]). */
+    fun returnedFromLoan(activity: Activity) = kitRunResult(activity, APP_EXIT)
 
     /** User tapped a sponsored drawer tile: `launcher.sponsored_app_open`, then [proceed] opens its link. */
-    fun paidBlockTapped(activity: Activity, proceed: () -> Unit) = exit(activity, SPONSORED_APP_OPEN) {
+    fun paidBrickTapped(activity: Activity, proceed: () -> Unit) = exit(activity, SPONSORED_APP_OPEN) {
         pendingReturn = PackResultX.SPONSORED
         proceed()
     }
 
-    fun returnedFromPaid(activity: Activity) = kitRunReturn(activity, SPONSORED_APP_EXIT)
+    fun returnedFromPaid(activity: Activity) = kitRunResult(activity, SPONSORED_APP_EXIT)
 
-    private fun kitRunReturn(activity: Activity, placeKey: String) {
+    private fun kitRunResult(activity: Activity, placeKey: String) {
         pendingReturn = PackResultX.NONE
         if (outOn(placeKey)) returnHandledAt = SystemClock.elapsedRealtime()
         activity.kitOnceWindowFocused { exit(activity, placeKey) {} }
@@ -157,7 +157,7 @@ object Spots {
     // ---- system events -------------------------------------------------------------------------------------
 
     /** `launcher.phone_unlock`: on, start_after_hours, gap_minutes, max_per_day; shown on [PromoPack.isHomeScreen]. */
-    fun handsetUnlocked(context: Context) = LaunchPromoTracker.onOpen2(context.applicationContext)
+    fun handsetUnlocked(context: Context) = LaunchPromoTracker.onLaunch2(context.applicationContext)
 
     /** `launcher.charger_connected` / `charger_disconnected`: on, gap_sec → battery screen (bottom_ad, exit_ad on close). */
     fun kitChargerChanged(context: Context, connected: Boolean) =
@@ -171,7 +171,7 @@ object Spots {
      * `launcher.play_store_return`, on a Recents press: within `window_sec` after install the first press opens our
      * Play Store page (`on`); with `show_ad_screen` the user comes back to an ad screen (bottom_ad, exit_ad), `gap_sec` apart.
      */
-    fun playKeeperReturn(context: Context) = LatestPromoTracker.onSwitcher(context.applicationContext)
+    fun runHolderResult(context: Context) = LatestPromoTracker.onToggle(context.applicationContext)
 
     // ---- helpers -------------------------------------------------------------------------------------------
 
@@ -182,11 +182,11 @@ object Spots {
     internal fun outOn(placeKey: String): Boolean =
         PromoPack.spotsOn() && PromoPack.config.places[placeKey]?.exitAd?.on == true
 
-    internal fun kitPlaceOn(placeKey: String): Boolean =
+    internal fun kitSlotOn(placeKey: String): Boolean =
         PromoPack.spotsOn() && PromoPack.config.places[placeKey]?.bool("on") == true
 
     /** Module screens (event screens, sponsor page) and SDK ad activities never get the resume ad. */
-    private fun isModuleView(activity: Activity): Boolean {
+    private fun isModuleScreen(activity: Activity): Boolean {
         val name = activity.javaClass.name
         return name.startsWith("com.loanmate.loan.emicalculator.carloan.adkit.") || name.startsWith("com.google.android.gms.ads.")
     }

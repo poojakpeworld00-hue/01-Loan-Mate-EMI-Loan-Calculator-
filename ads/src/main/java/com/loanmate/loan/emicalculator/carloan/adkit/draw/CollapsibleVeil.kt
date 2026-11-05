@@ -44,7 +44,7 @@ object CollapsibleVeil {
         decor.setTag(R.id.tag_collapsible_backdrop, null)
     }
 
-    fun maskFor(context: Context) = hide(context.findActivity())
+    fun maskFor(context: Context) = hide(context.locateActivity())
 
     private fun find(activity: Activity, banner: View, triesLeft: Int) {
         if (activity.isFinishing || activity.isDestroyed || !banner.isAttachedToWindow) return
@@ -79,7 +79,7 @@ object CollapsibleVeil {
             }
     }
 
-    private fun Context.findActivity(): Activity? {
+    private fun Context.locateActivity(): Activity? {
         var c: Context? = this
         while (c is ContextWrapper) {
             if (c is Activity) return c

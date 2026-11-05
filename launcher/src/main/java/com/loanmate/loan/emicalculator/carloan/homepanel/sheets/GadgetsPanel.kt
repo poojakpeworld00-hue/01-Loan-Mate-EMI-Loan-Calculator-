@@ -28,7 +28,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
 import com.loanmate.loan.emicalculator.carloan.homepanel.adapters.GadgetsLoader
 import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpGadgetsZoneBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.pullInitialSlotDims
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.pullInitialBayDims
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.prepRackBackdrop
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.ITEM_TYPE_SHORTCUT
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.ITEM_TYPE_WIDGET
@@ -54,7 +54,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
     override fun setupFragment(activity: XCenterScene) {
         this.activity = activity
         this.binding = HpGadgetsZoneBinding.bind(this)
-        getAppWidgets()
+        obtainProgGadgets()
 
         binding.widgetsRollIxVw.setOnTouchListener { v, event ->
             if (event.actionMasked == MotionEvent.ACTION_DOWN && binding.queryBarIxVw.hasFocus()) {
@@ -73,12 +73,12 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
 
     fun onConfigurationChanged() {
         binding.widgetsRollIxVw.scrollToPosition(0)
-        prepareViews()
+        primeScreens()
 
         if (widgets.isNotEmpty()) {
-            splitWidgetsByApplets()
+            splitGadgetsByApplets()
         } else {
-            getAppWidgets()
+            obtainProgGadgets()
         }
     }
 
@@ -115,7 +115,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
                 if (binding.queryBarIxVw.hasFocus()) {
                     activity?.hideKeyboard()
                 }
-                activity?.startHandlingTouches(touchDownY)
+                activity?.beginHandlingTouches(touchDownY)
                 touchDownY = -1
             }
         }
@@ -130,7 +130,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
      * previews are decoded straight at the bounded size; anything else (a vector, a drawable XML)
      * goes through the framework as before.
      */
-    private fun fetchPreview(info: AppWidgetProviderInfo, maxSide: Int): Drawable? {
+    private fun retrievePreview(info: AppWidgetProviderInfo, maxSide: Int): Drawable? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && info.previewImage != 0) {
             runCatching {
                 val res = context.packageManager.getResourcesForApplication(info.provider.packageName)
@@ -153,26 +153,26 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
     }
 
     /** True once the widget list has been built at least once. */
-    fun hasWidgets() = binding.widgetsRollIxVw.adapter != null
+    fun hasGadgets() = binding.widgetsRollIxVw.adapter != null
 
     @SuppressLint("WrongConstant")
-    fun getAppWidgets() {
+    fun obtainProgGadgets() {
         ensureBackgroundThread {
             runCatching {
                 var appWidgets = ArrayList<WidgetGadget>()
-                appWidgets.addAll(pullPseudoWidgets())
+                appWidgets.addAll(pullPseudoGadgets())
                 val previewMaxPx = resources.getDimensionPixelSize(R.dimen.launcher_widget_preview_size) * PREVIEW_OVERSAMPLE
                 val manager = AppWidgetManager.getInstance(context)
                 val packageManager = context.packageManager
                 val infoList = manager.installedProviders
                 for (info in infoList) {
                     val appPackageName = info.provider.packageName
-                    val appMetadata = pullAppletMetaFromPkg(appPackageName) ?: continue
+                    val appMetadata = pullAppletInfoFromPkg(appPackageName) ?: continue
                     val appTitle = appMetadata.appTitle
                     val appIcon = appMetadata.appIcon
                     val widgetTitleUi = info.loadLabel(packageManager)
-                    val widgetPreviewImage = fetchPreview(info, previewMaxPx) ?: appIcon
-                    val cellSize = context.pullInitialSlotDims(info, info.minWidth, info.minHeight)
+                    val widgetPreviewImage = retrievePreview(info, previewMaxPx) ?: appIcon
+                    val cellSize = context.pullInitialBayDims(info, info.minWidth, info.minHeight)
                     val widthCells = cellSize.width
                     val heightCells = cellSize.height
                     val className = info.provider.className
@@ -200,7 +200,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
                     val componentInfo = info.activityInfo.applicationInfo
                     val appTitle = componentInfo.loadLabel(packageManager).toString()
                     val appPackageName = componentInfo.packageName
-                    val appMetadata = pullAppletMetaFromPkg(appPackageName) ?: continue
+                    val appMetadata = pullAppletInfoFromPkg(appPackageName) ?: continue
                     val appIcon = appMetadata.appIcon
                     val widgetTitleUi = info.loadLabel(packageManager).toString()
                     val widgetPreviewImage = packageManager.getDrawable(
@@ -231,14 +231,14 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
                 ).toMutableList() as ArrayList<WidgetGadget>
                 widgets = appWidgets
                 activity?.runOnUiThread {
-                    splitWidgetsByApplets()
+                    splitGadgetsByApplets()
                 }
             }.onFailure { android.util.Log.w("GadgetsPanel", "getAppWidgets failed", it) }
         }
     }
 
-    private fun pullPseudoWidgets(): List<WidgetGadget> {
-        val appMetadata = pullAppletMetaFromPkg(context.packageName) ?: return emptyList()
+    private fun pullPseudoGadgets(): List<WidgetGadget> {
+        val appMetadata = pullAppletInfoFromPkg(context.packageName) ?: return emptyList()
         return listOf(
             PSEUDO_WIDGET_CLOCK to Triple(R.string.launcher_pseudo_widget_clock, 4, 2),
             PSEUDO_WIDGET_SEARCH to Triple(R.string.launcher_pseudo_widget_search_bar, 4, 1)
@@ -260,7 +260,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
         }
     }
 
-    private fun splitWidgetsByApplets() {
+    private fun splitGadgetsByApplets() {
         val searchQuery = binding.queryBarIxVw.getCurrentQuery()
         val filteredWidgets = if (searchQuery.isNotEmpty()) {
             widgets.filter { widget ->
@@ -308,29 +308,29 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
                     binding.widgetsRollIxVw.adapter = this
                 }
             } else {
-                (currAdapter as GadgetsLoader).updateItems(widgetsListItems)
+                (currAdapter as GadgetsLoader).refreshItems(widgetsListItems)
             }
         }
     }
 
-    fun prepareViews() {
+    fun primeScreens() {
         if (activity == null) {
             return
         }
 
         binding.widgetsFastscrollerIxVw.updateColors(context.getProperPrimaryColor())
-        (binding.widgetsRollIxVw.adapter as? GadgetsLoader)?.reloadCaptionTint(context.getProperTextColor())
+        (binding.widgetsRollIxVw.adapter as? GadgetsLoader)?.reloadLabelTint(context.getProperTextColor())
         prepRackBackdrop()
 
         binding.queryBarIxVw.requireToolbar().beGone()
         binding.queryBarIxVw.updateColors()
         binding.queryBarIxVw.setupMenu()
         binding.queryBarIxVw.onSearchTextChangedListener = {
-            splitWidgetsByApplets()
+            splitGadgetsByApplets()
         }
     }
 
-    private fun pullAppletMetaFromPkg(packageName: String): GadgetsStackCluster? {
+    private fun pullAppletInfoFromPkg(packageName: String): GadgetsStackCluster? {
         try {
             val appInfoUi = activity!!.packageManager.getApplicationInfo(packageName, 0)
             val appTitle = activity!!.packageManager.getApplicationLabel(appInfoUi).toString()

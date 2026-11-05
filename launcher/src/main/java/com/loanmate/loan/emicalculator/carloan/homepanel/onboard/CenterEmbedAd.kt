@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import androidx.core.view.ViewCompat
 import com.loanmate.loan.emicalculator.carloan.homepanel.Launcher
 import com.loanmate.loan.emicalculator.carloan.homepanel.gateway.StarterBay
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.reviveNavigationBand
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.reviveNavStrip
 
 object CenterEmbedAd {
     private const val TAG = "LAUNCHER_AD"
@@ -22,7 +22,7 @@ object CenterEmbedAd {
         runCatching {
             Launcher.events.bindSlot(activity, slot, container)
             ViewCompat.requestApplyInsets(container)
-            activity.reviveNavigationBand()
+            activity.reviveNavStrip()
         }.onFailure { Log.w(TAG, "could not render $key", it) }
     }
 }

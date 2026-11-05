@@ -57,7 +57,7 @@ object LinkLayer {
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    PromoSignals.loadFailed(PromoSignals.INTER, error.code, "")
+                    PromoSignals.fetchFailed(PromoSignals.INTER, error.code, "")
                     loading -= unitId
                     Log.e(TAG, "preload failed for $unitId: ${error.message}")
                 }
@@ -66,7 +66,7 @@ object LinkLayer {
     }
 
     /** A preloaded ad is waiting for [unitId]. */
-    fun kitHasReady(unitId: String): Boolean = unitId in ready
+    fun kitHasSet(unitId: String): Boolean = unitId in ready
 
     fun show(
         activity: Activity,
@@ -126,7 +126,7 @@ object LinkLayer {
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    PromoSignals.loadFailed(PromoSignals.INTER, error.code, place)
+                    PromoSignals.fetchFailed(PromoSignals.INTER, error.code, place)
                     loading -= unitId
                     if (settled) return
                     settled = true

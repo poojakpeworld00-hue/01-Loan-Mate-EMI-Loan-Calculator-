@@ -15,7 +15,7 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.LineupPr
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowBlockBinding
 
 /** Adapter positions of the ad rows in a list of [tiles] items: after [after] items, then every [every] (0 = once), none after the last item. */
-internal fun spotStripPositions(tiles: Int, after: Int, every: Int): List<Int> {
+internal fun spotBarLoci(tiles: Int, after: Int, every: Int): List<Int> {
     val before = mutableListOf(after.coerceIn(0, tiles))
     if (every > 0) while (before.last() + every < tiles) before += before.last() + every
     return before.mapIndexed { k, n -> n + k }
@@ -37,7 +37,7 @@ class BrickAdapter(
     private class PromoKeeper(val frame: FrameLayout) : RecyclerView.ViewHolder(frame)
 
     /** Adapter positions of the ad rows: the first after `after` tiles, the next ones every `every` tiles, none after the last tile. */
-    private val adPositions: List<Int> = ad?.let { spotStripPositions(tiles.size, it.after, it.every) }.orEmpty()
+    private val adPositions: List<Int> = ad?.let { spotBarLoci(tiles.size, it.after, it.every) }.orEmpty()
 
     /** One container per ad row, created (and its ad loaded) the first time the row is shown. */
     private val adViews = HashMap<Int, FrameLayout>()

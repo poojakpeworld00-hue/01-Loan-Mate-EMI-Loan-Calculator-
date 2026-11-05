@@ -8,7 +8,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.gateway.StarterGate
 import com.loanmate.loan.emicalculator.carloan.homepanel.gateway.StarterSignals
 import com.loanmate.loan.emicalculator.carloan.homepanel.gateway.StarterBridge
 import com.loanmate.loan.emicalculator.carloan.homepanel.gateway.StarterConfig
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isPrimaryLaunchpad
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isPrimaryPad
 import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterLobbyAsRear
 import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterHistoryPlanner
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
@@ -35,7 +35,7 @@ object Launcher : StarterGate {
 
     internal fun host(): StarterBridge? = host
 
-    override fun isDefaultHome(context: Context): Boolean = context.isPrimaryLaunchpad()
+    override fun isDefaultHome(context: Context): Boolean = context.isPrimaryPad()
 
     override fun requestDefaultHome(activity: Activity, onResult: (Boolean) -> Unit) =
         PrimeCenterAsker.request(activity, onResult)
@@ -49,6 +49,6 @@ object Launcher : StarterGate {
     override fun hostShown() = CenterLobbyAsRear.hostShown()
 
     override fun refresh(context: Context) {
-        XCenterScene.current?.let { it.runOnUiThread { it.onSettingsChanged() } }
+        XCenterScene.current?.let { it.runOnUiThread { it.onConfigChanged() } }
     }
 }

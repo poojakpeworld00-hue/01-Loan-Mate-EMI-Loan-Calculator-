@@ -28,8 +28,8 @@ object Views {
 
     fun install() {
         ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStop(owner: LifecycleOwner) { if (!ownLeave()) visits.leaveTool() }
-            override fun onStart(owner: LifecycleOwner) = visits.returnToTool()
+            override fun onStop(owner: LifecycleOwner) { if (!ownLeave()) visits.leaveLoan() }
+            override fun onStart(owner: LifecycleOwner) = visits.returnToLoan()
         })
     }
 }
@@ -64,14 +64,14 @@ class ScreenHits(
     }
 
     @Synchronized
-    fun leaveTool() {
+    fun leaveLoan() {
         if (!active) return
         end("background")
         away = true
     }
 
     @Synchronized
-    fun returnToTool() {
+    fun returnToLoan() {
         if (away && !active) start(current)
         away = false
     }

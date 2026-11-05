@@ -44,7 +44,7 @@ object DeskPlacer {
     fun reinitForRebuild(context: Context) {
         val config = context.launcherConfig
         val db = context.homeScreenGridItemsDB
-        val items = db.pullAllCells()
+        val items = db.pullEveryCells()
         val folders = items.filter { it.type == ITEM_TYPE_FOLDER && !it.docked }.mapNotNull { it.id }.toSet()
         var removed = 0
         val kept = ArrayList<com.loanmate.loan.emicalculator.carloan.homepanel.models.DeskViewerGridItem>()
@@ -54,7 +54,7 @@ object DeskPlacer {
                 item.docked -> false
                 item.type == ITEM_TYPE_FOLDER -> true
                 item.type == ITEM_TYPE_ICON -> item.parentId == null || item.parentId in folders
-                else -> DeskGadgetPlacer.isSeededGadget(item)
+                else -> DeskGadgetPlacer.isSeededWidget(item)
             }
             if (drop) {
                 if (item.type == ITEM_TYPE_WIDGET && item.widgetId > 0) {
@@ -75,7 +75,7 @@ object DeskPlacer {
             val height = (item.bottom - item.top + 1).coerceIn(1, rows)
             val left = item.left.coerceIn(0, cols - width)
             val top = item.top.coerceIn(0, rows - height)
-            db.reloadCellPoint(left, top, left + width - 1, top + height - 1, item.page, false, null, item.id!!)
+            db.reloadCellSpot(left, top, left + width - 1, top + height - 1, item.page, false, null, item.id!!)
         }
         Timber.i("HubPlanter: layout switch - $removed item(s) cleared, ${kept.size} widget(s)/shortcut(s) kept")
     }

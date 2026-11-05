@@ -72,7 +72,7 @@ class OnboardScreenModel(
         update(s.copy(selections = s.selections.replace(s.stepIndex, selection)))
     }
 
-    fun switchAllStars() {
+    fun switchEveryStars() {
         if (favIndex < 0) return
         val all = steps[favIndex].opts.indices.toSet()
         update(_state.value.let { s -> s.copy(selections = s.selections.replace(favIndex, if (s.selections[favIndex] == all) emptySet() else all)) })

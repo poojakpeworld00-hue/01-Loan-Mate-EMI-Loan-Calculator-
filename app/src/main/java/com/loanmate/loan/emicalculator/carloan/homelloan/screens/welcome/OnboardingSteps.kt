@@ -54,7 +54,7 @@ const val PERMISSION_HUB_KEY = "permission_hub"
 val INFO_STEPS = setOf(DEFAULT_HOME_KEY, WELCOME_KEY, PERMISSION_HUB_KEY)
 
 /** Phase 1, also reused by the Settings language screen: native name first, English-language name below. */
-fun tonguePhase(languages: List<Tongue>) =
+fun tongueStep(languages: List<Tongue>) =
     Phase(
         LANG_KEY, R.string.lang_title, R.string.lang_sub, R.string.step_lang,
         languages.map { l ->
@@ -64,7 +64,7 @@ fun tonguePhase(languages: List<Tongue>) =
 
 /** Every onboarding step (the 13 FFF questions + the launcher's set-as-default-home step); Remote Config picks and orders them. */
 fun setupPhases(languages: List<Tongue>): List<Phase> =
-    listOf(tonguePhase(languages)) + QUESTION_STEPS + listOf(WELCOME_STEP, PERMISSION_HUB_STEP, DEFAULT_HOME_STEP)
+    listOf(tongueStep(languages)) + QUESTION_STEPS + listOf(WELCOME_STEP, PERMISSION_HUB_STEP, DEFAULT_HOME_STEP)
 
 private val WELCOME_STEP = Phase(
     WELCOME_KEY, R.string.wl_title, R.string.wl_sub, R.string.step_welcome, defaultSel = emptySet(),

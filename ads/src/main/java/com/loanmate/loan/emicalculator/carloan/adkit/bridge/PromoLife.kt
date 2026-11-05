@@ -20,23 +20,23 @@ object PromoLife : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
-        NavLayer.onReturnFromOptions(activity)
-        keepEmbeddedWarm(activity)
+        NavLayer.onResultFromSettings(activity)
+        keepInlineWarm(activity)
     }
 
     /** Previous version kept a native ready in the background so screens find one at once (shared load, no spam). */
-    private fun keepEmbeddedWarm(activity: Activity) {
+    private fun keepInlineWarm(activity: Activity) {
         if (activity is com.loanmate.loan.emicalculator.carloan.adkit.draw.SponsorBrowserActivity) return
         val vault = com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoSettingsBox.getInstance(activity)
         if (!vault.getBoolean("IsAdsON") || !vault.getBoolean("NativeAd")) return
-        if (com.loanmate.loan.emicalculator.carloan.adkit.draw.InlinePromoRenderer.holdsCachedSpot()) return
-        runCatching { com.loanmate.loan.emicalculator.carloan.adkit.draw.InlinePromoRenderer().obtainEmbeddedSpots(activity) }
+        if (com.loanmate.loan.emicalculator.carloan.adkit.draw.InlinePromoRenderer.holdsCachedPromo()) return
+        runCatching { com.loanmate.loan.emicalculator.carloan.adkit.draw.InlinePromoRenderer().obtainInlinePromos(activity) }
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
     override fun onActivityStarted(activity: Activity) = Unit
     override fun onActivityPaused(activity: Activity) = Unit
-    override fun onActivityStopped(activity: Activity) = NavLayer.onToolCovered()
+    override fun onActivityStopped(activity: Activity) = NavLayer.onLoanCovered()
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
     override fun onActivityDestroyed(activity: Activity) = Unit
 }

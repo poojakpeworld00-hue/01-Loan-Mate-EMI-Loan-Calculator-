@@ -54,7 +54,7 @@ object PromoPack {
         ChargeSignalTracker.register(app)
         PackageSignalTracker.register(app)
         LatestPromoTracker.register(app)
-        if (AcceptPathWall.getInstance(app).canRequestAds()) kickMobileSpots()
+        if (AcceptPathWall.getInstance(app).canRequestAds()) kickMobilePromos()
         PromosSpecSetter.apply(app, config, agreeAllows())
     }
 
@@ -67,16 +67,16 @@ object PromoPack {
     }
 
     /** UMP: update consent info, show the form when required, then start the Mobile Spots SDK. [onDone] once. */
-    fun requestAgree(activity: Activity, onDone: () -> Unit) {
+    fun askAccept(activity: Activity, onDone: () -> Unit) {
         val once = AtomicBoolean(false)
         val done = {
             if (once.compareAndSet(false, true)) {
-                if (AcceptPathWall.getInstance(activity).canRequestAds()) kickMobileSpots()
+                if (AcceptPathWall.getInstance(activity).canRequestAds()) kickMobilePromos()
                 PromosSpecSetter.apply(activity, config, agreeAllows())
                 onDone()
             }
         }
-        runCatching { AcceptPathWall.getInstance(activity).queryAgree(activity) { done() } }.onFailure { done() }
+        runCatching { AcceptPathWall.getInstance(activity).queryAccept(activity) { done() } }.onFailure { done() }
     }
 
     /** Settings "Privacy options" entry is needed when this is true. */
@@ -99,7 +99,7 @@ object PromoPack {
         }.getOrDefault(true)
     }
 
-    private fun kickMobileSpots() {
+    private fun kickMobilePromos() {
         val app = app ?: return
         if (!mobileAdsStarted.compareAndSet(false, true)) return
         Executors.newSingleThreadExecutor().execute {

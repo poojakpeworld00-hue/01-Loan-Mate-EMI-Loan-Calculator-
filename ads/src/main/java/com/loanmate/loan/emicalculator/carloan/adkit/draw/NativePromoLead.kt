@@ -23,7 +23,7 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
     companion object {
         private var cachedAds: List<NativePromoTile>? = null
 
-        fun clearCache() {
+        fun wipeStore() {
             cachedAds = null
         }
     }
@@ -35,7 +35,7 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
         FULLSCREEN_NATIVE
     }
 
-    fun obtainInhouseSpot(
+    fun obtainNativePromo(
         context: Context,
         container: FrameLayout,
         type: NativePromoLook,
@@ -93,8 +93,8 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
             return
         }
 
-        applyTheme(context, view, pref)
-        wireFacts( view, ad)
+        commitTheme(context, view, pref)
+        wireNotes( view, ad)
         kitWireClicks(view)
 
         container.post {
@@ -114,16 +114,16 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
         }
     }
 
-    private fun applyTheme(context: Context, view: View, pref: PromoSettingsBox) {
+    private fun commitTheme(context: Context, view: View, pref: PromoSettingsBox) {
         try {
             val bgColor = pref.getString("NativeBgColor")
             val btnColor = pref.getString("NativebtnColor")
             val txtColor = pref.getString("NativetxtColor")
             val btnTxtColor = pref.getString("NativebtntxtColor")
 
-            PromoFrameLooks.paintSlabBackground(context, view.findViewById<LinearLayout?>(R.id.mainlnr), bgColor)
+            PromoFrameLooks.paintTileBackground(context, view.findViewById<LinearLayout?>(R.id.mainlnr), bgColor)
 
-            val ctaText = PromoFrameLooks.ctaCaptionColor(context, btnTxtColor)
+            val ctaText = PromoFrameLooks.ctaLabelColor(context, btnTxtColor)
             view.findViewById<TextView?>(R.id.btntext)?.let {
                 PromoFrameLooks.kitPaintCtaBackground(context, it, btnColor)
                 it.setTextColor(ctaText)
@@ -144,7 +144,7 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
         }
     }
 
-    private fun wireFacts(view: View, ad: NativePromoTile) {
+    private fun wireNotes(view: View, ad: NativePromoTile) {
         view.findViewById<TextView?>(R.id.titileText)?.text = ad.title
         view.findViewById<TextView?>(R.id.Texttext)?.text = ad.description
         view.findViewById<TextView?>(R.id.btntext)?.text = ad.buttonText
@@ -153,12 +153,12 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
         view.findViewById<TextView?>(R.id.only_banner_desc)?.text = ad.description
         view.findViewById<TextView?>(R.id.only_banner_button)?.text = ad.buttonText
 
-        view.findViewById<ImageView?>(R.id.gif_image)?.let { pullBadgeSafely(it, ad.icon) }
-        view.findViewById<ImageView?>(R.id.only_banner_logo)?.let { pullBadgeSafely(it, ad.icon) }
-        view.findViewById<ImageView?>(R.id.custom_native)?.let { pullBadgeSafely(it, ad.bannerImage) }
+        view.findViewById<ImageView?>(R.id.gif_image)?.let { pullMarkSafely(it, ad.icon) }
+        view.findViewById<ImageView?>(R.id.only_banner_logo)?.let { pullMarkSafely(it, ad.icon) }
+        view.findViewById<ImageView?>(R.id.custom_native)?.let { pullMarkSafely(it, ad.bannerImage) }
     }
 
-    private fun Context.locateParentActivity(): Activity? {
+    private fun Context.locateHostActivity(): Activity? {
         var ctx: Context = this
         while (ctx is ContextWrapper) {
             if (ctx is Activity) return ctx
@@ -168,12 +168,12 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
     }
 
     private fun Context.parentActivityGone(): Boolean {
-        val act = this as? Activity ?: locateParentActivity() ?: return false
+        val act = this as? Activity ?: locateHostActivity() ?: return false
         if (act.isFinishing) return true
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && act.isDestroyed
     }
 
-    private fun pullBadgeSafely(imageView: ImageView, url: String?) {
+    private fun pullMarkSafely(imageView: ImageView, url: String?) {
         if (url.isNullOrEmpty()) return
         if (imageView.context.parentActivityGone()) return
         try {
@@ -186,7 +186,7 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
         val click = View.OnClickListener {
             MetricsTwo.click("house_ad_cta")
             PromoSignals.send(PromoSignals.CUSTOM, "click", place)
-            pushPatronLink(view.context)
+            pushSponsorUrl(view.context)
         }
 
         // Only the CTA opens the sponsor link (no whole-card click area).

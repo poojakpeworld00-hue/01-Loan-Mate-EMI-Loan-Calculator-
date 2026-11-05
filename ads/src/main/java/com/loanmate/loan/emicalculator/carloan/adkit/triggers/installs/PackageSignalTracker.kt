@@ -54,9 +54,9 @@ object PackageSignalTracker {
 
     /** Caches labels / icons of installed apps for the uninstall screen, only while `app_uninstalled` is on. */
     internal fun kitSeedIfNeeded(app: Context) {
-        if (seeded || !Spots.kitPlaceOn(Spots.APP_UNINSTALLED)) return
+        if (seeded || !Spots.kitSlotOn(Spots.APP_UNINSTALLED)) return
         seeded = true
-        thread { PackageInfoStore.kitSeedAll(app) }
+        thread { PackageInfoStore.kitSeedEvery(app) }
     }
 
     private object Receiver : BroadcastReceiver() {
@@ -112,7 +112,7 @@ object PackageSignalTracker {
 
     private fun kitGatesPass(context: Context, installed: Boolean): Boolean {
         val placeKey = if (installed) Spots.APP_INSTALLED else Spots.APP_UNINSTALLED
-        if (!Spots.kitPlaceOn(placeKey)) return false
+        if (!Spots.kitSlotOn(placeKey)) return false
         val gapSec = (PromoPack.config.places[placeKey]?.int("gap_sec") ?: 0).toLong()
         val passed = SlotChecks.kitGapPassed(prefs(context).getLong(KEY_LAST_SHOWN, 0L), gapSec, System.currentTimeMillis())
         if (!passed) Log.d(TAG, "throttled (gap_sec $gapSec)")
@@ -127,7 +127,7 @@ object PackageSignalTracker {
         }
     }
 
-    private fun takePending(context: Context): Pair<Boolean, String>? {
+    private fun takeQueued(context: Context): Pair<Boolean, String>? {
         val store = prefs(context)
         val pkg = store.getString(KEY_PACKAGE, null) ?: return null
         val installed = store.getBoolean(KEY_INSTALLED, true)
@@ -145,7 +145,7 @@ object PackageSignalTracker {
             if (activity is PackageResultActivity) return
             resumed = WeakReference(activity)
 
-            val (installed, pkg) = takePending(activity.applicationContext) ?: return
+            val (installed, pkg) = takeQueued(activity.applicationContext) ?: return
             runCatching {
                 if (kitGatesPass(activity.applicationContext, installed)) fire(activity, installed, pkg)
             }.onFailure { Log.w(TAG, "drain($pkg) failed", it); PromoPack.onError(it, "package.drain") }

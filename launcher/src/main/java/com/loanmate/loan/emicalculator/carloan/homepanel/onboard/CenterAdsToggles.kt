@@ -14,7 +14,7 @@ object CenterAdsToggles {
     const val KEY_PANEL_BOTTOM = "apps_panel"
     const val KEY_APP_DRAWER = "app_drawer"
 
-    fun guidePhaseEnabled(step: CenterTourStop): Boolean {
+    fun guideStepEnabled(step: CenterTourStop): Boolean {
         val guide = Launcher.settings().swipeGuide
         if (!guide.on) return false
         return when (step) {
@@ -31,5 +31,5 @@ object CenterAdsToggles {
     }
 
     /** App rows above the drawer ad (ads.launcher.app_drawer.bottom_ad_row). */
-    fun rackAdvertRowPoint(): Int = Launcher.settings().drawerAdRow
+    fun rackAdvertRowSpot(): Int = Launcher.settings().drawerAdRow
 }

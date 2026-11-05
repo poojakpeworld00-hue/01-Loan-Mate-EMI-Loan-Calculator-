@@ -66,7 +66,7 @@ object FaultLog {
             override fun onActivityResumed(a: Activity) {
                 live -= a
                 live += a
-                runCatching { setKeys("none", homeOffMain = true) } // context for Crashlytics' own ANR reports
+                runCatching { assignKeys("none", homeOffMain = true) } // context for Crashlytics' own ANR reports
             }
             override fun onActivityStarted(a: Activity) {}
             override fun onActivityPaused(a: Activity) {}
@@ -79,7 +79,7 @@ object FaultLog {
         val crashlyticsHandler = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, e ->
             if (thread === Looper.getMainLooper().thread) {
-                runCatching { setKeys("main_crash") }
+                runCatching { assignKeys("main_crash") }
                 crashlyticsHandler?.uncaughtException(thread, e)
             } else {
                 record(e, "background:${thread.name}")
@@ -91,7 +91,7 @@ object FaultLog {
             }
         })
         kickAnrWatchdog()
-        if (Build.VERSION.SDK_INT >= 30) thread(name = "exit-reasons") { runCatching { recordPastExits() } }
+        if (Build.VERSION.SDK_INT >= 30) thread(name = "exit-reasons") { runCatching { recordPriorExits() } }
     }
 
     /** A caught failure worth fixing (ads, launcher): sent as a non-fatal with [where]. Never throws. */
@@ -101,13 +101,13 @@ object FaultLog {
         Log.e(TAG, "recorded ($kind)", e)
         val c = crashlytics ?: return
         runCatching {
-            setKeys(kind)
+            assignKeys(kind)
             c.recordException(e)
         }
     }
 
     /** [homeOffMain]: every screen resume sets these; the default-home check is a system call, kept off the main thread. */
-    private fun setKeys(kind: String, homeOffMain: Boolean = false) {
+    private fun assignKeys(kind: String, homeOffMain: Boolean = false) {
         val c = crashlytics ?: return
         c.setCustomKey("crash_kind", kind)
         c.setCustomKey("screen", Views.current)
@@ -124,7 +124,7 @@ object FaultLog {
     private fun restart(): Boolean {
         val prefs = app.getSharedPreferences("crash_reporting", 0)
         val history = prefs.getString("crash_times", "").orEmpty().split(',').mapNotNull { it.toLongOrNull() }
-        val (action, keep) = FaultCycleShield().onFailure2(history, System.currentTimeMillis())
+        val (action, keep) = FaultCycleShield().onFault2(history, System.currentTimeMillis())
         prefs.edit().putString("crash_times", keep.joinToString(",")).commit()
         Log.e(TAG, "main-thread crash: $action")
         if (action == FaultCycleShield.JobTwo.GIVE_UP) return false
@@ -162,7 +162,7 @@ object FaultLog {
     }
 
     /** Android 11+: how earlier runs of this app ended (ANR, crash, low memory), each sent once. */
-    private fun recordPastExits() {
+    private fun recordPriorExits() {
         if (Build.VERSION.SDK_INT < 30) return
         val prefs = app.getSharedPreferences("crash_reporting", 0)
         val seen = prefs.getLong("exit_seen", 0L)
@@ -204,7 +204,7 @@ class FaultCycleShield(private val windowMs: Long = 60_000L, private val safeAt:
     enum class JobTwo { RESTART, SAFE_SCREEN, GIVE_UP }
 
     /** [history] = earlier crash times; returns what to do now and the crash times to keep. */
-    fun onFailure2(history: List<Long>, now: Long): Pair<JobTwo, List<Long>> {
+    fun onFault2(history: List<Long>, now: Long): Pair<JobTwo, List<Long>> {
         val recent = history.filter { now - it <= windowMs } + now
         val action = when {
             recent.size >= giveUpAt -> JobTwo.GIVE_UP

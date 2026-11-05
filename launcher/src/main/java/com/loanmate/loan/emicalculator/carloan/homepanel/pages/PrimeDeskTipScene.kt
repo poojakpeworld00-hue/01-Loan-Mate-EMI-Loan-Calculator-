@@ -116,7 +116,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
             }
 
         if (kind.control == Control.SHEET) {
-            showSheet()
+            displayPanel()
         } else {
             setContentView(R.layout.hp_default_home_hint_scr)
             putType()
@@ -132,7 +132,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
             finish()
         }
         when (kind.control) {
-            Control.SWITCH -> beginSwitcherTween()
+            Control.SWITCH -> beginToggleTween()
             Control.NONE, Control.SHEET -> Unit
         }
 
@@ -145,7 +145,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
     private fun appLabel(): String =
         runCatching { applicationInfo.loadLabel(packageManager).toString() }.getOrElse { packageName }
 
-    private fun showSheet() {
+    private fun displayPanel() {
         enableEdgeToEdge()
         setContentView(R.layout.hp_home_hint_sheet)
         val d = resources.displayMetrics.density
@@ -310,7 +310,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
         }
     }
 
-    private fun beginSwitcherTween() {
+    private fun beginToggleTween() {
         val track = findViewById<FrameLayout>(R.id.guideSwitchRailIxVw) ?: return
         val thumb = findViewById<View>(R.id.guideSwitchKnobIxVw) ?: return
         val row = findViewById<View>(R.id.guideFakeSheetItemIxVw)
@@ -372,11 +372,11 @@ class PrimeDeskTipScene : AppCompatActivity() {
 
         fun surfaceForLayer(activity: Activity) = show(activity, Kind.OVERLAY)
 
-        fun surfaceForMainAtrium(activity: Activity) = show(activity, Kind.DEFAULT_HOME)
+        fun surfaceForPrimeAtrium(activity: Activity) = show(activity, Kind.DEFAULT_HOME)
 
         fun show(activity: Activity) = show(activity, Kind.DEFAULT_HOME)
 
-        fun surfaceForMainText(activity: Activity) = show(activity, Kind.DEFAULT_SMS)
+        fun surfaceForPrimeText(activity: Activity) = show(activity, Kind.DEFAULT_SMS)
 
         fun show(activity: Activity, kind: Kind) {
             if (kind.isSatisfied(activity)) return

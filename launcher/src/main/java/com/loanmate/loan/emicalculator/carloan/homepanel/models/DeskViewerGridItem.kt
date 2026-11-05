@@ -61,7 +61,7 @@ data class DeskViewerGridItem(
         }
     }
 
-    fun pullDockAdjustedBottom(rowCount: Int): Int {
+    fun pullDockAdjustedFoot(rowCount: Int): Int {
         return if (!docked) {
             bottom
         } else {
@@ -71,5 +71,5 @@ data class DeskViewerGridItem(
 
     fun pullCellIdentifier() = "$packageName/$activityName"
 
-    fun getTopLeft(rowCount: Int) = Point(left, pullDockAdjustedTop(rowCount))
+    fun obtainTopLeft(rowCount: Int) = Point(left, pullDockAdjustedTop(rowCount))
 }

@@ -45,7 +45,7 @@ class ExitPromoPath(
 
     fun start() {
         if (!config.on || !exit.on) return finish()
-        if (PromoStep.LINK in exit.ads) runSpot(0) else openLinks { runSpot(0) }
+        if (PromoStep.LINK in exit.ads) runPromo(0) else openLinks { runPromo(0) }
     }
 
     /** Ends the flow now (e.g. its activity finished); later callbacks are ignored. */
@@ -65,17 +65,17 @@ class ExitPromoPath(
     }
 
     private fun openLinks(then: () -> Unit) {
-        val links = config.kitLinksFor(exit)
+        val links = config.kitUrlsFor(exit)
         if (links.isEmpty()) then() else source.openLinks(links) { if (!stopped()) then() }
     }
 
-    private fun runSpot(i: Int) {
+    private fun runPromo(i: Int) {
         if (stopped()) return
         if (i >= exit.ads.size) return finish()
-        if (exit.ads[i] == PromoStep.LINK) return openLinks { runSpot(i + 1) }
+        if (exit.ads[i] == PromoStep.LINK) return openLinks { runPromo(i + 1) }
         // show_all false stops the ads, but links always open: a later `link` step still runs.
-        val shown = { if (config.presentAllFor(exit)) runSpot(i + 1) else if (PromoStep.LINK in exit.ads.drop(i + 1)) openLinks(::finish) else finish() }
-        trySpot(exit.ads[i], shown) { fallback(0, shown) { runSpot(i + 1) } }
+        val shown = { if (config.presentEveryFor(exit)) runPromo(i + 1) else if (PromoStep.LINK in exit.ads.drop(i + 1)) openLinks(::finish) else finish() }
+        attemptPromo(exit.ads[i], shown) { fallback(0, shown) { runPromo(i + 1) } }
     }
 
     /** if_ad_not_ready: the first item that shows ends the fallback; none shows → [none]. */
@@ -85,7 +85,7 @@ class ExitPromoPath(
         if (j >= items.size) return none()
         val next = { fallback(j + 1, shown, none) }
         when (val item = items[j]) {
-            is BackupStep.Spot -> trySpot(item.step, shown, next)
+            is BackupStep.Spot -> attemptPromo(item.step, shown, next)
             BackupStep.LaunchUrl -> {
                 val url = (exit.links?.takeIf { it.isNotEmpty() } ?: config.links).firstOrNull()
                 if (url == null) next() else source.openLinks(listOf(url)) { if (!stopped()) shown() }
@@ -94,8 +94,8 @@ class ExitPromoPath(
         }
     }
 
-    private fun trySpot(step: PromoStep, onShown: () -> Unit, onNotReady: () -> Unit) {
-        if (!kitFormatOn(config, step)) return onNotReady()
+    private fun attemptPromo(step: PromoStep, onShown: () -> Unit, onNotReady: () -> Unit) {
+        if (!kitShapeOn(config, step)) return onNotReady()
         var settled = false
         source.show(
             step,
@@ -106,7 +106,7 @@ class ExitPromoPath(
 
     companion object {
         /** A format switched off in `formats_on` (or any Google format with network=custom) counts as not ready. */
-        fun kitFormatOn(config: PromosSpec, step: PromoStep): Boolean {
+        fun kitShapeOn(config: PromosSpec, step: PromoStep): Boolean {
             if (step == PromoStep.CUSTOM) return config.customAds.on && config.customAds.list.isNotEmpty()
             if (config.network == PromoNet.CUSTOM) return false
             return when (step) {
@@ -138,7 +138,7 @@ object SlotChecks {
         if (storedDay == today) storedCount else 0
 
     /** phone_unlock: `start_after_hours` after install, `gap_minutes` between two, at most `max_per_day`. */
-    fun openAllowed(
+    fun launchAllowed(
         nowMs: Long,
         installMs: Long,
         startAfterHours: Long,

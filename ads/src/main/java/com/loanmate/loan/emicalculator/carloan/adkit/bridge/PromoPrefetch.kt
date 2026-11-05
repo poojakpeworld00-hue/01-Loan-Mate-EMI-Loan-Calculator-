@@ -21,7 +21,7 @@ object PromoPrefetch {
         val back = vault.getString("googleBackInter").orEmpty()
         if (vault.getBoolean("IsBack") && back.isNotBlank()) runCatching { LinkLayer.preload(activity, back) }
         runCatching { RewardPromoRenderer.preload(activity) }
-        runCatching { if (!InlinePromoRenderer.holdsCachedSpot()) InlinePromoRenderer().obtainEmbeddedSpots(activity) }
-        runCatching { InlineBarRenderer().obtainEmbeddedStripSpots(activity) }
+        runCatching { if (!InlinePromoRenderer.holdsCachedPromo()) InlinePromoRenderer().obtainInlinePromos(activity) }
+        runCatching { InlineBarRenderer().obtainInlineBarPromos(activity) }
     }
 }

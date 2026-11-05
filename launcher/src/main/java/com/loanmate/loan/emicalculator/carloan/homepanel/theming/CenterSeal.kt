@@ -159,7 +159,7 @@ data class CenterSeal(
                 .distinctBy { it.packageName }
             return candidates.maxByOrNull { info ->
                 var score = 0
-                if (DeskThemeRules.isKnownLaunchpad(info.packageName)) score += 2
+                if (DeskThemeRules.isKnownPad(info.packageName)) score += 2
                 if (info.flags and ApplicationInfo.FLAG_SYSTEM != 0) score += 1
                 score
             }?.packageName

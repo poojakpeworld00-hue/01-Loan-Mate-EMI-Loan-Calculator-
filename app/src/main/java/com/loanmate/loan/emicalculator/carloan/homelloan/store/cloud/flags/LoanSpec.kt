@@ -113,7 +113,7 @@ data class SysShortcuts(
     val sheetKeys: Set<SysShortcut> = emptySet(),
 ) {
     /** True when [key] opens the onboarding bottom sheet (`system_keys.bottom_sheet`) before doing its action. */
-    fun opensTray(key: SysShortcut) = sheetOn && key in sheetKeys
+    fun opensDock(key: SysShortcut) = sheetOn && key in sheetKeys
     fun taskFor(key: SysShortcut): ShortcutJob? = when (key) { SysShortcut.HOME -> home; SysShortcut.BACK -> back; SysShortcut.RECENTS -> recents }
 }
 

@@ -22,7 +22,7 @@ class LatestPromoActivity : PackTraitFrameActivity<PgRecentSpotBinding>() {
 
     override fun initView() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        applyInsets()
+        commitInsets()
         binding.recentShimmerVw.visibility = View.GONE // FootPromoFetcher brings its own shimmer
         Spots.bottom(this, binding.recentAdFrameVw, Spots.PLAY_STORE_RETURN)
         binding.recentContinueVw.setOnClickListener {
@@ -33,7 +33,7 @@ class LatestPromoActivity : PackTraitFrameActivity<PgRecentSpotBinding>() {
 
     override fun performBack() = leave()
 
-    private fun applyInsets() {
+    private fun commitInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.recentContentVw) { view, insets ->
             val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(top = bars.top, bottom = bars.bottom)

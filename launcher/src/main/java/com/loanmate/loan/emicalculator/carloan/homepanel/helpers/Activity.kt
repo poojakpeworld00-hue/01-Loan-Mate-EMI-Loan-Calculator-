@@ -36,7 +36,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.specs.ItemSettingsKeepe
 import com.loanmate.loan.emicalculator.carloan.homepanel.overlays.ItemMovesPanel
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.DeskViewerGridItem
 
-fun Activity.reviveNavigationBand() {
+fun Activity.reviveNavStrip() {
     val decorView = window.decorView
 
     @Suppress("DEPRECATION")
@@ -51,19 +51,19 @@ fun Activity.reviveNavigationBand() {
         .show(WindowInsetsCompat.Type.systemBars())
 }
 
-fun Activity.fireApplet(packageName: String, activityName: String) {
-    if (packageName == applicationContext.packageName) return fireAppletNow(packageName, activityName)
+fun Activity.emitApplet(packageName: String, activityName: String) {
+    if (packageName == applicationContext.packageName) return emitAppletNow(packageName, activityName)
     com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterDealBroker.run(
         this,
         com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterAdsToggles.APP_LAUNCH,
         packageName,
     ) {
         com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterDealBroker.away = com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterDealBroker.Away.APP
-        fireAppletNow(packageName, activityName)
+        emitAppletNow(packageName, activityName)
     }
 }
 
-fun Activity.fireAppletNow(packageName: String, activityName: String) {
+fun Activity.emitAppletNow(packageName: String, activityName: String) {
     try {
         Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
@@ -87,14 +87,14 @@ fun Activity.fireAppletNow(packageName: String, activityName: String) {
     }
 }
 
-fun Activity.fireAppletInfo(packageName: String) {
+fun Activity.emitAppletInfo(packageName: String) {
     Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         data = Uri.fromParts("package", packageName, null)
         runCatching { startActivity(this) }.onFailure { android.util.Log.w("Launcher", "app info failed", it) }
     }
 }
 
-fun Activity.promptAssignAsMainHomebase() {
+fun Activity.promptAssignAsPrimeHomebase() {
     CenterSeal.guaranteeCaptured(this)
 
     val intents = buildList<Pair<Intent, Boolean>> {
@@ -142,7 +142,7 @@ fun Activity.deleteApplet(packageName: String) {
     (this as? com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene)?.watchDelete(packageName)
 }
 
-fun Activity.processGridCellOverlayTweaks(
+fun Activity.processLatticeCellLayerTweaks(
     anchorView: View,
     gridItem: DeskViewerGridItem,
     isOnAllAppsFragment: Boolean,

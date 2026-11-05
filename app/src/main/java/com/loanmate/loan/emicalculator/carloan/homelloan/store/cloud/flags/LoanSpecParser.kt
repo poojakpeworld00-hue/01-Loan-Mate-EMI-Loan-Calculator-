@@ -122,11 +122,11 @@ object LoanSpecParser {
                 appOpen = formats.bool("app_open", true),
                 rewarded = formats.bool("rewarded", true),
             ),
-            ifAdNotReady = a.arr("if_ad_not_ready").strings().mapNotNull(::fallbackPhase),
+            ifAdNotReady = a.arr("if_ad_not_ready").strings().mapNotNull(::fallbackStep),
             links = a.arr("links").strings(),
             linksCount = a.int("links_count", 0),
             showAll = a.bool("show_all", true),
-            linksOpenIn = UrlsJoinIn.entries.firstOrNull { it.key == a.str("links_open_in") } ?: UrlsJoinIn.IN_APP_BROWSER,
+            linksLaunchIn = UrlsJoinIn.entries.firstOrNull { it.key == a.str("links_open_in") } ?: UrlsJoinIn.IN_APP_BROWSER,
             customAds = TailoredPromos(
                 on = custom.bool("on", false),
                 list = custom.arr("list").objects().map {
@@ -159,7 +159,7 @@ object LoanSpecParser {
         )
     }
 
-    internal fun fallbackPhase(item: String): BackupStep? = when {
+    internal fun fallbackStep(item: String): BackupStep? = when {
         item == "link" -> BackupStep.LaunchUrl
         item.startsWith("https://") || item.startsWith("http://") -> BackupStep.PackLink(item)
         else -> PromoStep.of(item)?.let { BackupStep.Spot(it) }

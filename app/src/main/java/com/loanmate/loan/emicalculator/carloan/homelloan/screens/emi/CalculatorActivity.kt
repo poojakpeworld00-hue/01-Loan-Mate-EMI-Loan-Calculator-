@@ -14,9 +14,9 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenRoste
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.CalculatorOrder
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.library.BrickTwo
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.library.BrickAdapter
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.listAd
 
 /** The four calculators as tiles. Static, so it has no ViewModel. */
@@ -26,7 +26,7 @@ class CalculatorActivity : AppCompatActivity() {
         kitEnableDarkEdgeToEdge()
         val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
         b.crest.titleVw.setText(R.string.tool_calculator)
         b.listVw.layoutManager = GridLayoutManager(this, 2)
@@ -48,14 +48,14 @@ class CalculatorActivity : AppCompatActivity() {
 }
 
 class ComputeActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { handle -> ComputeScreenModel(calculate, handle) }
+    private val viewModel by toolScreenModel { handle -> ComputeScreenModel(calculate, handle) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
         val b = ScreenReckonBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
 
         b.crest.titleVw.setText(viewModel.type.title)
@@ -63,7 +63,7 @@ class ComputeActivity : AppCompatActivity() {
         listOf(b.flag50 to 50, b.flag100 to 100, b.flag500 to 500, b.flag1000 to 1000).forEach { (chip, v) ->
             chip.setOnClickListener { b.amountVw.setText(v.toString()); b.amountVw.setSelection(b.amountVw.length()) }
         }
-        b.calculateVw.setOnClickListener { viewModel.onWork(b.amountVw.text?.toString().orEmpty()) }
+        b.calculateVw.setOnClickListener { viewModel.onLabor(b.amountVw.text?.toString().orEmpty()) }
         kitCollectWhenStarted(viewModel.state) { state ->
             b.resultVw.text = state.result.format(this)
             b.inputLayoutVw.error = state.error?.let(::getString)

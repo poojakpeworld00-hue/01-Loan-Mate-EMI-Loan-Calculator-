@@ -15,7 +15,7 @@ object FeaturedCards {
 
     private val tiles = HashMap<String, PartnerProg>()
 
-    fun isSponsored(item: WidgetCenter) = item.packageName.startsWith(PACKAGE_PREFIX)
+    fun isPartner(item: WidgetCenter) = item.packageName.startsWith(PACKAGE_PREFIX)
 
     fun logo(item: WidgetCenter): String = tiles[item.packageName]?.logo.orEmpty()
 

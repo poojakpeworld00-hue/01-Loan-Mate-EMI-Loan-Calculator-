@@ -34,15 +34,15 @@ object FootPromoFetcher {
         val config = PromoPack.config
         PromoBayWall.open(container)
         // Banners and natives in this slot are paused / destroyed with the screen.
-        PromoBayWall.dismissWithView(activity, container)
+        PromoBayWall.dismissWithScreen(activity, container)
         container.setOnHierarchyChangeListener(null)
         if (!PromoPack.spotsOn() || !slot.on) return collapse(container)
-        kitEdgeToEdge(container, isBand(slot.type))
-        PromosSpecSetter.kitWritePalette(activity, config)
+        kitEdgeToEdge(container, isStrip(slot.type))
+        PromosSpecSetter.kitPutSwatch(activity, config)
 
         val customOn = config.customAds.on && config.customAds.list.isNotEmpty()
-        if (config.network == PromoNet.CUSTOM || !kitFormatOn(slot.type)) {
-            return if (customOn) showCustom(activity, container, slot.type, placeKey) else collapse(container)
+        if (config.network == PromoNet.CUSTOM || !kitShapeOn(slot.type)) {
+            return if (customOn) displayTailored(activity, container, slot.type, placeKey) else collapse(container)
         }
 
         val shimmer = kitShimmerFor(activity, slot.type)
@@ -61,13 +61,13 @@ object FootPromoFetcher {
             override fun onChildViewRemoved(parent: View?, child: View?) = Unit
         })
         wait.start {
-            PromoSignals.send(if (isBand(slot.type)) PromoSignals.BANNER else PromoSignals.NATIVE, "timeout", placeKey)
+            PromoSignals.send(if (isStrip(slot.type)) PromoSignals.BANNER else PromoSignals.NATIVE, "timeout", placeKey)
             if (activity.isFinishing || activity.isDestroyed) return@start
             PromoBayWall.close(container) // a late banner is dropped, not stacked over the card
             PromoBayWall.open(container)
-            if (customOn) showCustom(activity, container, slot.type, placeKey) else collapse(container)
+            if (customOn) displayTailored(activity, container, slot.type, placeKey) else collapse(container)
         }
-        val onFail = slot.onFail?.takeIf { isBand(slot.type) && !isBand(it) && kitFormatOn(it) }
+        val onFail = slot.onFail?.takeIf { isStrip(slot.type) && !isStrip(it) && kitShapeOn(it) }
         render(activity, container, shimmer, slot.type, placeKey, onFail) { !wait.timedOut }
     }
 
@@ -80,12 +80,12 @@ object FootPromoFetcher {
         container.layoutParams = lp
     }
 
-    private fun isBand(type: BayOrder) =
+    private fun isStrip(type: BayOrder) =
         type == BayOrder.BANNER || type == BayOrder.BANNER_INLINE || type == BayOrder.BANNER_COLLAPSIBLE
 
-    private fun kitFormatOn(type: BayOrder) = PromoPack.config.formatsOn.let {
+    private fun kitShapeOn(type: BayOrder) = PromoPack.config.formatsOn.let {
         when {
-            isBand(type) -> it.banner
+            isStrip(type) -> it.banner
             type == BayOrder.NATIVE_BANNER -> it.nativeBanner
             else -> it.native
         }
@@ -102,7 +102,7 @@ object FootPromoFetcher {
         stillWanted: () -> Boolean,
     ) {
         when (type) {
-            BayOrder.BANNER, BayOrder.BANNER_INLINE, BayOrder.BANNER_COLLAPSIBLE -> StripRenderer(placeKey).presentBand(
+            BayOrder.BANNER, BayOrder.BANNER_INLINE, BayOrder.BANNER_COLLAPSIBLE -> StripRenderer(placeKey).presentStrip(
                 activity = activity,
                 container = container,
                 type = StripLook.AUTO,
@@ -121,19 +121,19 @@ object FootPromoFetcher {
                 },
                 disableInternalFallback = onFail != null,
             )
-            BayOrder.NATIVE_BANNER -> InlineBarRenderer(placeKey).presentEmbeddedStrip(activity, container, shimmer)
+            BayOrder.NATIVE_BANNER -> InlineBarRenderer(placeKey).presentInlineBar(activity, container, shimmer)
             else -> {
                 val native = InlinePromoRenderer(placeKey)
                 val paint: () -> Unit = {
                     if (stillWanted() && !activity.isFinishing && !activity.isDestroyed) when (type) {
-                        BayOrder.NATIVE_BIG -> native.presentLargeEmbedded(activity, container, shimmer)
-                        BayOrder.NATIVE_MID -> native.presentMediumEmbedded(activity, container, shimmer)
-                        BayOrder.NATIVE_MID2 -> native.presentMediumEmbeddedAlt(activity, container, shimmer)
-                        else -> native.presentFullEmbedded(activity, container, onClose = { collapse(container) }, shimmer)
+                        BayOrder.NATIVE_BIG -> native.presentLargeInline(activity, container, shimmer)
+                        BayOrder.NATIVE_MID -> native.presentMediumInline(activity, container, shimmer)
+                        BayOrder.NATIVE_MID2 -> native.presentMediumInlineAlt(activity, container, shimmer)
+                        else -> native.presentWholeInline(activity, container, onClose = { collapse(container) }, shimmer)
                     }
                 }
                 // MSG-06 ScreenPromoMapper.presentNative: no native cached yet → load one, render when it arrives.
-                if (InlinePromoRenderer.holdsCachedSpot()) paint() else native.obtainEmbeddedSpots(
+                if (InlinePromoRenderer.holdsCachedPromo()) paint() else native.obtainInlinePromos(
                     activity,
                     object : InlinePromoRenderer.InlinePromoTracker {
                         override fun onNativeAdLoaded() = paint()
@@ -145,18 +145,18 @@ object FootPromoFetcher {
         }
     }
 
-    private fun showCustom(activity: Activity, container: FrameLayout, type: BayOrder, placeKey: String) {
+    private fun displayTailored(activity: Activity, container: FrameLayout, type: BayOrder, placeKey: String) {
         val style = when (type) {
             BayOrder.NATIVE_BIG -> NativePromoLead.NativePromoLook.BIG_NATIVE
             BayOrder.NATIVE_MID, BayOrder.NATIVE_MID2 -> NativePromoLead.NativePromoLook.MID_NATIVE
             BayOrder.NATIVE_FULL -> NativePromoLead.NativePromoLook.FULLSCREEN_NATIVE
             else -> NativePromoLead.NativePromoLook.BANNER
         }
-        NativePromoLead(placeKey).obtainInhouseSpot(activity, container, style)
+        NativePromoLead(placeKey).obtainNativePromo(activity, container, style)
     }
 
     private fun collapse(container: FrameLayout) {
-        PromoBayWall.destroySpots(container)
+        PromoBayWall.destroyPromos(container)
         container.removeAllViews()
         container.minimumHeight = 0
         container.visibility = View.GONE

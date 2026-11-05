@@ -7,13 +7,13 @@ import org.junit.Test
 class PromoSignalsTest {
     @Test
     fun kitErrorCode3IsNoFillOthersFailed() {
-        assertEquals("no_fill", PromoSignals.failPhase(3))
-        assertEquals("failed", PromoSignals.failPhase(0))
-        assertEquals("failed", PromoSignals.failPhase(2))
+        assertEquals("no_fill", PromoSignals.failStep(3))
+        assertEquals("failed", PromoSignals.failStep(0))
+        assertEquals("failed", PromoSignals.failStep(2))
     }
 
     @Test
-    fun engineLabelsMapToFirebaseSpotFormat() {
+    fun engineLabelsMapToFirebasePromoShape() {
         mapOf(
             "banner" to "banner",
             "native_big" to "native", "native_medium2" to "native", "native_full_unit" to "native", "native_strip" to "native",
@@ -24,7 +24,7 @@ class PromoSignalsTest {
     }
 
     @Test
-    fun outPhasesMapToSpotFormat() {
+    fun outPhasesMapToPromoShape() {
         assertEquals("inter", PromoSignals.formatOf(PromoStep.INTER))
         assertEquals("rewarded", PromoSignals.formatOf(PromoStep.REWARDED))
         assertEquals("app_open", PromoSignals.formatOf(PromoStep.APP_OPEN))

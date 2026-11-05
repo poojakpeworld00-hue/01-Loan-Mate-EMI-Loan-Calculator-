@@ -59,10 +59,10 @@ object LaunchPromoTracker {
         )
     }
 
-    internal fun onOpen2(context: Context) {
+    internal fun onLaunch2(context: Context) {
         if (!eligible(context)) return
         val top = front.get()
-        if (top != null && isBase(top) && !top.isFinishing && !top.isDestroyed) {
+        if (top != null && isRoot(top) && !top.isFinishing && !top.isDestroyed) {
             present(top)
         } else {
             unlockedAt = SystemClock.uptimeMillis()
@@ -73,15 +73,15 @@ object LaunchPromoTracker {
      * The launcher came back because the phone was just unlocked and the unlock ad is due: it takes this moment, so
      * `launcher.app_resume` stays quiet instead of covering it (both would land on the same screen at the same time).
      */
-    internal fun claimsProceed(activity: Activity): Boolean {
+    internal fun claimsAdvance(activity: Activity): Boolean {
         val recent = screenOnAt != 0L && SystemClock.uptimeMillis() - screenOnAt <= SCREEN_ON_MS
         screenOnAt = 0L
         // Also when the unlock ad already ran for this screen-on: the app-open must not follow straight after it.
         val justShown = shownAt != 0L && SystemClock.uptimeMillis() - shownAt <= SCREEN_ON_MS
-        return recent && isBase(activity) && (justShown || eligible(activity))
+        return recent && isRoot(activity) && (justShown || eligible(activity))
     }
 
-    private fun isBase(activity: Activity) = runCatching { PromoPack.isHomeScreen(activity) }.getOrDefault(false) &&
+    private fun isRoot(activity: Activity) = runCatching { PromoPack.isHomeScreen(activity) }.getOrDefault(false) &&
         !activity.javaClass.name.startsWith("com.loanmate.loan.emicalculator.carloan.adkit.")
 
     private fun present(activity: Activity) {
@@ -96,11 +96,11 @@ object LaunchPromoTracker {
     }
 
     private fun eligible(context: Context): Boolean = runCatching {
-        if (!Spots.kitPlaceOn(Spots.PHONE_UNLOCK) || !Spots.outOn(Spots.PHONE_UNLOCK)) return false
+        if (!Spots.kitSlotOn(Spots.PHONE_UNLOCK) || !Spots.outOn(Spots.PHONE_UNLOCK)) return false
         val place = PromoPack.config.places[Spots.PHONE_UNLOCK] ?: return false
         val pref = PromoSettingsBox.getInstance(context)
         val installed = context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime
-        SlotChecks.openAllowed(
+        SlotChecks.launchAllowed(
             nowMs = System.currentTimeMillis(),
             installMs = installed,
             startAfterHours = place.int("start_after_hours", 24).toLong(),
@@ -127,7 +127,7 @@ object LaunchPromoTracker {
     private object PackLogger : Application.ActivityLifecycleCallbacks {
         override fun onActivityResumed(activity: Activity) {
             front = WeakReference(activity)
-            if (unlockedAt == 0L || !isBase(activity)) return
+            if (unlockedAt == 0L || !isRoot(activity)) return
             val fresh = SystemClock.uptimeMillis() - unlockedAt <= FRESH_MS
             unlockedAt = 0L
             if (fresh && eligible(activity)) present(activity)

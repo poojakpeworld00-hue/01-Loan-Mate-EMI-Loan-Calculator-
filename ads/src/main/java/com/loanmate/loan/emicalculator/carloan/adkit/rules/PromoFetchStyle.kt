@@ -40,7 +40,7 @@ object PromoFetchStyle {
     }
 
     /** Places whose own `preload` is true: their interstitial is warmed ahead even in on-load mode. */
-    fun kitInterPreloadPlaces(context: Context): List<String> =
+    fun kitInterPrefetchPlaces(context: Context): List<String> =
         PromoPieceKeys.kitPlacementNames(context).filter { place ->
             PromoPieceKeys.own(context, place, PLACE_KEY)?.trim()?.lowercase() == "true"
         }

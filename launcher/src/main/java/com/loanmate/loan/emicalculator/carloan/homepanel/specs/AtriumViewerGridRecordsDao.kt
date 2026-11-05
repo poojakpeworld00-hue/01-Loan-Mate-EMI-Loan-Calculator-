@@ -4,9 +4,9 @@ import androidx.room.*
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.DeskViewerGridItem
 
 @Dao
-interface atriumViewerGridRecordsDao {
+interface atriumViewerLatticeLogsDao {
     @Query("SELECT * FROM home_screen_grid_items")
-    fun pullAllCells(): List<DeskViewerGridItem>
+    fun pullEveryCells(): List<DeskViewerGridItem>
 
     @Query("SELECT * FROM home_screen_grid_items WHERE parent_id = :folderId")
     fun pullBundleCells(folderId: Long): List<DeskViewerGridItem>
@@ -15,7 +15,7 @@ interface atriumViewerGridRecordsDao {
     fun insert(item: DeskViewerGridItem): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(items: List<DeskViewerGridItem>)
+    fun insertEvery(items: List<DeskViewerGridItem>)
 
     @Query("UPDATE home_screen_grid_items SET title = :title WHERE package_name = :packageName")
     fun reloadAppletTitle(title: String, packageName: String)
@@ -24,21 +24,21 @@ interface atriumViewerGridRecordsDao {
     fun reloadCellTitle(title: String, id: Long): Int
 
     @Query("UPDATE home_screen_grid_items SET `left` = :left, `top` = :top, `right` = :right, `bottom` = :bottom, `page` = :page, `docked` = :docked , `parent_id` = :parentId WHERE id = :id")
-    fun reloadCellPoint(left: Int, top: Int, right: Int, bottom: Int, page: Int, docked: Boolean, parentId: Long?, id: Long)
+    fun reloadCellSpot(left: Int, top: Int, right: Int, bottom: Int, page: Int, docked: Boolean, parentId: Long?, id: Long)
 
     @Query("UPDATE home_screen_grid_items SET widget_id = :widgetId WHERE id = :id")
-    fun reloadWidgetKey(widgetId: Int, id: Long): Int
+    fun reloadGadgetKey(widgetId: Int, id: Long): Int
 
     @Query("DELETE FROM home_screen_grid_items WHERE id = :id")
     fun eraseCellByKey(id: Long)
 
     @Query("DELETE FROM home_screen_grid_items WHERE parent_id = :id")
-    fun eraseCellsWithParentKey(id: Long)
+    fun eraseCellsWithHostKey(id: Long)
 
     @Transaction
     fun eraseByKey(id: Long) {
         eraseCellByKey(id)
-        eraseCellsWithParentKey(id)
+        eraseCellsWithHostKey(id)
     }
 
     @Query("DELETE FROM home_screen_grid_items WHERE class_name = :className")
@@ -48,7 +48,7 @@ interface atriumViewerGridRecordsDao {
     fun eraseCellByPkgName(packageName: String)
 
     @Query("DELETE FROM home_screen_grid_items WHERE parent_id IN (SELECT id FROM home_screen_grid_items WHERE package_name = :packageName)")
-    fun eraseCellsByParentPkgName(packageName: String)
+    fun eraseCellsByHostPkgName(packageName: String)
 
     @Query("UPDATE home_screen_grid_items SET `left` = `left` + :shiftBy WHERE parent_id == :folderId AND `left` > :shiftFrom AND id != :excludingId")
     fun shiftBundleCells(folderId: Long, shiftFrom: Int, shiftBy: Int, excludingId: Long? = null)
@@ -59,6 +59,6 @@ interface atriumViewerGridRecordsDao {
     @Transaction
     fun eraseByPkgName(packageName: String) {
         eraseCellByPkgName(packageName)
-        eraseCellsByParentPkgName(packageName)
+        eraseCellsByHostPkgName(packageName)
     }
 }

@@ -11,7 +11,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.aid.Transformers
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.appletHomebasesDao
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.appletActivityDao
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.hiddenGlyphsDao
-import com.loanmate.loan.emicalculator.carloan.homepanel.specs.atriumViewerGridRecordsDao
+import com.loanmate.loan.emicalculator.carloan.homepanel.specs.atriumViewerLatticeLogsDao
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.WidgetCenter
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.WidgetActivity
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.MaskedIcon
@@ -25,7 +25,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.models.DeskViewerGridIt
 abstract class WidgetsBase : RoomDatabase() {
     abstract fun appletHomebasesDao(): appletHomebasesDao
 
-    abstract fun atriumViewerGridRecordsDao(): atriumViewerGridRecordsDao
+    abstract fun atriumViewerLatticeLogsDao(): atriumViewerLatticeLogsDao
 
     abstract fun hiddenGlyphsDao(): hiddenGlyphsDao
 

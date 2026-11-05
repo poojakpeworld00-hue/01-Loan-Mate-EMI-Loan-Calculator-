@@ -21,7 +21,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.aid.Config
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.appletHomebasesDao
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.appletActivityDao
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.hiddenGlyphsDao
-import com.loanmate.loan.emicalculator.carloan.homepanel.specs.atriumViewerGridRecordsDao
+import com.loanmate.loan.emicalculator.carloan.homepanel.specs.atriumViewerLatticeLogsDao
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -30,10 +30,10 @@ val Context.launcherConfig: Config get() = Config.newInstance(applicationContext
 val Context.launchersDB: appletHomebasesDao
     get() = WidgetsBase.getInstance(applicationContext).appletHomebasesDao()
 
-val Context.homeScreenGridItemsDB: atriumViewerGridRecordsDao
+val Context.homeScreenGridItemsDB: atriumViewerLatticeLogsDao
     get() = WidgetsBase.getInstance(
         applicationContext
-    ).atriumViewerGridRecordsDao()
+    ).atriumViewerLatticeLogsDao()
 
 val Context.hiddenIconsDB: hiddenGlyphsDao
     get() = WidgetsBase.getInstance(applicationContext).hiddenGlyphsDao()
@@ -66,7 +66,7 @@ fun Context.pullDrawableForPkgName(packageName: String): Drawable? {
     return drawable?.let { IconMaker.shape(it, launcherConfig.legacyIconTray) }
 }
 
-fun Context.pullInitialSlotDims(
+fun Context.pullInitialBayDims(
     info: AppWidgetProviderInfo,
     fallbackWidth: Int,
     fallbackHeight: Int
@@ -74,18 +74,18 @@ fun Context.pullInitialSlotDims(
     return if (isSPlus() && info.targetCellWidth != 0 && info.targetCellHeight != 0) {
         Size(info.targetCellWidth, info.targetCellHeight)
     } else {
-        val widthCells = pullSlotCounter(fallbackWidth)
-        val heightCells = pullSlotCounter(fallbackHeight)
+        val widthCells = pullBayTally(fallbackWidth)
+        val heightCells = pullBayTally(fallbackHeight)
         Size(widthCells, heightCells)
     }
 }
 
-fun Context.pullSlotCounter(size: Int): Int {
+fun Context.pullBayTally(size: Int): Int {
     val tiles = ceil(((size / resources.displayMetrics.density) - 30) / 70.0).toInt()
     return max(tiles, 1)
 }
 
-fun Context.isDefaultSmsApp(): Boolean {
+fun Context.isDefaultSmsProg(): Boolean {
     val roleHeld = if (isQPlus()) {
         runCatching {
             with(roleManager) {
@@ -103,7 +103,7 @@ fun Context.isDefaultSmsApp(): Boolean {
     return roleHeld ?: (Telephony.Sms.getDefaultSmsPackage(this) == packageName)
 }
 
-fun Context.isPrimaryLaunchpad(): Boolean {
+fun Context.isPrimaryPad(): Boolean {
     return if (isQPlus()) {
         with(roleManager) {
             isRoleAvailable(RoleManager.ROLE_HOME) && isRoleHeld(RoleManager.ROLE_HOME)

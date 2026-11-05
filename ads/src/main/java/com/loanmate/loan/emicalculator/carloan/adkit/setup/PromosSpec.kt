@@ -16,7 +16,7 @@ data class PromosSpec(
     val links: List<String> = emptyList(),
     val linksCount: Int = 0,
     val showAll: Boolean = true,
-    val linksOpenIn: UrlsJoinIn = UrlsJoinIn.IN_APP_BROWSER,
+    val linksLaunchIn: UrlsJoinIn = UrlsJoinIn.IN_APP_BROWSER,
     val customAds: TailoredPromos = TailoredPromos(),
     val colors: PromoTints = PromoTints(),
     val network: PromoNet = PromoNet.GOOGLE,
@@ -27,14 +27,14 @@ data class PromosSpec(
     fun place(group: String, name: String): PromoSlot = places["$group.$name"] ?: PromoSlot()
 
     /** Links an exit ad opens, after its block overrides: [ExitPromo.links] / [ExitPromo.linksCount] win over the defaults. */
-    fun kitLinksFor(exit: ExitPromo): List<String> {
+    fun kitUrlsFor(exit: ExitPromo): List<String> {
         val urls = exit.links ?: links
         val count = exit.linksCount ?: linksCount
         if (urls.isEmpty() || count <= 0) return emptyList()
         return List(count) { urls[it % urls.size] }
     }
 
-    fun presentAllFor(exit: ExitPromo): Boolean = exit.showAll ?: showAll
+    fun presentEveryFor(exit: ExitPromo): Boolean = exit.showAll ?: showAll
 }
 
 data class PackShapeBits(
@@ -67,7 +67,7 @@ data class PromoPieces(
     val banner: String = "",
     val rewarded: String = "",
 ) {
-    fun interForBoot() = interSplash.ifBlank { inter }
+    fun interForStart() = interSplash.ifBlank { inter }
     fun interForPrior() = interBack.ifBlank { inter }
 }
 

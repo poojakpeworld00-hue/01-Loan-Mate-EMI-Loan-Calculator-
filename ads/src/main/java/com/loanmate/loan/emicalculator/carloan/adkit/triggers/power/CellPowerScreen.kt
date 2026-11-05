@@ -51,7 +51,7 @@ class CellPowerScreen @JvmOverloads constructor(
     private fun activeColor() =
         if (connected) primary() else color(R.color.charging_ring_disconnected)
 
-    fun setProgress(value: Int, animate: Boolean) {
+    fun assignProgress(value: Int, animate: Boolean) {
         val target = value.coerceIn(0, 100).toFloat()
         progressAnimator?.cancel()
         if (!animate || !isAttachedToWindow) {

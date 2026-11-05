@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.updatePadding
 
 /** Pads this view by the system bars, for edge-to-edge activities. */
-fun View.padForOsBars() {
+fun View.padForSysBars() {
     val start = paddingStart; val top = paddingTop; val end = paddingEnd; val bottom = paddingBottom
     ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
         val b = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -23,11 +23,11 @@ fun View.padForOsBars() {
 fun androidx.activity.ComponentActivity.kitEnableDarkEdgeToEdge() {
     val bars = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
     enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
-    window.maskNavigationBar()
+    window.maskNavBar()
 }
 
 /** LoanTwo-wide: the navigation bar stays hidden; a swipe from the edge shows it for a moment, then it hides again. */
-fun android.view.Window.maskNavigationBar() {
+fun android.view.Window.maskNavBar() {
     androidx.core.view.WindowCompat.getInsetsController(this, decorView).apply {
         systemBarsBehavior = androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         hide(WindowInsetsCompat.Type.navigationBars())

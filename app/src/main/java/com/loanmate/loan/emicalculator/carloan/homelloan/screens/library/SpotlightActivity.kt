@@ -1,6 +1,6 @@
 package com.loanmate.loan.emicalculator.carloan.homelloan.screens.library
 
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.wireViewSpot
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.wireScreenPromo
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
@@ -19,13 +19,13 @@ import androidx.core.content.ContextCompat
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenFocusBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowStatBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.ShelfOrder
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 
 /** Image, stats, description and a Download button for one item. */
 class SpotlightActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { handle -> SpotlightScreenModel(catalogRepository, mediaRepository, handle) }
+    private val viewModel by toolScreenModel { handle -> SpotlightScreenModel(catalogRepository, mediaRepository, handle) }
 
     // Saving to Pictures needs the storage permission only before Android 10.
     private val requestWrite = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -37,7 +37,7 @@ class SpotlightActivity : AppCompatActivity() {
         kitEnableDarkEdgeToEdge()
         val b = ScreenFocusBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
 
         val item = viewModel.item
@@ -65,7 +65,7 @@ class SpotlightActivity : AppCompatActivity() {
             if (needsPermission) requestWrite.launch(Manifest.permission.WRITE_EXTERNAL_STORAGE) else viewModel.download()
         }
         kitCollectWhenStarted(viewModel.messages) { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
-        wireViewSpot("screens.detail", b.adInlineVw, b.adSlotVw)
+        wireScreenPromo("screens.detail", b.adInlineVw, b.adSlotVw)
     }
 
     override fun onResume() {

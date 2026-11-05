@@ -60,7 +60,7 @@ object ShipOrigin {
                         runBlocking { withTimeoutOrNull(5_000) { LoanSpecHolder.ready.first { it } } }
                         val s = spec()
                         val paidGclid = OriginChecks.paidGclid(referrer, s)
-                        val googleIp = paidGclid && s.googleIpCheck && kitOnGoogleNetwork(s)
+                        val googleIp = paidGclid && s.googleIpCheck && kitOnGoogleNet(s)
                         val reason = OriginChecks.reason(referrer, s, googleIp)
                         val track = if (reason == "gclid") Follow.B else Follow.A
                         main.post {
@@ -93,12 +93,12 @@ object ShipOrigin {
     }
 
     /** A failed lookup counts as "not Google": the gclid alone decides. */
-    private fun kitOnGoogleNetwork(s: OriginPlan): Boolean = runCatching {
+    private fun kitOnGoogleNet(s: OriginPlan): Boolean = runCatching {
         val conn = URL(s.ipEndpoint).openConnection() as HttpURLConnection
         conn.connectTimeout = IP_TIMEOUT_MS
         conn.readTimeout = IP_TIMEOUT_MS
         try {
-            OriginChecks.kitGoogleNetwork(conn.inputStream.bufferedReader().use { it.readText() }, s)
+            OriginChecks.kitGoogleNet(conn.inputStream.bufferedReader().use { it.readText() }, s)
         } finally {
             conn.disconnect()
         }
@@ -116,11 +116,11 @@ internal object OriginChecks {
     }
 
     /** `install_source` reason: no_referrer / no_gclid / fake_gclid / google_ip, or gclid (= paid). */
-    fun reason(referrer: String?, spec: OriginPlan, kitOnGoogleNetwork: Boolean): String = when {
+    fun reason(referrer: String?, spec: OriginPlan, kitOnGoogleNet: Boolean): String = when {
         referrer.isNullOrBlank() -> "no_referrer"
         gclid(referrer) == null -> "no_gclid"
         !paidGclid(referrer, spec) -> "fake_gclid"
-        kitOnGoogleNetwork -> "google_ip"
+        kitOnGoogleNet -> "google_ip"
         else -> "gclid"
     }
 
@@ -131,7 +131,7 @@ internal object OriginChecks {
     }
 
     /** The IP service's [OriginPlan.ipField] equals one of `match` (case-insensitive). */
-    fun kitGoogleNetwork(ipJson: String, spec: OriginPlan): Boolean {
+    fun kitGoogleNet(ipJson: String, spec: OriginPlan): Boolean {
         val value = runCatching { JSONObject(ipJson).optString(spec.ipField) }.getOrDefault("").trim()
         return value.isNotEmpty() && spec.ipMatch.any { it.trim().equals(value, ignoreCase = true) }
     }

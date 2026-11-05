@@ -32,8 +32,8 @@ class LoanPackHost(context: Context) : StarterBridge {
     // The launcher calls this when HOME is pressed before onboarding finished.
     override fun openHostApp(activity: Activity) {
         // Onboarding gets Home only for a real Home press: MIUI also sends Home when its Recents screen closes.
-        val home = !isOnboardingDone() && ToggleShield.baseHotkeyJustPressed()
-        if (!isOnboardingDone() && !home) ToggleShield.handPriorWithoutHotkey()
+        val home = !isOnboardingDone() && ToggleShield.baseShortcutJustPressed()
+        if (!isOnboardingDone() && !home) ToggleShield.handPriorWithoutShortcut()
         PrimeScreens.open(activity, SysShortcut.HOME.key.takeIf { home })
     }
 

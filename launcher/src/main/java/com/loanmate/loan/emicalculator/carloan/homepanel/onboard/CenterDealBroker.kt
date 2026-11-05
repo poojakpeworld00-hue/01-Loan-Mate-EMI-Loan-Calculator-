@@ -12,7 +12,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.gateway.StarterTray
 object CenterDealBroker {
     private const val TAG = "LAUNCHER_PROMO"
 
-    /** What the next launcher resume returns from (MSG-05 LauncherAds.onAppLaunched / onHomeResume). */
+    /** What the next launcher resume returns from (MSG-05 LauncherAds.onAppLaunched / onLobbyResume). */
     enum class Away { NONE, APP, SPONSORED }
 
     var away = Away.NONE
@@ -42,7 +42,7 @@ object CenterDealBroker {
     }
 
     /** Launcher home came back to the front: tell the host where the user returns from. */
-    fun onHomeResume(activity: Activity) {
+    fun onLobbyResume(activity: Activity) {
         val from = away
         away = Away.NONE
         when (from) {

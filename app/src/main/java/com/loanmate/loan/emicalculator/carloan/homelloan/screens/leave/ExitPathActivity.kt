@@ -26,10 +26,10 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBind
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowFarewellReasonBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.homebridge.OwnMark
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.ChooseAdapter
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.tonguePhase
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.tongueStep
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.prefs.SettingsActivity
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -71,7 +71,7 @@ class ExitPathActivity : AppCompatActivity() {
         kitEnableDarkEdgeToEdge()
         b = ScreenFarewellBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.contentVw.padForOsBars()
+        b.contentVw.padForSysBars()
         b.glowVw.kitGlowPulse()
         b.crest.titleVw.setText(R.string.un_title)
         b.crest.backVw.setOnClickListener { MetricsTwo.click("back"); goBack() }
@@ -104,7 +104,7 @@ class ExitPathActivity : AppCompatActivity() {
     /** As the reference: splash and progress move on by themselves; language keeps the current pick; step1 → reasons. */
     private fun goBack() = when (screen) {
         ScreenTwo.SPLASH, ScreenTwo.PROGRESS -> Unit
-        ScreenTwo.LANGUAGE -> pickTongue(container.settingsRepository.currentLanguageIndex())
+        ScreenTwo.LANGUAGE -> chooseLanguage(container.settingsRepository.currentLanguageIndex())
         ScreenTwo.STEP1 -> leave { show(ScreenTwo.STEP2) }
         ScreenTwo.STEP2 -> show(ScreenTwo.STEP1)
         ScreenTwo.STEP3 -> show(ScreenTwo.STEP2)
@@ -123,20 +123,20 @@ class ExitPathActivity : AppCompatActivity() {
         b.adSlotVw.removeAllViews()
         if (next != ScreenTwo.SPLASH) Spots.bottom(this, b.adSlotVw, place())
         when (next) {
-            ScreenTwo.SPLASH -> presentBoot(flow.splashMs)
+            ScreenTwo.SPLASH -> presentStart(flow.splashMs)
             ScreenTwo.LANGUAGE -> {
                 show(b.pageTitleVw, b.listVw, b.primaryVw)
                 b.pageTitleVw.setText(R.string.un_language_title)
                 // A tap marks the row and moves on after 250 ms; Continue moves on with the current pick.
                 var pick = container.settingsRepository.currentLanguageIndex()
                 b.listVw.layoutManager = LinearLayoutManager(this)
-                b.listVw.adapter = ChooseAdapter(tonguePhase(container.settingsRepository.languages), setOf(pick)) {
+                b.listVw.adapter = ChooseAdapter(tongueStep(container.settingsRepository.languages), setOf(pick)) {
                     pick = it
                     (b.listVw.adapter as ChooseAdapter).kitSubmitSelection(setOf(it))
-                    b.listVw.postDelayed({ if (screen == ScreenTwo.LANGUAGE) pickTongue(it) }, 250)
+                    b.listVw.postDelayed({ if (screen == ScreenTwo.LANGUAGE) chooseLanguage(it) }, 250)
                 }
                 b.primaryVw.setText(R.string.next)
-                b.primaryVw.setOnClickListener { pickTongue(pick) }
+                b.primaryVw.setOnClickListener { chooseLanguage(pick) }
             }
             ScreenTwo.STEP1 -> {
                 show(b.crest.root, b.pageTitleVw, b.subVw, b.rowsScrollVw, b.primaryVw, b.secondaryVw)
@@ -152,7 +152,7 @@ class ExitPathActivity : AppCompatActivity() {
                     }
                 }
                 b.primaryVw.setText(R.string.un_keep)
-                b.primaryVw.setOnClickListener { keepTool() }
+                b.primaryVw.setOnClickListener { keepLoan() }
                 b.secondaryVw.setText(R.string.un_still)
                 b.secondaryVw.setOnClickListener { MetricsTwo.click("still_uninstall"); leave { show(ScreenTwo.STEP2) } }
             }
@@ -161,20 +161,20 @@ class ExitPathActivity : AppCompatActivity() {
                 b.pageTitleVw.setText(R.string.un_reason_title)
                 wireReasons()
                 b.secondaryVw.setText(R.string.un_keep)
-                b.secondaryVw.setOnClickListener { keepTool() }
+                b.secondaryVw.setOnClickListener { keepLoan() }
             }
             ScreenTwo.PROGRESS -> {
                 show(b.centerVw, b.prog, b.percentVw)
                 b.centerTitleVw.text = getString(R.string.un_progress, getString(R.string.app_name))
                 b.centerSubVw.setText(R.string.un_progress_sub)
-                runHeadway(flow.progressMs.coerceIn(500L, 20_000L))
+                runProgress(flow.progressMs.coerceIn(500L, 20_000L))
             }
             ScreenTwo.STEP3 -> {
                 show(b.crest.root, b.centerVw, b.primaryVw, b.secondaryVw)
                 b.centerTitleVw.setText(R.string.un_confirm_title)
                 b.centerSubVw.setText(R.string.un_confirm_body)
                 b.primaryVw.setText(R.string.un_keep)
-                b.primaryVw.setOnClickListener { keepTool() }
+                b.primaryVw.setOnClickListener { keepLoan() }
                 b.secondaryVw.setText(R.string.un_uninstall)
                 b.secondaryVw.setOnClickListener { MetricsTwo.click("uninstall"); leave { end() } }
                 // As the reference: no tap within 3 s ends the flow.
@@ -186,13 +186,13 @@ class ExitPathActivity : AppCompatActivity() {
     private fun show(vararg views: View) = views.forEach { it.visibility = View.VISIBLE }
 
     /** The app's own splash (art, logo, name, bar) for `splash_ms`, as the reference shows its splash screen here. */
-    private fun presentBoot(durationMs: Long) {
+    private fun presentStart(durationMs: Long) {
         val s = ScreenBootBinding.inflate(layoutInflater, b.root, false)
         b.root.addView(s.root)
-        s.contentVw.padForOsBars()
+        s.contentVw.padForSysBars()
         splash = s
         ObjectAnimator.ofInt(s.prog, "progress", 0, 100).setDuration(durationMs).start()
-        timer = lifecycleScope.launch { delay(durationMs); kitLeaveWhenFree { show(ScreenTwo.LANGUAGE) } }
+        timer = lifecycleScope.launch { delay(durationMs); kitQuitWhenFree { show(ScreenTwo.LANGUAGE) } }
     }
 
     /** Phase 2: a picked reason opens its fix, the fix button and "Uninstall anyway" (→ progress). */
@@ -221,7 +221,7 @@ class ExitPathActivity : AppCompatActivity() {
     }
 
     /** 0 → 100 % over [durationMs], "Ready to uninstall" for 1.2 s, then step 3. */
-    private fun runHeadway(durationMs: Long) {
+    private fun runProgress(durationMs: Long) {
         b.prog.progress = 0
         b.percentVw.setTextColor(getColor(R.color.sh_muted))
         val start = SystemClock.elapsedRealtime()
@@ -236,13 +236,13 @@ class ExitPathActivity : AppCompatActivity() {
             b.percentVw.setText(R.string.un_progress_done)
             b.percentVw.setTextColor(getColor(R.color.sh_primary))
             delay(1_200)
-            kitLeaveWhenFree { show(ScreenTwo.STEP3) }
+            kitQuitWhenFree { show(ScreenTwo.STEP3) }
         }
     }
 
     private fun place() = "uninstall_flow.${screen.name.lowercase()}"
 
-    private fun pickTongue(index: Int) {
+    private fun chooseLanguage(index: Int) {
         MetricsTwo.click("language", container.settingsRepository.languages[index].tag)
         leave {
             show(ScreenTwo.STEP1)
@@ -258,14 +258,14 @@ class ExitPathActivity : AppCompatActivity() {
     }
 
     /** Views that move on by themselves wait out an ad still on screen instead of dropping the step. */
-    private fun kitLeaveWhenFree(action: () -> Unit) {
+    private fun kitQuitWhenFree(action: () -> Unit) {
         lifecycleScope.launch {
             while (ExitPromoRunner.busy()) delay(300)
             leave(action)
         }
     }
 
-    private fun keepTool() {
+    private fun keepLoan() {
         MetricsTwo.click("keep")
         MetricsTwo.step(MetricsTwo.UNINSTALL, "keep")
         startActivity(Intent(this, RootActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -288,7 +288,7 @@ class ExitPathActivity : AppCompatActivity() {
     /** As the reference: paid hides our icon (the app stays installed, the user is back on the launcher); organic opens LoanTwo info. */
     private fun end() {
         timer?.cancel()
-        endFarewell(this, paid)
+        endExit(this, paid)
         finish()
     }
 
@@ -300,7 +300,7 @@ class ExitPathActivity : AppCompatActivity() {
 }
 
 /** The end of the premium uninstall (flow or dialog), as the reference: paid hides our icon; organic opens LoanTwo info. */
-internal fun endFarewell(activity: android.app.Activity, paid: Boolean) {
+internal fun endExit(activity: android.app.Activity, paid: Boolean) {
     if (paid) {
         MetricsTwo.step(MetricsTwo.UNINSTALL, "hidden")
         OwnMark.hide(activity)

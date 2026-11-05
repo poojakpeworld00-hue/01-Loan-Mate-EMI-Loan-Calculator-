@@ -8,7 +8,7 @@ import org.fossify.commons.helpers.DARK_GREY
 import org.fossify.commons.helpers.isSPlus
 
 @RequiresApi(Build.VERSION_CODES.O_MR1)
-fun WallpaperColors.supportsDarkCaption(): Boolean {
+fun WallpaperColors.supportsDarkLabel(): Boolean {
     return if (isSPlus()) {
         (colorHints and WallpaperColors.HINT_SUPPORTS_DARK_TEXT) != 0
     } else {

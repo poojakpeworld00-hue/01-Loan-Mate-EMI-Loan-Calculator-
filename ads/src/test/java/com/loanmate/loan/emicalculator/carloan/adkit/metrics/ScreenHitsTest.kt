@@ -29,12 +29,12 @@ class ScreenHitsTest {
         visits.show("home")
         now += 2_000
         visits.outBy("home")
-        visits.leaveTool()
+        visits.leaveLoan()
         assertEquals("home", sent.last()["exit_by"])
         now += 60_000
-        visits.returnToTool()
+        visits.returnToLoan()
         now += 5_000
-        visits.leaveTool()
+        visits.leaveLoan()
         assertEquals(listOf("home", "background"), sent.map { it["exit_by"] })
         assertEquals(5L, sent.last()["duration_sec"])
         assertEquals("home", visits.current)
@@ -50,10 +50,10 @@ class ScreenHitsTest {
 
     @Test fun viewChangeWhileAway_startsOnlyWhenPrior() {
         visits.show("app_drawer")
-        visits.leaveTool() // launched another app from the drawer
+        visits.leaveLoan() // launched another app from the drawer
         visits.show("launcher") // drawer closes behind it
         now += 30_000 // user in the other app
-        visits.returnToTool()
+        visits.returnToLoan()
         now += 2_000
         visits.show("app_drawer")
         assertEquals(listOf("app_drawer", "launcher"), sent.map { it["screen"] })

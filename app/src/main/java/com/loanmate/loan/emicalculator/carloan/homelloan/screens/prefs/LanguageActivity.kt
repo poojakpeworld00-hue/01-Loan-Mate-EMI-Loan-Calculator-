@@ -9,26 +9,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenTongueBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.ChooseAdapter
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.tonguePhase
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.tongueStep
 
 /** Tongue picker opened from Settings; Apply switches the app language and returns to Settings. */
 class LanguageActivity : AppCompatActivity() {
-    private val viewModel by toolViewForm { handle -> LanguageScreenModel(settingsRepository, handle) }
+    private val viewModel by toolScreenModel { handle -> LanguageScreenModel(settingsRepository, handle) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
         val b = ScreenTongueBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.root.padForOsBars()
+        b.root.padForSysBars()
         b.crest.backVw.setOnClickListener { finish() }
         b.crest.titleVw.setText(R.string.language)
 
-        val adapter = ChooseAdapter(tonguePhase(viewModel.languages), setOf(viewModel.selected.value)) { viewModel.select(it) }
+        val adapter = ChooseAdapter(tongueStep(viewModel.languages), setOf(viewModel.selected.value)) { viewModel.select(it) }
         b.listVw.layoutManager = LinearLayoutManager(this)
         b.listVw.adapter = adapter
         b.listVw.scrollToPosition(viewModel.selected.value)

@@ -72,7 +72,7 @@ class RootFabric(
         ).forEach { (tile, catalog) ->
             tile.setOnClickListener { open(catalog.name.lowercase()) { LineupActivity.intent(activity, catalog) } }
         }
-        wireSpots()
+        wirePromos()
 
         // Staggered entrance, as in the design's hcUp keyframes.
         listOf(b.crest, b.tileCharactersVw, b.tileBundlesVw, b.tileEmotesVw, b.tileWeaponsVw, b.tilePetsVw, b.tileVehiclesVw, b.toolsTitleVw, b.toolsVw)
@@ -93,7 +93,7 @@ class RootFabric(
     }
 
     /** `bottom_ad` pinned under the list; `list_ad` inside the list at `list_ad_position` (after_header / after_tiles / after_tools). */
-    private fun wireSpots() {
+    private fun wirePromos() {
         Spots.bottom(activity, b.adSlotVw, adPlace)
         val place = PromoPack.config.places[adPlace]
         val list = b.adInlineVw.parent as ViewGroup

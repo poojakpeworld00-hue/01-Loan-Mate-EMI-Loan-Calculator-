@@ -29,7 +29,7 @@ object PadIcons {
      * is left alone, and so is one already shaped, so calling it twice is harmless.
      */
     @JvmStatic
-    fun applyTo(imageView: ImageView) {
+    fun commitTo(imageView: ImageView) {
         val current = imageView.drawable ?: return
         if (imageView.getTag(R.id.lnch_tag_icon_shaped) === current) return
         val shaped = shape(imageView.context, current)

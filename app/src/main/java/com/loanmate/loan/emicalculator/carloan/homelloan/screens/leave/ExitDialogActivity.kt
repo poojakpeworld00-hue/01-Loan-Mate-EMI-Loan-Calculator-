@@ -34,7 +34,7 @@ class ExitDialogActivity : AppCompatActivity() {
             .setPositiveButton(android.R.string.ok) { _, _ ->
                 ended = true
                 MetricsTwo.click("uninstall_ok")
-                endFarewell(this, (application as LoanTwo).container.config.value.track == Follow.B)
+                endExit(this, (application as LoanTwo).container.config.value.track == Follow.B)
             }
             .setOnDismissListener {
                 if (!ended) MetricsTwo.step(MetricsTwo.UNINSTALL, "cancel")

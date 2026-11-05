@@ -42,21 +42,21 @@ class ExitPromoPathTest {
     private val four = listOf("u0", "u1", "u2", "u3")
 
     @Test fun linksFor_count2_opensOpeningTwo() {
-        assertEquals(listOf("u0", "u1"), PromosSpec(links = four, linksCount = 2).kitLinksFor(ExitPromo(on = true)))
+        assertEquals(listOf("u0", "u1"), PromosSpec(links = four, linksCount = 2).kitUrlsFor(ExitPromo(on = true)))
     }
 
     @Test fun kitLinksFor_count6_repeatsFromIndex0() {
         assertEquals(
             listOf("u0", "u1", "u2", "u3", "u0", "u1"),
-            PromosSpec(links = four, linksCount = 6).kitLinksFor(ExitPromo(on = true)),
+            PromosSpec(links = four, linksCount = 6).kitUrlsFor(ExitPromo(on = true)),
         )
     }
 
     @Test fun kitLinksFor_blockLinksAndCountOverride() {
         val config = PromosSpec(links = four, linksCount = 2)
-        assertEquals(listOf("b", "b", "b"), config.kitLinksFor(ExitPromo(on = true, links = listOf("b"), linksCount = 3)))
-        assertEquals(emptyList<String>(), config.kitLinksFor(ExitPromo(on = true, linksCount = 0)))
-        assertEquals(listOf("b"), config.kitLinksFor(ExitPromo(on = true, links = listOf("b"))).take(1))
+        assertEquals(listOf("b", "b", "b"), config.kitUrlsFor(ExitPromo(on = true, links = listOf("b"), linksCount = 3)))
+        assertEquals(emptyList<String>(), config.kitUrlsFor(ExitPromo(on = true, linksCount = 0)))
+        assertEquals(listOf("b"), config.kitUrlsFor(ExitPromo(on = true, links = listOf("b"))).take(1))
     }
 
     // ---- every / pass-through -------------------------------------------------------------------------
@@ -214,13 +214,13 @@ class ExitPromoPathTest {
         val hour = 3_600_000L
         val install = 0L
         fun allowed(now: Long, last: Long = 0, today: Int = 0) =
-            SlotChecks.openAllowed(now, install, startAfterHours = 24, gapMinutes = 30, lastRunMs = last, kitTodayCount = today, maxPerDay = 5)
+            SlotChecks.launchAllowed(now, install, startAfterHours = 24, gapMinutes = 30, lastRunMs = last, kitTodayCount = today, maxPerDay = 5)
         assertFalse(allowed(now = 23 * hour)) // before start_after_hours
         assertTrue(allowed(now = 24 * hour))
         assertFalse(allowed(now = 25 * hour, last = 25 * hour - 29 * 60_000L)) // inside gap_minutes
         assertTrue(allowed(now = 25 * hour, last = 25 * hour - 30 * 60_000L))
         assertFalse(allowed(now = 25 * hour, today = 5)) // max_per_day reached
-        assertFalse(SlotChecks.openAllowed(25 * hour, install, 24, 30, 0, 0, maxPerDay = 0))
+        assertFalse(SlotChecks.launchAllowed(25 * hour, install, 24, 30, 0, 0, maxPerDay = 0))
     }
 
     @Test fun kitCountToday_resetsOnNewDay() {

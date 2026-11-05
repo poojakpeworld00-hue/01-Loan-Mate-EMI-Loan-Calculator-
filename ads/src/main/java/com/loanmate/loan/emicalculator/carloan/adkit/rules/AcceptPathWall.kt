@@ -15,7 +15,7 @@ class AcceptPathWall private constructor(context: Context) {
         UserMessagingPlatform.getConsentInformation(context)
 
     fun interface AcceptSetListener {
-        fun agreeRouteDone(error: FormError?)
+        fun agreePathDone(error: FormError?)
     }
 
     fun canRequestAds(): Boolean = consentInformation.canRequestAds()
@@ -24,7 +24,7 @@ class AcceptPathWall private constructor(context: Context) {
         get() = consentInformation.privacyOptionsRequirementStatus ==
             PrivacyOptionsRequirementStatus.REQUIRED
 
-    fun queryAgree(
+    fun queryAccept(
         activity: Activity,
         onConsentGatheringCompleteListener: AcceptSetListener
     ) {
@@ -38,11 +38,11 @@ class AcceptPathWall private constructor(context: Context) {
             params,
             {
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) { formError ->
-                    onConsentGatheringCompleteListener.agreeRouteDone(formError)
+                    onConsentGatheringCompleteListener.agreePathDone(formError)
                 }
             },
             { requestConsentError ->
-                onConsentGatheringCompleteListener.agreeRouteDone(requestConsentError)
+                onConsentGatheringCompleteListener.agreePathDone(requestConsentError)
             }
         )
     }

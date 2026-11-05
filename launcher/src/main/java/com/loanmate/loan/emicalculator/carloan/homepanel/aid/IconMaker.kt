@@ -32,7 +32,7 @@ object IconMaker {
 
     fun shape(drawable: Drawable, tray: Tray): Drawable = runCatching {
         val shaped = if (drawable is AdaptiveIconDrawable) {
-            drawable.withSlabIfWipe(tray)
+            drawable.withTileIfWipe(tray)
         } else {
             val bitmap = drawable.toSampledBitmap() ?: return drawable
             val opaqueSquare = bitmap.cornersArePainted()
@@ -99,7 +99,7 @@ object IconMaker {
         return false
     }
 
-    private fun AdaptiveIconDrawable.withSlabIfWipe(tray: Tray): Drawable {
+    private fun AdaptiveIconDrawable.withTileIfWipe(tray: Tray): Drawable {
         val backgroundPainted = background?.toSampledBitmap()?.cornersArePainted() ?: false
         if (backgroundPainted) return this
         val art = foreground ?: return this

@@ -64,7 +64,7 @@ object AppScan {
      */
     @SuppressLint("WrongConstant")
     fun quick(context: Context): List<WidgetCenter> = with(context) {
-        val hidden = hiddenIconsDB.pullHiddenGlyphs().map { it.pullGlyphIdentifier() }
+        val hidden = hiddenIconsDB.pullMaskedGlyphs().map { it.pullGlyphIdentifier() }
         wanted(this, launchable(this), hidden).map { info -> bare(info, info.loadLabel(packageManager).toString()) }
     }
 
@@ -81,7 +81,7 @@ object AppScan {
         onProgress: (List<WidgetCenter>) -> Unit = {},
     ): ArrayList<WidgetCenter> = synchronized(lock) {
         with(context) {
-            val hiddenIcons = hiddenIconsDB.pullHiddenGlyphs().map { it.pullGlyphIdentifier() }
+            val hiddenIcons = hiddenIconsDB.pullMaskedGlyphs().map { it.pullGlyphIdentifier() }
             val list = launchable(this)
 
             // Everything below decodes an icon per installed app. Skipped outright when the
@@ -124,7 +124,7 @@ object AppScan {
             // The on-demand cache must agree: an app whose APK moved (an update) is decoded again,
             // not handed back the icon a tile cached before the update. Same for a tray change.
             val legacyTray = launcherConfig.legacyIconTray
-            IconFetcher.syncTray(legacyTray)
+            IconFetcher.syncDock(legacyTray)
             IconFetcher.invalidate(sourceDirs.keys.filter { key -> knownDirs[key] != null && knownDirs[key] != sourceDirs[key] })
 
             // One icon per installed app: an XML inflate, a render and a colour average each, all
@@ -172,7 +172,7 @@ object AppScan {
             }
 
             Timber.d("AppScan: ${allApps.size} launchers, ${allApps.size - reusable.size} icons decoded in ${SystemClock.elapsedRealtime() - started} ms")
-            launchersDB.insertAll(allApps)
+            launchersDB.insertEvery(allApps)
             // Last, so a throw anywhere above leaves the signature stale and the next resume
             // retries rather than caching a half-built list.
             IconStore.installedSignature = signature

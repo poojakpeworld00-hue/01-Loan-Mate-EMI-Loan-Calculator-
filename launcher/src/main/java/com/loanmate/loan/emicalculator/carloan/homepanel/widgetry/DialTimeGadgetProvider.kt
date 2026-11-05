@@ -13,7 +13,7 @@ class DialTimeGadgetProvider : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray,
     ) {
-        appWidgetIds.forEach { reloadWidget(context, appWidgetManager, it) }
+        appWidgetIds.forEach { reloadGadget(context, appWidgetManager, it) }
     }
 
     override fun onAppWidgetOptionsChanged(
@@ -22,10 +22,10 @@ class DialTimeGadgetProvider : AppWidgetProvider() {
         appWidgetId: Int,
         newOptions: Bundle?,
     ) {
-        reloadWidget(context, appWidgetManager, appWidgetId)
+        reloadGadget(context, appWidgetManager, appWidgetId)
     }
 
-    private fun reloadWidget(
+    private fun reloadGadget(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetId: Int,
@@ -34,7 +34,7 @@ class DialTimeGadgetProvider : AppWidgetProvider() {
             setInt(
                 R.id.widget_holderIxVw,
                 "setBackgroundColor",
-                context.pullWidgetBackdropTint(appWidgetId)
+                context.pullGadgetBackdropTint(appWidgetId)
             )
         }
 

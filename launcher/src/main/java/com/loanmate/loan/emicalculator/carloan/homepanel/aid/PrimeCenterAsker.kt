@@ -15,9 +15,9 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.pages.PrimeDeskTipScene
 import com.loanmate.loan.emicalculator.carloan.homepanel.theming.CenterSeal
 import org.fossify.commons.helpers.isQPlus
 import timber.log.Timber
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isPrimaryLaunchpad
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.isPrimaryPad
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.roleManager
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.promptAssignAsMainHomebase
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.promptAssignAsPrimeHomebase
 
 class PrimeCenterAsker(
     private val activity: Activity,
@@ -35,7 +35,7 @@ class PrimeCenterAsker(
     private var roleDialogShown = false
 
     fun start(): Boolean {
-        if (inFlight || activity.isPrimaryLaunchpad()) return false
+        if (inFlight || activity.isPrimaryPad()) return false
 
         CenterSeal.guaranteeCaptured(activity)
         roleDialogShown = false
@@ -47,13 +47,13 @@ class PrimeCenterAsker(
 
     private var returnWatch: Runnable? = null
 
-    private fun primeRevisitWatch() {
-        abortRevisitWatch()
+    private fun primeRevisitGuard() {
+        abortRevisitGuard()
         val startedAt = SystemClock.uptimeMillis()
         val watch = object : Runnable {
             override fun run() {
                 if (returnWatch !== this || activity.isFinishing || activity.isDestroyed) return
-                if (activity.isPrimaryLaunchpad()) {
+                if (activity.isPrimaryPad()) {
                     returnWatch = null
                     Timber.d("DefaultLauncherRequester: role granted on the Settings list, raising the launcher")
                     runCatching {
@@ -76,15 +76,15 @@ class PrimeCenterAsker(
         handler.postDelayed(watch, RETURN_WATCH_POLL_MS)
     }
 
-    private fun abortRevisitWatch() {
+    private fun abortRevisitGuard() {
         returnWatch?.let { handler.removeCallbacks(it) }
         returnWatch = null
     }
 
     fun onResume() {
         inFlight = false
-        abortRevisitWatch()
-        if (activity.isPrimaryLaunchpad()) {
+        abortRevisitGuard()
+        if (activity.isPrimaryPad()) {
             // Only a request in flight counts: a launcher that was already default reports nothing.
             if (pending != Pending.NONE) {
                 Launcher.events.onStep(STEP_EVENT, "granted")
@@ -127,7 +127,7 @@ class PrimeCenterAsker(
 
             if (step == Pending.SETTINGS) {
                 PrimeDeskTipScene.show(activity)
-                primeRevisitWatch()
+                primeRevisitGuard()
             }
             true
         }.getOrElse {
@@ -159,7 +159,7 @@ class PrimeCenterAsker(
          * coach-mark over it, then the role dialog; [onResult] once, true as soon as we hold the HOME role.
          */
         fun request(activity: Activity, onResult: (Boolean) -> Unit) {
-            if (activity.isPrimaryLaunchpad()) return onResult(true)
+            if (activity.isPrimaryPad()) return onResult(true)
             val app = activity.application
             var done = false
             lateinit var watcher: Application.ActivityLifecycleCallbacks
@@ -169,10 +169,10 @@ class PrimeCenterAsker(
                 app.unregisterActivityLifecycleCallbacks(watcher)
                 onResult(granted)
             }
-            val requester = PrimeCenterAsker(activity, onGranted = { finish(true) }, onGaveUp = { finish(activity.isPrimaryLaunchpad()) })
+            val requester = PrimeCenterAsker(activity, onGranted = { finish(true) }, onGaveUp = { finish(activity.isPrimaryPad()) })
             watcher = object : Application.ActivityLifecycleCallbacks {
                 override fun onActivityResumed(a: Activity) { if (a === activity) requester.onResume() }
-                override fun onActivityDestroyed(a: Activity) { if (a === activity) finish(a.isPrimaryLaunchpad()) }
+                override fun onActivityDestroyed(a: Activity) { if (a === activity) finish(a.isPrimaryPad()) }
                 override fun onActivityCreated(a: Activity, b: Bundle?) = Unit
                 override fun onActivityStarted(a: Activity) = Unit
                 override fun onActivityPaused(a: Activity) = Unit
@@ -183,7 +183,7 @@ class PrimeCenterAsker(
             if (!requester.start()) {
                 // No Settings list / role dialog could open: MSG-05's wider fallback; the next resume decides.
                 requester.pending = Pending.ROLE_DIALOG
-                activity.promptAssignAsMainHomebase()
+                activity.promptAssignAsPrimeHomebase()
             }
         }
 

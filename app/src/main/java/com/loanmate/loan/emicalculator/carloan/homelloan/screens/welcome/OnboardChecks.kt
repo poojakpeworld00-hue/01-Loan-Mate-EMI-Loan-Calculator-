@@ -27,7 +27,7 @@ object OnboardChecks {
      * pressed again while it is open ([sheetOpen]) it does its own action, like a key that isn't listed.
      */
     fun onKey(keys: SysShortcuts, key: SysShortcut, index: Int, sheetOpen: Boolean = false): ShortcutResult = when {
-        keys.opensTray(key) && !sheetOpen -> ShortcutResult.ShowDock
+        keys.opensDock(key) && !sheetOpen -> ShortcutResult.ShowDock
         else -> when (keys.taskFor(key)) {
             null -> ShortcutResult.PackNothing
             ShortcutJob.NEXT -> ShortcutResult.Onward

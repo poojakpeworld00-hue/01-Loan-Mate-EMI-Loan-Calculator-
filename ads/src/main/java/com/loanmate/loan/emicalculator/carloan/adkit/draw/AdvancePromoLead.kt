@@ -27,15 +27,15 @@ object AdvancePromoLead {
 
     var skipNextAppOpenAd: Boolean = false
 
-    private var flagReturnAd: Boolean = false
+    private var flagResultAd: Boolean = false
 
-    fun flagReturnAd() {
-        flagReturnAd = true
+    fun flagResultAd() {
+        flagResultAd = true
     }
 
-    fun takeReturnSpotFlag(): Boolean {
-        val v = flagReturnAd
-        flagReturnAd = false
+    fun takeResultPromoFlag(): Boolean {
+        val v = flagResultAd
+        flagResultAd = false
         return v
     }
 
@@ -96,7 +96,7 @@ object AdvancePromoLead {
                                     LOG_TAG, "Ad failed to load: ${loadAdError.message}"
                                 )
 
-                                PromoSignals.loadFailed(PromoSignals.APP_OPEN, loadAdError.code, place)
+                                PromoSignals.fetchFailed(PromoSignals.APP_OPEN, loadAdError.code, place)
                                 isLoadingAd = false
                                 onResult?.invoke(false)
                             }
@@ -119,7 +119,7 @@ object AdvancePromoLead {
      * On-load app-open: load now behind the full-screen loader, then [onReady]; [onMiss] if the
      * load fails or takes longer than ads.loader_wait_sec. A late ad stays for next time.
      */
-    private fun pullThenPresent(activity: Activity, onReady: () -> Unit, onMiss: () -> Unit) {
+    private fun pullThenShow(activity: Activity, onReady: () -> Unit, onMiss: () -> Unit) {
         LayerPrimer.show(activity, true)
         val wait = PromoDelays.main(activity)
         wait.start {
@@ -136,8 +136,8 @@ object AdvancePromoLead {
     }
 
 
-    private fun presentReady(activity: Activity, onShowAdCompleteListener: PromoCloseListener) {
-        if (!isAdAvailable || isShowingAd) return onShowAdCompleteListener.onPresentSpotComplete()
+    private fun presentSet(activity: Activity, onShowAdCompleteListener: PromoCloseListener) {
+        if (!isAdAvailable || isShowingAd) return onShowAdCompleteListener.onShowPromoComplete()
 
         val place = PromoSignals.place
         appOpenAd?.fullScreenContentCallback = object : PromoSignals.WholeScreen(PromoSignals.APP_OPEN, place) {
@@ -150,7 +150,7 @@ object AdvancePromoLead {
                 appOpenAd = null
                 isShowingAd = false
                 isOpenAppDismiss = true
-                onShowAdCompleteListener.onPresentSpotComplete()
+                onShowAdCompleteListener.onShowPromoComplete()
                 loadAd(
                     activity
                 )
@@ -163,7 +163,7 @@ object AdvancePromoLead {
                 )
                 appOpenAd = null
                 isShowingAd = false
-                onShowAdCompleteListener.onPresentSpotComplete()
+                onShowAdCompleteListener.onShowPromoComplete()
                 loadAd(
                     activity
                 )
@@ -195,7 +195,7 @@ object AdvancePromoLead {
             (loadIfMissing || !PromoFetchStyle.preload(activity, PromoFetchStyle.PackShape.APP_OPEN))
         ) {
             // On-load app-open as a chain step: load it now; a miss moves to the next step.
-            return pullThenPresent(
+            return pullThenShow(
                 activity,
                 onReady = { if (appOpenAd != null) presentLoaded(activity, onShown, onMiss) else onMiss() },
                 onMiss = onMiss,
@@ -229,6 +229,6 @@ object AdvancePromoLead {
     }
 
     interface PromoCloseListener {
-        fun onPresentSpotComplete()
+        fun onShowPromoComplete()
     }
 }

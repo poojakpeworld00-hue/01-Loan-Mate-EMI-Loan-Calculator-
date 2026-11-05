@@ -160,7 +160,7 @@ object DeskThemeRules {
         builtIn.rules.flatMap { it.match.packages }.toSet()
     }
 
-    fun isKnownLaunchpad(packageName: String): Boolean = packageName in knownLaunchers
+    fun isKnownPad(packageName: String): Boolean = packageName in knownLaunchers
 
     val builtIn: Table by lazy {
         parse(DEFAULT_RULES_JSON, ThemeRoot.BUILT_IN) ?: Table(disabled = false, rules = emptyList())

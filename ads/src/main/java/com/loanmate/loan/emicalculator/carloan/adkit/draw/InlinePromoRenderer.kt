@@ -55,7 +55,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
         var isFullNativeShowing: Boolean = false
 
-        fun holdsCachedSpot(): Boolean = nativeAd != null
+        fun holdsCachedPromo(): Boolean = nativeAd != null
 
         fun isLoading(): Boolean = sharedLoad.inFlight
 
@@ -75,7 +75,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         missing: () -> Unit,
     ) {
         if (PromoFetchStyle.preload(context, PromoFetchStyle.PackShape.NATIVE)) return missing()
-        kitPresentWithUnit(context, ScreenPromoMapper.embeddedUnitId(context), format, layout, shimmer) { missing() }
+        kitShowWithPiece(context, ScreenPromoMapper.embeddedPieceId(context), format, layout, shimmer) { missing() }
     }
 
     private fun Activity.kitIsActivityGone(): Boolean {
@@ -84,7 +84,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
     }
 
     /** [place]: the slot waiting for this load; "" for a warm-up preload. */
-    fun obtainEmbeddedSpots(context: Activity, observer: InlinePromoTracker? = null, place: String = "") {
+    fun obtainInlinePromos(context: Activity, observer: InlinePromoTracker? = null, place: String = "") {
         val adsPreference = PromoSettingsBox.getInstance(context)
 
         // On-load natives (PromoFetchStyle): nothing is warmed; each slot loads its own when shown.
@@ -103,7 +103,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             return
         }
 
-        val adUnit = ScreenPromoMapper.embeddedUnitId(context)
+        val adUnit = ScreenPromoMapper.embeddedPieceId(context)
         if (adUnit.isEmpty()) {
             observer?.onNativeAdFailed()
             return
@@ -155,7 +155,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         ad.setOnPaidEventListener { PromoSignals.paid(it, label, unit, ad.responseInfo, place) }
     }
 
-    fun kitPresentWithUnit(
+    fun kitShowWithPiece(
         context: Activity,
         unitId: String,
         format: String,
@@ -170,7 +170,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             "mediumnative2", "mid_native_2", "mid2" -> 2
             else -> -1
         }
-        if (unitId.isBlank() || kind < 0 || context.kitIsActivityGone() || !kitHasNetwork(context) ||
+        if (unitId.isBlank() || kind < 0 || context.kitIsActivityGone() || !kitHasNet(context) ||
             !pref.getBoolean("IsAdsON") || !pref.getBoolean("NativeAd") ||
             PromoBayType.fromString(pref.getString("IsAdType")) != PromoBayType.GOOGLE
         ) return fallback()
@@ -188,11 +188,11 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 }
                 val root: View = when (kind) {
                     0 -> AduGmsEmbeddedLargeBinding.inflate(context.layoutInflater)
-                        .also { largeEmbeddedLayout(ad, it, context) }.root
+                        .also { largeInlineLayout(ad, it, context) }.root
                     1 -> AduGmsEmbeddedMediumBinding.inflate(context.layoutInflater)
-                        .also { mediumEmbeddedLayout(ad, it, context) }.root
+                        .also { mediumInlineLayout(ad, it, context) }.root
                     else -> AduGmsEmbeddedMediumAltBinding.inflate(context.layoutInflater)
-                        .also { mediumEmbeddedLayoutAlt(ad, it, context) }.root
+                        .also { mediumInlineLayoutAlt(ad, it, context) }.root
                 }
                 ad.setOnPaidEventListener { PromoSignals.paid(it, "native_unit", unitId, ad.responseInfo, place) }
                 layout.removeAllViews()
@@ -214,7 +214,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             .loadAd(AdRequest.Builder().build())
     }
 
-    fun presentLargeEmbedded(
+    fun presentLargeInline(
         context: Activity,
         layout: FrameLayout,
         shimmer: ShimmerFrameLayout? = null,
@@ -226,7 +226,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
         if (context.isFinishing || context.isDestroyed) return
 
-        if (!kitHasNetwork(context)
+        if (!kitHasNet(context)
             || !adsPreference.getBoolean("IsAdsON")
             || !adsPreference.getBoolean("NativeAd")
         ) {
@@ -254,7 +254,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                         if (nativeAd != null) {
                             val rootView: View = run {
                                 val binding = AduGmsEmbeddedLargeBinding.inflate(context.layoutInflater)
-                                largeEmbeddedLayout(nativeAd!!, binding, context)
+                                largeInlineLayout(nativeAd!!, binding, context)
                                 binding.root
                                 }
 
@@ -266,7 +266,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                             kitShownCached(nativeAd!!, "native_big")
 
                             nativeAd = null
-                            obtainEmbeddedSpots(context)
+                            obtainInlinePromos(context)
 
                             return@post
                         }
@@ -276,7 +276,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                             shimmer?.stopShimmer()
                             shimmer?.isVisible = false
 
-                            NativePromoLead(place).obtainInhouseSpot(
+                            NativePromoLead(place).obtainNativePromo(
                                 context,
                                 layout,
                                 NativePromoLead.NativePromoLook.BIG_NATIVE,
@@ -299,7 +299,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 layout.removeAllViews()
                 shimmer?.stopShimmer()
                 shimmer?.isVisible = false
-                NativePromoLead(place).obtainInhouseSpot(
+                NativePromoLead(place).obtainNativePromo(
                     context,
                     layout,
                     NativePromoLead.NativePromoLook.BIG_NATIVE,
@@ -309,7 +309,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         }
     }
 
-    fun presentFullEmbedded(
+    fun presentWholeInline(
         context: Activity,
         layout: FrameLayout,
         onClose: () -> Unit,
@@ -319,7 +319,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
         if (context.isFinishing || context.isDestroyed) return
 
-        if (!kitHasNetwork(context)
+        if (!kitHasNet(context)
             || !adsPreference.getBoolean("IsAdsON")
             || !adsPreference.getBoolean("NativeAd")
         ) {
@@ -346,7 +346,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                     val binding = AduGmsEmbeddedFullpageBinding.inflate(context.layoutInflater)
 
                     isFullNativeShowing = true
-                    fullpageEmbeddedLayout(nativeAd!!, binding, context) {
+                    fullpageInlineLayout(nativeAd!!, binding, context) {
                         isFullNativeShowing = false
                         onClose()
                     }
@@ -359,7 +359,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                     kitShownCached(nativeAd!!, "native_full")
 
                     nativeAd = null
-                    obtainEmbeddedSpots(context)
+                    obtainInlinePromos(context)
                     return@post
                 }
 
@@ -367,7 +367,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 shimmer?.isVisible = false
                 // On-load natives: nothing was warmed, so load one now over the screen.
                 if (!PromoFetchStyle.preload(context, PromoFetchStyle.PackShape.NATIVE)) {
-                    presentFullEmbeddedWithUnit(context, PromoPieceKeys.pickFullEmbedded(context, null), onClose = onClose)
+                    presentWholeInlineWithPiece(context, PromoPieceKeys.chooseWholeInline(context, null), onClose = onClose)
                 } else {
                     onClose()
                 }
@@ -383,7 +383,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
      * Loads [unitId] now and shows it full screen. [onClose] runs once it is closed; [onMiss]
      * (null: [onClose]) if it fails to load or takes longer than ads.loader_wait_sec.
      */
-    fun presentFullEmbeddedWithUnit(
+    fun presentWholeInlineWithPiece(
         activity: Activity,
         unitId: String,
         onMiss: (() -> Unit)? = null,
@@ -409,14 +409,14 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             isClickable = true
         }
         content.addView(overlay)
-        val dropOverlay = { (overlay.parent as? ViewGroup)?.removeView(overlay) }
+        val dropLayer = { (overlay.parent as? ViewGroup)?.removeView(overlay) }
         // A slow load gives up like an on-load interstitial does; a late ad is then dropped.
         val wait = PromoDelays.main(activity)
         wait.start {
             if (fired) return@start
             Log.d("NativeAds", "FullNative unit $unitId timed out — skip")
             PromoSignals.send(PromoSignals.NATIVE, "timeout", place)
-            dropOverlay()
+            dropLayer()
             miss()
         }
 
@@ -425,14 +425,14 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             .forNativeAd { ad ->
                 PromoSignals.send(PromoSignals.NATIVE, "loaded", place)
                 if (!wait.kitArrived() || fired || activity.isFinishing || activity.isDestroyed) {
-                    ad.destroy(); dropOverlay(); return@forNativeAd miss()
+                    ad.destroy(); dropLayer(); return@forNativeAd miss()
                 }
                 val binding = AduGmsEmbeddedFullpageBinding.inflate(activity.layoutInflater)
                 isFullNativeShowing = true
-                fullpageEmbeddedLayout(ad, binding, activity) {
+                fullpageInlineLayout(ad, binding, activity) {
                     isFullNativeShowing = false
                     ad.destroy()
-                    dropOverlay()
+                    dropLayer()
                     done()
                 }
                 overlay.removeAllViews()
@@ -445,7 +445,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                     super.onAdFailedToLoad(error)
                     if (!wait.kitArrived()) return
                     Log.e("NativeAds", "FullNative unit load failed: ${error.message}")
-                    dropOverlay()
+                    dropLayer()
                     miss()
                 }
             })
@@ -453,7 +453,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             .loadAd(AdRequest.Builder().build())
     }
 
-    private fun fullpageEmbeddedLayout(
+    private fun fullpageInlineLayout(
         nativeAd: NativeAd,
         binding: AduGmsEmbeddedFullpageBinding,
         context: Activity,
@@ -499,21 +499,21 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
             mainNativeadView.setTag(R.id.tag_native_ad, nativeAd)
 
-            fullNativeContent.padOsBars()
+            fullNativeContent.padSysBars()
         }
     }
 
-    private fun View.padOsBars() {
+    private fun View.padSysBars() {
         fun kitBarsOf(insets: WindowInsetsCompat) = insets.getInsets(
             WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
         )
 
-        fun putFromRoot() {
+        fun putFromBase() {
             val bars = ViewCompat.getRootWindowInsets(this)?.let(::kitBarsOf) ?: return
             updatePadding(top = bars.top, bottom = bars.bottom)
         }
 
-        if (isAttachedToWindow) putFromRoot() else doOnAttach { putFromRoot() }
+        if (isAttachedToWindow) putFromBase() else doOnAttach { putFromBase() }
         ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
             val bars = kitBarsOf(insets)
             v.updatePadding(top = bars.top, bottom = bars.bottom)
@@ -522,7 +522,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         ViewCompat.requestApplyInsets(this)
     }
 
-    private fun largeEmbeddedLayout(
+    private fun largeInlineLayout(
         nativeAd: NativeAd,
         binding: AduGmsEmbeddedLargeBinding,
         context: Activity
@@ -542,13 +542,13 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             val txtColor = PromoSettingsBox.getInstance(context).getString("NativetxtColor")
             val btntxtColor = PromoSettingsBox.getInstance(context).getString("NativebtntxtColor")
 
-            PromoFrameLooks.paintSlabBackground(context, binding.mainNativeadView, bgColor)
+            PromoFrameLooks.paintTileBackground(context, binding.mainNativeadView, bgColor)
             PromoFrameLooks.kitPaintCtaBackground(context, binding.mainNativeadView.callToActionView, btnColor)
 
             (binding.mainNativeadView.headlineView as TextView).setTextColor(PromoFrameLooks.headlineColor2(context, txtColor))
             PromoFrameLooks.kitPaintDesignExtras(context, binding.mainNativeadView)
             (binding.mainNativeadView.bodyView as TextView).setTextColor(PromoFrameLooks.kitBodyColor(context, txtColor))
-            (adCallToAction as TextView).setTextColor(PromoFrameLooks.ctaCaptionColor(context, btntxtColor))
+            (adCallToAction as TextView).setTextColor(PromoFrameLooks.ctaLabelColor(context, btntxtColor))
 
             binding.mainNativeadView.bodyView?.apply {
                 visibility = if (nativeAd.body == null) View.GONE else View.VISIBLE
@@ -571,7 +571,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         }
     }
 
-    fun presentMediumEmbedded(
+    fun presentMediumInline(
         context: Activity,
         layout: FrameLayout,
         shimmer: ShimmerFrameLayout? = null,
@@ -582,7 +582,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
         if (context.isFinishing || context.isDestroyed) return
 
-        if (!kitHasNetwork(context)
+        if (!kitHasNet(context)
             || !adsPref.getBoolean("IsAdsON")
             || !adsPref.getBoolean("NativeAd")
         ) {
@@ -609,7 +609,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                         if (context.isFinishing || context.isDestroyed) return@post
                         if (nativeAd != null) {
                             val binding = AduGmsEmbeddedMediumBinding.inflate(context.layoutInflater)
-                            mediumEmbeddedLayout(
+                            mediumInlineLayout(
                                 nativeAd!!,
                                 binding,
                                 context
@@ -624,7 +624,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                             kitShownCached(nativeAd!!, "native_medium")
 
                             nativeAd = null
-                            obtainEmbeddedSpots(context)
+                            obtainInlinePromos(context)
                             return@post
                         }
 
@@ -632,7 +632,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                             layout.removeAllViews()
                             shimmer?.stopShimmer()
                             shimmer?.isVisible = false
-                            NativePromoLead(place).obtainInhouseSpot(
+                            NativePromoLead(place).obtainNativePromo(
                                 context,
                                 layout,
                                 NativePromoLead.NativePromoLook.MID_NATIVE
@@ -653,7 +653,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 layout.removeAllViews()
                 shimmer?.stopShimmer()
                 shimmer?.isVisible = false
-                NativePromoLead(place).obtainInhouseSpot(
+                NativePromoLead(place).obtainNativePromo(
                     context,
                     layout,
                     NativePromoLead.NativePromoLook.MID_NATIVE
@@ -662,7 +662,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         }
     }
 
-    private fun mediumEmbeddedLayout(
+    private fun mediumInlineLayout(
         nativeAd: NativeAd,
         binding: AduGmsEmbeddedMediumBinding,
         context: Activity
@@ -680,13 +680,13 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             val txtColor = PromoSettingsBox.getInstance(context).getString("NativetxtColor")
             val btntxtColor = PromoSettingsBox.getInstance(context).getString("NativebtntxtColor")
 
-            PromoFrameLooks.paintSlabBackground(context, binding.mainNativeadView, bgColor)
+            PromoFrameLooks.paintTileBackground(context, binding.mainNativeadView, bgColor)
             PromoFrameLooks.kitPaintCtaBackground(context, binding.mainNativeadView.callToActionView, btnColor)
 
             (binding.mainNativeadView.headlineView as TextView).setTextColor(PromoFrameLooks.headlineColor2(context, txtColor))
             PromoFrameLooks.kitPaintDesignExtras(context, binding.mainNativeadView)
             (binding.mainNativeadView.bodyView as TextView).setTextColor(PromoFrameLooks.kitBodyColor(context, txtColor))
-            (adCallToAction as TextView).setTextColor(PromoFrameLooks.ctaCaptionColor(context, btntxtColor))
+            (adCallToAction as TextView).setTextColor(PromoFrameLooks.ctaLabelColor(context, btntxtColor))
 
             binding.mainNativeadView.bodyView?.apply {
                 visibility = if (nativeAd.body == null) View.GONE else View.VISIBLE
@@ -717,7 +717,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         this.visibility = View.GONE
     }
 
-    fun presentMediumEmbeddedAlt(
+    fun presentMediumInlineAlt(
         context: Activity,
         layout: FrameLayout,
         shimmer: ShimmerFrameLayout? = null,
@@ -728,7 +728,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
         if (context.isFinishing || context.isDestroyed) return
 
-        if (!kitHasNetwork(context) || !adsPref.getBoolean("IsAdsON") || !adsPref.getBoolean("NativeAd")) {
+        if (!kitHasNet(context) || !adsPref.getBoolean("IsAdsON") || !adsPref.getBoolean("NativeAd")) {
             layout.removeAllViews()
             layout.invisible()
             shimmer?.stopShimmer()
@@ -751,7 +751,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                         if (context.isFinishing || context.isDestroyed) return@post
                         if (Companion.nativeAd != null) {
                             val binding = AduGmsEmbeddedMediumAltBinding.inflate(context.layoutInflater)
-                            mediumEmbeddedLayoutAlt(
+                            mediumInlineLayoutAlt(
                                 Companion.nativeAd!!,
                                 binding,
                                 context
@@ -766,7 +766,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                             kitShownCached(nativeAd!!, "native_medium2")
 
                             nativeAd = null
-                            obtainEmbeddedSpots(context)
+                            obtainInlinePromos(context)
                             return@post
                         }
 
@@ -774,7 +774,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                             layout.removeAllViews()
                             shimmer?.stopShimmer()
                             shimmer?.isVisible = false
-                            NativePromoLead(place).obtainInhouseSpot(
+                            NativePromoLead(place).obtainNativePromo(
                                 context,
                                 layout,
                                 NativePromoLead.NativePromoLook.MID_NATIVE
@@ -794,7 +794,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 layout.removeAllViews()
                 shimmer?.stopShimmer()
                 shimmer?.isVisible = false
-                NativePromoLead(place).obtainInhouseSpot(
+                NativePromoLead(place).obtainNativePromo(
                     context,
                     layout,
                     NativePromoLead.NativePromoLook.MID_NATIVE
@@ -804,7 +804,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
         }
     }
 
-    private fun mediumEmbeddedLayoutAlt(
+    private fun mediumInlineLayoutAlt(
         nativeAd: NativeAd,
         binding: AduGmsEmbeddedMediumAltBinding,
         context: Activity
@@ -824,13 +824,13 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
             val txtColor = PromoSettingsBox.getInstance(context).getString("NativetxtColor")
             val btntxtColor = PromoSettingsBox.getInstance(context).getString("NativebtntxtColor")
 
-            PromoFrameLooks.paintSlabBackground(context, binding.mainNativeadView, bgColor)
+            PromoFrameLooks.paintTileBackground(context, binding.mainNativeadView, bgColor)
             PromoFrameLooks.kitPaintCtaBackground(context, binding.mainNativeadView.callToActionView, btnColor)
 
             (binding.mainNativeadView.headlineView as TextView).setTextColor(PromoFrameLooks.headlineColor2(context, txtColor))
             PromoFrameLooks.kitPaintDesignExtras(context, binding.mainNativeadView)
             (binding.mainNativeadView.bodyView as TextView).setTextColor(PromoFrameLooks.kitBodyColor(context, txtColor))
-            (adCallToAction as TextView).setTextColor(PromoFrameLooks.ctaCaptionColor(context, btntxtColor))
+            (adCallToAction as TextView).setTextColor(PromoFrameLooks.ctaLabelColor(context, btntxtColor))
 
             binding.mainNativeadView.bodyView?.apply {
                 visibility = if (nativeAd.body == null) View.GONE else View.VISIBLE

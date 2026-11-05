@@ -31,10 +31,10 @@ class ChooseAdapter(
     private val ctaAt = if (adAt >= 0 && cta != null) adAt + 1 else -1
 
     /** A full-width row: the ad or the Continue button under it. */
-    fun isSpot(position: Int) = position == adAt || position == ctaAt
+    fun isPromo(position: Int) = position == adAt || position == ctaAt
 
     /** Option index of an adapter position (positions after the ad and the button shift). */
-    private fun pickAt(position: Int) = position - listOf(adAt, ctaAt).count { it in 0 until position }
+    private fun chooseAt(position: Int) = position - listOf(adAt, ctaAt).count { it in 0 until position }
 
     fun kitSubmitSelection(selection: Set<Int>) {
         if (selection == selected) return
@@ -51,7 +51,7 @@ class ChooseAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (payloads.isEmpty() || holder !is PackKeeper) return onBindViewHolder(holder, position)
-        holder.itemView.isSelected = pickAt(position) in selected
+        holder.itemView.isSelected = chooseAt(position) in selected
     }
 
     class PackKeeper(val binding: androidx.viewbinding.ViewBinding) : RecyclerView.ViewHolder(binding.root)
@@ -90,7 +90,7 @@ class ChooseAdapter(
             if (adapterPosition == ctaAt) cta?.let { kitMoveInto(it, holder.slot) }
             return
         }
-        val position = pickAt(adapterPosition)
+        val position = chooseAt(adapterPosition)
         val opt = step.opts[position]
         val ctx = holder.itemView.context
         val name = ctx.getString(opt.name)
@@ -122,7 +122,7 @@ class ChooseAdapter(
         holder.itemView.contentDescription = if (sub.isEmpty()) name else "$name, $sub"
         holder.itemView.setOnClickListener {
             if (holder.bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
-            val p = pickAt(holder.bindingAdapterPosition)
+            val p = chooseAt(holder.bindingAdapterPosition)
             if (p !in selected) it.pop()
             onClick(p)
         }

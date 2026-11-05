@@ -33,7 +33,7 @@ object DeskGadgetPlacer {
 
     /**
      * The row an older build laid the time on, to leave the top free for the "set as default
-     * home" ribbon (now gone); [moveTimeWidgetToTop] brings it back to row 0.
+     * home" ribbon (now gone); [moveTimeGadgetToTop] brings it back to row 0.
      */
     private const val LEGACY_TIME_TOP_ROW = 2
 
@@ -50,7 +50,7 @@ object DeskGadgetPlacer {
         config.timeWidgetShown = prep.showTimeWidget
         config.searchWidgetShown = prep.showSearchWidget
         config.timeWidgetAtTop = true
-        if (prep.showTimeWidget) seedTimeWidget(context)
+        if (prep.showTimeWidget) seedTimeGadget(context)
         if (prep.showSearchWidget) seedLookupRow(context)
     }
 
@@ -63,7 +63,7 @@ object DeskGadgetPlacer {
         if (row < 0) return false
 
         val db = context.homeScreenGridItemsDB
-        val items = db.pullAllCells()
+        val items = db.pullEveryCells()
         if (items.any { isSeededLookupLine(it) }) return false
         val rowTaken = items.any { !it.docked && it.parentId == null && it.page == 0 && it.top <= row && it.bottom >= row }
         if (rowTaken) return false
@@ -109,23 +109,23 @@ object DeskGadgetPlacer {
 
         if (!config.timeWidgetAtTop) {
             config.timeWidgetAtTop = true
-            changed = moveTimeWidgetToTop(context)
+            changed = moveTimeGadgetToTop(context)
         }
 
         if (config.timeWidgetShown != prep.showTimeWidget) {
             config.timeWidgetShown = prep.showTimeWidget
-            val done = if (prep.showTimeWidget) seedTimeWidget(context) else deleteWidgets(context) { it.className == PSEUDO_WIDGET_TIME }
+            val done = if (prep.showTimeWidget) seedTimeGadget(context) else deleteGadgets(context) { it.className == PSEUDO_WIDGET_TIME }
             changed = done || changed
             Timber.i("HubGadgetPlanter: time widget ${if (prep.showTimeWidget) "on" else "off"}")
         }
 
         if (config.searchWidgetShown != prep.showSearchWidget) {
             config.searchWidgetShown = prep.showSearchWidget
-            val done = if (prep.showSearchWidget) seedLookupRow(context) else deleteWidgets(context) { isSeededLookupLine(it) }
+            val done = if (prep.showSearchWidget) seedLookupRow(context) else deleteGadgets(context) { isSeededLookupLine(it) }
             changed = done || changed
             Timber.i("HubGadgetPlanter: search widget ${if (prep.showSearchWidget) "on" else "off"}")
         } else if (prep.showSearchWidget && config.searchWidget != prep.searchWidgetChoice) {
-            deleteWidgets(context) { isSeededLookupLine(it) }
+            deleteGadgets(context) { isSeededLookupLine(it) }
             // Written even when the row cannot go back (its cells taken), so this is not retried forever.
             config.searchWidget = prep.searchWidgetChoice
             seedLookupRow(context)
@@ -140,9 +140,9 @@ object DeskGadgetPlacer {
      * the default-home ribbon. Left where it is when those cells are taken, or when it sits
      * anywhere else - the user put it there. Runs once per install.
      */
-    private fun moveTimeWidgetToTop(context: Context): Boolean {
+    private fun moveTimeGadgetToTop(context: Context): Boolean {
         val db = context.homeScreenGridItemsDB
-        val items = db.pullAllCells()
+        val items = db.pullEveryCells()
         val time = items.firstOrNull {
             it.type == ITEM_TYPE_WIDGET && it.className == PSEUDO_WIDGET_TIME && it.page == 0 && it.top == LEGACY_TIME_TOP_ROW
         } ?: return false
@@ -152,15 +152,15 @@ object DeskGadgetPlacer {
                 it.left <= time.right && it.right >= time.left && it.top <= bottom
         }
         if (taken) return false
-        db.reloadCellPoint(time.left, 0, time.right, bottom, time.page, false, null, time.id ?: return false)
+        db.reloadCellSpot(time.left, 0, time.right, bottom, time.page, false, null, time.id ?: return false)
         Timber.i("HubGadgetPlanter: time widget moved back to row 0")
         return true
     }
 
     /** Deletes every grid widget [match] picks, releasing its bound id. Returns true when any went. */
-    private fun deleteWidgets(context: Context, match: (DeskViewerGridItem) -> Boolean): Boolean {
+    private fun deleteGadgets(context: Context, match: (DeskViewerGridItem) -> Boolean): Boolean {
         val db = context.homeScreenGridItemsDB
-        val gone = db.pullAllCells().filter { it.type == ITEM_TYPE_WIDGET && match(it) }
+        val gone = db.pullEveryCells().filter { it.type == ITEM_TYPE_WIDGET && match(it) }
         gone.forEach { item ->
             if (item.widgetId > 0) runCatching { AppWidgetHost(context, WIDGET_HOST_ID).deleteAppWidgetId(item.widgetId) }
             db.eraseCellByKey(item.id ?: return@forEach)
@@ -168,7 +168,7 @@ object DeskGadgetPlacer {
         return gone.isNotEmpty()
     }
 
-    fun seedTimeWidget(context: Context): Boolean {
+    fun seedTimeGadget(context: Context): Boolean {
         val config = context.launcherConfig
         val columns = config.homeColumnCount
         val rows = config.homeRowCount - 1
@@ -178,7 +178,7 @@ object DeskGadgetPlacer {
         val bottom = TIME_ROWS - 1
 
         val db = context.homeScreenGridItemsDB
-        val items = db.pullAllCells()
+        val items = db.pullEveryCells()
         if (items.any { it.className == PSEUDO_WIDGET_TIME && it.page == 0 }) return false
         val taken = items.any {
             !it.docked && it.parentId == null && it.page == 0 && it.left <= right && it.top <= bottom && it.bottom >= top
@@ -209,7 +209,7 @@ object DeskGadgetPlacer {
         return true
     }
 
-    fun isSeededGadget(item: DeskViewerGridItem): Boolean =
+    fun isSeededWidget(item: DeskViewerGridItem): Boolean =
         isSeededLookupLine(item) ||
             (item.type == ITEM_TYPE_WIDGET && item.page == 0 && item.className == PSEUDO_WIDGET_TIME)
 

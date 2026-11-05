@@ -16,7 +16,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.adkit.draw.AdvancePromoLead
-import com.loanmate.loan.emicalculator.carloan.adkit.draw.kitHasNetwork
+import com.loanmate.loan.emicalculator.carloan.adkit.draw.kitHasNet
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.SheetNoOnlineBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.leave.ExitDialogActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -44,7 +44,7 @@ object NoConnected {
     fun install(app: Application, enabled: () -> Boolean) {
         this.app = app
         this.enabled = enabled
-        onlineState.value = kitHasNetwork(app)
+        onlineState.value = kitHasNet(app)
         val cm = app.getSystemService(ConnectivityManager::class.java)
         runCatching {
             cm.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
@@ -75,7 +75,7 @@ object NoConnected {
             val back = isOnline && !onlineState.value
             onlineState.value = isOnline
             update()
-            if (back) resumed?.let(Spots::kitRefillEmptySlots)
+            if (back) resumed?.let(Spots::kitRefillBlankSlots)
         }
     }
 
@@ -99,7 +99,7 @@ object NoConnected {
         val v = SheetNoOnlineBinding.inflate(activity.layoutInflater)
         v.netRetryVw.setOnClickListener {
             MetricsTwo.click("retry", "no_internet")
-            if (kitHasNetwork(app)) post(true)
+            if (kitHasNet(app)) post(true)
             else v.netIconVw.animate().translationX(12f).setInterpolator(CycleInterpolator(3f)).setDuration(400).start()
         }
         v.netSettingsVw.setOnClickListener {

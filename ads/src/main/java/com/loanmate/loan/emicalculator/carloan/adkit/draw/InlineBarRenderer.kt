@@ -36,7 +36,7 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
      * Warms the strip native. On-load natives (PromoFetchStyle) warm nothing; a slot then calls this
      * with [now] = true to load its own, and hears back through [onLoaded] / [onFailed].
      */
-    fun obtainEmbeddedStripSpots(
+    fun obtainInlineBarPromos(
         activity: Activity,
         now: Boolean = false,
         onLoaded: () -> Unit = {},
@@ -83,7 +83,7 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
         }
     }
 
-    fun presentEmbeddedStrip(
+    fun presentInlineBar(
         context: Activity, layout: FrameLayout, shimmer: ShimmerFrameLayout? = null
     ) {
         Log.e("NativeAds", "Google Show: nativeAd")
@@ -91,7 +91,7 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
 
         if (context.isFinishing || context.isDestroyed) return
 
-        if (!kitHasNetwork(context)
+        if (!kitHasNet(context)
             || !adsPref.getBoolean("IsAdsON")
             || !adsPref.getBoolean("NativeBannerPresenter")
         ) {
@@ -117,14 +117,14 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
                             return@post
                         } else {
                             // PackNothing cached (on-load mode, or the warmed strip was already used): load this slot's strip now.
-                            obtainEmbeddedStripSpots(
+                            obtainInlineBarPromos(
                                 context, now = true,
                                 onLoaded = {
                                     if (!context.isFinishing && !context.isDestroyed && layout.isAttachedToWindow) {
                                         presentCached(context, layout, shimmer)
                                     }
                                 },
-                                onFailed = { if (!context.isFinishing && !context.isDestroyed) kitStripMissing(context, layout, shimmer) },
+                                onFailed = { if (!context.isFinishing && !context.isDestroyed) kitBarMissing(context, layout, shimmer) },
                             )
                         }
                     } catch (e: Exception) {
@@ -138,7 +138,7 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
                 layout.removeAllViews()
                 shimmer?.stopShimmer()
                 shimmer?.isVisible = false
-                NativePromoLead(place).obtainInhouseSpot(
+                NativePromoLead(place).obtainNativePromo(
                     context, layout, NativePromoLead.NativePromoLook.BANNER
                 )
             }
@@ -146,9 +146,9 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
     }
 
     private fun presentCached(context: Activity, layout: FrameLayout, shimmer: ShimmerFrameLayout?) {
-        val ad = nativeAdBanner ?: return kitStripMissing(context, layout, shimmer)
+        val ad = nativeAdBanner ?: return kitBarMissing(context, layout, shimmer)
         val binding = AduGmsEmbeddedCompactBinding.inflate(context.layoutInflater)
-        populateGmsEmbedded(ad, binding, context)
+        populateGmsInline(ad, binding, context)
 
         layout.removeAllViews()
         shimmer?.stopShimmer()
@@ -158,17 +158,17 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
         stripEvents?.place = place
         PromoSignals.send(PromoSignals.NATIVE, "show", place)
         nativeAdBanner = null
-        obtainEmbeddedStripSpots(context)
+        obtainInlineBarPromos(context)
     }
 
-    private fun kitStripMissing(context: Activity, layout: FrameLayout, shimmer: ShimmerFrameLayout?) {
+    private fun kitBarMissing(context: Activity, layout: FrameLayout, shimmer: ShimmerFrameLayout?) {
         layout.removeAllViews()
         shimmer?.stopShimmer()
         shimmer?.isVisible = false
-        NativePromoLead(place).obtainInhouseSpot(context, layout, NativePromoLead.NativePromoLook.BANNER)
+        NativePromoLead(place).obtainNativePromo(context, layout, NativePromoLead.NativePromoLook.BANNER)
     }
 
-    private fun populateGmsEmbedded(
+    private fun populateGmsInline(
         nativeAd: NativeAd, binding: AduGmsEmbeddedCompactBinding, context: Activity
     ) {
         val unit = PromoSettingsBox.getInstance(context).getString("googleNative")
@@ -200,10 +200,10 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
                 PromoSettingsBox.getInstance(context).getString("NativebtntxtColor")
 
             (adCallToAction as TextView).apply {
-                setTextColor(PromoFrameLooks.ctaCaptionColor(context, btntxtColor))
+                setTextColor(PromoFrameLooks.ctaLabelColor(context, btntxtColor))
             }
 
-            PromoFrameLooks.paintSlabBackground(context, mainNativeadView, bgColor)
+            PromoFrameLooks.paintTileBackground(context, mainNativeadView, bgColor)
 
             PromoFrameLooks.kitPaintCtaBackground(context, adCallToAction, btnColor)
             PromoFrameLooks.kitPaintDesignExtras(context, mainNativeadView)

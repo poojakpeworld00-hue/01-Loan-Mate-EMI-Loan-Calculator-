@@ -39,10 +39,10 @@ class GadgetsLoader(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val widgetListItem = widgetListItems[position]
-        holder.bindView(widgetListItems[position]) { itemView, layoutPosition ->
+        holder.attachScreen(widgetListItems[position]) { itemView, layoutPosition ->
             when (widgetListItem) {
                 is GadgetsStackCluster -> prepRollCluster(itemView, widgetListItem)
-                is GadgetsStackLogsSaver -> prepRollCellsRetainer(itemView, widgetListItem)
+                is GadgetsStackLogsSaver -> prepRollCellsSaver(itemView, widgetListItem)
             }
         }
     }
@@ -62,7 +62,7 @@ class GadgetsLoader(
         }
     }
 
-    private fun prepRollCellsRetainer(view: View, listItem: GadgetsStackLogsSaver) {
+    private fun prepRollCellsSaver(view: View, listItem: GadgetsStackLogsSaver) {
         val binding = HpBinGadgetListEntriesKeeperBinding.bind(view)
         binding.widgetRollCellsHolderIxVw.removeAllViews()
         binding.widgetRollCellsScrollFrameIxVw.scrollX = 0
@@ -115,7 +115,7 @@ class GadgetsLoader(
         }
     }
 
-    fun updateItems(newItems: ArrayList<GadgetsStackItem>) {
+    fun refreshItems(newItems: ArrayList<GadgetsStackItem>) {
         val oldSum = widgetListItems.sumOf { it.getHashToCompare() }
         val newSum = newItems.sumOf { it.getHashToCompare() }
         if (oldSum != newSum) {
@@ -124,7 +124,7 @@ class GadgetsLoader(
         }
     }
 
-    fun reloadCaptionTint(newTextColor: Int) {
+    fun reloadLabelTint(newTextColor: Int) {
         if (newTextColor != textColor) {
             textColor = newTextColor
             notifyDataSetChanged()
@@ -132,7 +132,7 @@ class GadgetsLoader(
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bindView(widgetListItem: GadgetsStackItem, callback: (itemView: View, adapterPosition: Int) -> Unit) {
+        fun attachScreen(widgetListItem: GadgetsStackItem, callback: (itemView: View, adapterPosition: Int) -> Unit) {
             itemView.apply {
                 callback(this, adapterPosition)
             }

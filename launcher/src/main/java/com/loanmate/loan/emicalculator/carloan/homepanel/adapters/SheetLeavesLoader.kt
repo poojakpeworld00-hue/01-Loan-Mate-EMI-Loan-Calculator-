@@ -22,7 +22,7 @@ class SheetLeavesLoader(
     var firstPageAdapter: CentersLoader? = null
         private set
 
-    fun submitPages(newPages: List<List<WidgetCenter>>, columnCount: Int, rowCount: Int) {
+    fun submitLeaves(newPages: List<List<WidgetCenter>>, columnCount: Int, rowCount: Int) {
         pages = newPages
         columns = columnCount
         rows = rowCount.coerceAtLeast(1)
@@ -62,14 +62,14 @@ class SheetLeavesLoader(
 
         init {
             grid.addOnLayoutChangeListener { _, _, top, _, bottom, _, oldTop, _, oldBottom ->
-                if (bottom - top != oldBottom - oldTop) grid.post { syncSlotTallness(bottom - top) }
+                if (bottom - top != oldBottom - oldTop) grid.post { syncBayTallness(bottom - top) }
             }
         }
 
         private fun slotTallnessFor(pageHeight: Int) =
             if (pageHeight > 0) (pageHeight - grid.paddingTop - grid.paddingBottom) / rowCount else 0
 
-        private fun syncSlotTallness(pageHeight: Int) {
+        private fun syncBayTallness(pageHeight: Int) {
             val lineup = adapter ?: return
             val cell = slotTallnessFor(pageHeight)
             if (cell <= 0 || lineup.cellHeightPx == cell) return
@@ -94,7 +94,7 @@ class SheetLeavesLoader(
             val lineup = adapter!!
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int) =
-                    if (lineup.isPromoSlotSpot(position)) layoutManager.spanCount else 1
+                    if (lineup.isAdBayPromo(position)) layoutManager.spanCount else 1
             }
 
             slotTallnessFor(grid.height.takeIf { it > 0 } ?: pager.height).takeIf { it > 0 }?.let { lineup.cellHeightPx = it }

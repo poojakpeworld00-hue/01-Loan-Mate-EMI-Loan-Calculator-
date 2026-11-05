@@ -18,7 +18,7 @@ class ComputeScreenModel(private val calculate: LaborCommitJob, args: SavedState
     private val _state = MutableStateFlow(ComputeLookStyle(calculate.compute(type, 0.0)))
     val state: StateFlow<ComputeLookStyle> = _state
 
-    fun onWork(input: String) {
+    fun onLabor(input: String) {
         _state.value = when (val outcome = calculate(type, input)) {
             LaborCommitJob.PackResult.PackBlank -> _state.value.copy(error = R.string.calc_error_empty)
             LaborCommitJob.PackResult.PackBroken -> _state.value.copy(error = R.string.calc_error_invalid)

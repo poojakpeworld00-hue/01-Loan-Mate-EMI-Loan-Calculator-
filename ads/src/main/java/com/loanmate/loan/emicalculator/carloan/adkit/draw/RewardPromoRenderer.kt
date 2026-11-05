@@ -69,7 +69,7 @@ class RewardPromoRenderer {
                     }
 
                     override fun onAdFailedToLoad(error: LoadAdError) {
-                        PromoSignals.loadFailed(PromoSignals.REWARDED, error.code, place)
+                        PromoSignals.fetchFailed(PromoSignals.REWARDED, error.code, place)
                         loadedAd = null
                         isLoading = false
                         Log.e("RewardAdRenderer", "Preload failed: ${error.message}")
@@ -79,7 +79,7 @@ class RewardPromoRenderer {
             )
         }
 
-        fun kitPresentIfLoaded(activity: Activity, onDone: () -> Unit, onMiss: () -> Unit = onDone): Boolean {
+        fun kitShowIfLoaded(activity: Activity, onDone: () -> Unit, onMiss: () -> Unit = onDone): Boolean {
             val ad = kitDropStale() ?: return false
             loadedAd = null
             val place = PromoSignals.place
@@ -107,14 +107,14 @@ class RewardPromoRenderer {
          * A chain's rewarded step: the ready ad, else - on-load rewarded - one loaded now behind
          * the loader. [onMiss] when there is none (or the load outlasts ads.loader_wait_sec).
          */
-        fun presentOrPull(activity: Activity, onDone: () -> Unit, onMiss: () -> Unit, loadIfMissing: Boolean = false) {
-            if (kitPresentIfLoaded(activity, onDone, onMiss)) return
+        fun presentOrFetch(activity: Activity, onDone: () -> Unit, onMiss: () -> Unit, loadIfMissing: Boolean = false) {
+            if (kitShowIfLoaded(activity, onDone, onMiss)) return
             if (!loadIfMissing && PromoFetchStyle.preload(activity, PromoFetchStyle.PackShape.REWARDED)) {
                 preload(activity)
                 return onMiss()
             }
             pullNow(activity, ignoreMasterSwitch = false) { ok ->
-                if (!ok || !kitPresentIfLoaded(activity, onDone, onMiss)) onMiss()
+                if (!ok || !kitShowIfLoaded(activity, onDone, onMiss)) onMiss()
             }
         }
 

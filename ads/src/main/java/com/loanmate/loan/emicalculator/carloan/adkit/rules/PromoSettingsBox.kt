@@ -11,7 +11,7 @@ class PromoSettingsBox private constructor(context: Context) {
 
     companion object {
         /** Sponsor links (string or JSON list). Same as the reference: not gated by house ads. */
-        fun decodePatronLinks(raw: String): List<String> {
+        fun decodeSponsorUrls(raw: String): List<String> {
             val v = raw.trim()
             if (v.isEmpty()) return emptyList()
             if (!v.startsWith("[")) return listOf(v)
@@ -47,8 +47,8 @@ class PromoSettingsBox private constructor(context: Context) {
 
     fun getString(key: String?): String? = getString(key, "")
 
-    fun patronLinks(placement: String? = null): List<String> =
-        decodePatronLinks(PromoPieceKeys.resolve(this, placement, "DirectLink"))
+    fun patronUrls(placement: String? = null): List<String> =
+        decodeSponsorUrls(PromoPieceKeys.resolve(this, placement, "DirectLink"))
 
     fun getString(key: String?, defaultValue: String?): String? =
         preferences.getString(key, defaultValue).also { PromoPut.read("vault", key, it) }
@@ -76,14 +76,14 @@ class PromoSettingsBox private constructor(context: Context) {
     fun clear() = preferences.edit().clear().apply()
 
     /** Removes every key the parser writes, so a key dropped from RC does not survive in prefs. */
-    fun resetManaged() {
+    fun restoreManaged() {
         val editor = preferences.edit()
-        resetManagedIn(editor)
+        restoreManagedIn(editor)
         editor.apply()
     }
 
-    /** Same as [resetManaged] inside a caller's editor, so clear + rewrite land in one atomic apply(). */
-    fun resetManagedIn(editor: SharedPreferences.Editor) {
+    /** Same as [restoreManaged] inside a caller's editor, so clear + rewrite land in one atomic apply(). */
+    fun restoreManagedIn(editor: SharedPreferences.Editor) {
         val keep = setOf("OnMaketing", "__cfg_audience_split", "geo_country_code", "GET_DATA_RAW")
         // "__" keys are engine state (unlock counters, audience split), not config: never cleared.
         preferences.all.keys.filter { it !in keep && !it.startsWith("__") }.forEach { editor.remove(it) }

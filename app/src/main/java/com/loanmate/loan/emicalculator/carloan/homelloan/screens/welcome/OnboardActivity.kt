@@ -50,11 +50,11 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.SysSh
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenSetupBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.SheetSetupBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitAccentBold
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.maskNavigationBar
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.maskNavBar
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitShine
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.access.Grants
@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
  * an exit ad on every way forward, system keys (`launcher.system_keys`), the bottom sheet and the set-as-default-home step.
  */
 class OnboardActivity : AppCompatActivity(), SysShortcutAim {
-    private val viewModel by toolViewForm { handle ->
+    private val viewModel by toolScreenModel { handle ->
         OnboardScreenModel(settingsRepository, config.value, Launcher.isDefaultHome(this@OnboardActivity), handle)
     }
     private val config get() = (application as LoanTwo).container.config.value
@@ -92,8 +92,8 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     private var leftWithHome = false
     private val homeDemo by lazy { RootBootGallery(b.homeDemoVw) }
     private var waitedForLocale = false
-    private val finishAnyway = Runnable { finishSetup() }
-    private val reAsk = Runnable { if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && currentKey() == DEFAULT_HOME_KEY) queryBaseBase() }
+    private val finishAnyway = Runnable { finishOnboard() }
+    private val reAsk = Runnable { if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED) && currentKey() == DEFAULT_HOME_KEY) queryRootRoot() }
 
     /** Home while we are not the default home yet: the launcher can't see it, so the flow hears it here. */
     private val keyReceiver = object : BroadcastReceiver() {
@@ -107,7 +107,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         kitEnableDarkEdgeToEdge()
         b = ScreenSetupBinding.inflate(layoutInflater)
         setContentView(b.root)
-        b.contentVw.padForOsBars()
+        b.contentVw.padForSysBars()
         b.glowVw.kitGlowPulse()
         b.ctaShineVw.kitShine(b.ctaVw, 3200)
         b.ctaVw.clipToOutline = true
@@ -120,19 +120,19 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         b.skipVw.setOnClickListener { MetricsTwo.click("skip"); advance() }
         b.nextVw.setOnClickListener {
             MetricsTwo.click("continue")
-            primaryTask()
+            primaryJob()
         }
-        b.favAllVw.setOnClickListener { viewModel.switchAllStars() }
-        onBackPressedDispatcher.addCallback(this) { MetricsTwo.hotkeyPress("back"); onOsHotkey(SysShortcut.BACK) }
+        b.favAllVw.setOnClickListener { viewModel.switchEveryStars() }
+        onBackPressedDispatcher.addCallback(this) { MetricsTwo.hotkeyPress("back"); onSysShortcut(SysShortcut.BACK) }
 
         kitCollectWhenStarted(viewModel.state, ::render)
-        kitCollectWhenStarted(viewModel.finished) { finishSetup() }
-        lifecycleScope.launch { for (key in systemKeys) lifecycle.withResumed { onOsHotkey(key) } }
+        kitCollectWhenStarted(viewModel.finished) { finishOnboard() }
+        lifecycleScope.launch { for (key in systemKeys) lifecycle.withResumed { onSysShortcut(key) } }
         // Back after Recents removed our task with the setup sheet open: as the reference, it opens again.
-        if (savedInstanceState == null && viewModel.resumed && OnboardProgress.sheet) b.root.post { presentTray() }
+        if (savedInstanceState == null && viewModel.resumed && OnboardProgress.sheet) b.root.post { presentDock() }
         // The language picked on the last step relaunches this screen on some phones (despite configChanges): the new
         // one, already in that language, goes straight on to Home before it is ever drawn.
-        if (viewModel.done) finishSetup()
+        if (viewModel.done) finishOnboard()
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -167,7 +167,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         // during onboarding never make it give up and show the launcher home (the user stays in onboarding).
         Launcher.hostShown()
         live = WeakReference(this)
-        if (grantPending) grantSpotOver()
+        if (grantPending) grantPromoOver()
         // The sheet opens on Home / Recents, which pause us for a moment: the guide carries on where it was.
         if (voicePausedByLeaving) {
             voicePausedByLeaving = false
@@ -177,7 +177,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         ContextCompat.registerReceiver(this, keyReceiver, IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS), ContextCompat.RECEIVER_EXPORTED)
         if (leftWithHome) {
             leftWithHome = false
-            queryBaseBase()
+            queryRootRoot()
         }
     }
 
@@ -196,8 +196,8 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     }
 
     /** The step's main button: default_home asks to be home, permission_hub asks its permissions first, others go on. */
-    private fun primaryTask() = when (currentKey()) {
-        DEFAULT_HOME_KEY -> queryBaseBase()
+    private fun primaryJob() = when (currentKey()) {
+        DEFAULT_HOME_KEY -> queryRootRoot()
         PERMISSION_HUB_KEY -> { MetricsTwo.click("allow"); Grants.queryFor(this, PERMISSION_HUB_KEY) { advance() } }
         else -> advance()
     }
@@ -219,16 +219,16 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
      */
     private fun advance(key: SysShortcut? = null) {
         if (ExitPromoRunner.busy()) return
-        closeSheet()
+        dismissPanel()
         val step = currentKey() ?: return viewModel.skip()
-        val place = key?.takeIf { Spots.hotkeySpotDuringSetup(it.key) }?.let { "launcher.${it.key}_button" } ?: "onboarding.$step"
+        val place = key?.takeIf { Spots.hotkeyPromoDuringOnboard(it.key) }?.let { "launcher.${it.key}_button" } ?: "onboarding.$step"
         Spots.exit(this, place) {
             if (key == null) Views.outBy("next") // a system key already said how the visit ends
             viewModel.next()
         }
     }
 
-    private fun onOsHotkey(key: SysShortcut) {
+    private fun onSysShortcut(key: SysShortcut) {
         // One press at a time: while its action (and the exit ad it runs) is going, other presses are ignored.
         val now = SystemClock.elapsedRealtime()
         if (ExitPromoRunner.busy() || now - keyHandledAt < KEY_REPEAT_MS) return
@@ -239,24 +239,24 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         if (currentKey() == DEFAULT_HOME_KEY) {
             when (key) {
                 SysShortcut.HOME -> if (notHome) leftWithHome = true
-                SysShortcut.BACK -> queryBaseBase()
+                SysShortcut.BACK -> queryRootRoot()
                 SysShortcut.RECENTS -> Unit
             }
             return
         }
         if (notHome && key == SysShortcut.HOME) return // Home keys elsewhere work only while we are the default home
-        fun hotkeySpot(then: () -> Unit) {
-            if (!Spots.hotkeySpotDuringSetup(key.key)) return then()
+        fun hotkeyPromo(then: () -> Unit) {
+            if (!Spots.hotkeyPromoDuringOnboard(key.key)) return then()
             if (!ExitPromoRunner.busy()) Spots.exit(this, "launcher.${key.key}_button", then)
         }
         when (val r = OnboardChecks.onKey(config.systemKeys, key, viewModel.state.value.stepIndex, sheetOpen = sheet?.isShowing == true)) {
-            ShortcutResult.ShowDock -> presentTray()
+            ShortcutResult.ShowDock -> presentDock()
             ShortcutResult.Onward -> advance(key)
-            is ShortcutResult.PackGoTo -> hotkeySpot { closeSheet(); viewModel.kitGoTo(r.index) }
-            ShortcutResult.QuitLoan -> hotkeySpot { finish() }
+            is ShortcutResult.PackGoTo -> hotkeyPromo { dismissPanel(); viewModel.kitGoTo(r.index) }
+            ShortcutResult.QuitLoan -> hotkeyPromo { finish() }
             // Back like Android's own: the app goes to the background and onboarding waits where it is.
             ShortcutResult.GearRoot -> if (key == SysShortcut.BACK && !moveTaskToBack(true)) finish()
-            ShortcutResult.PackNothing -> hotkeySpot {}
+            ShortcutResult.PackNothing -> hotkeyPromo {}
         }
     }
 
@@ -264,12 +264,12 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
      * `system_keys.bottom_sheet`: the reference app's "Finish setup" sheet: progress, the step up next, and (from the sheet's
      * second opening) the voice guide, auto-played in the app's language. Continue setup and Go to Home go forward; the close button closes it.
      */
-    private fun closeSheet() {
+    private fun dismissPanel() {
         OnboardProgress.sheet = false
         sheet?.dismiss()
     }
 
-    private fun presentTray() {
+    private fun presentDock() {
         if (sheet?.isShowing == true) return
         Views.show("onboarding_bottom_sheet")
         val prefs = getSharedPreferences("onboarding_sheet", MODE_PRIVATE)
@@ -317,7 +317,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         v.sheetContinueVw.setOnClickListener { MetricsTwo.click("continue"); advance() }
         // As the reference: "Go to Home" moves on like Continue; only the close button (or Back) closes the sheet.
         v.sheetCloseVw.setOnClickListener { MetricsTwo.click("go_home"); advance() }
-        v.sheetXVw.setOnClickListener { MetricsTwo.click("dismiss"); closeSheet() }
+        v.sheetXVw.setOnClickListener { MetricsTwo.click("dismiss"); dismissPanel() }
         OnboardProgress.sheet = true
         sheet = BottomSheetDialog(this).apply {
             setContentView(v.root)
@@ -327,11 +327,11 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             setCanceledOnTouchOutside(false)
             behavior.isDraggable = false
             // As the reference: Back over the sheet is the system key's own action (system_keys), not a plain close.
-            onBackPressedDispatcher.addCallback { MetricsTwo.hotkeyPress("back"); onOsHotkey(SysShortcut.BACK) }
+            onBackPressedDispatcher.addCallback { MetricsTwo.hotkeyPress("back"); onSysShortcut(SysShortcut.BACK) }
             // Dismiss arrives posted: a sheet reopened meanwhile owns the voice now, so an old sheet leaves it alone.
             setOnDismissListener { if (sheet === this) releaseSpeech() }
             show()
-            window?.maskNavigationBar()
+            window?.maskNavBar()
             (v.root.parent as? View)?.setBackgroundColor(Color.TRANSPARENT) // our sheet draws its own rounded surface
         }
     }
@@ -431,7 +431,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         else -> R.raw.intro_voice_en
     }
 
-    private fun onBaseBasePhase(onIt: Boolean) {
+    private fun onRootRootStep(onIt: Boolean) {
         RootRootStep.shown = onIt
         // The reference's animated demo replaces the option list on this step; its button carries the home icon.
         b.listVw.visibility = if (onIt) View.GONE else View.VISIBLE
@@ -439,10 +439,10 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         b.nextVw.icon = if (onIt) ContextCompat.getDrawable(this, R.drawable.glyph_home) else null
         b.nextVw.iconGravity = com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_START
         if (onIt) homeDemo.start() else homeDemo.stop()
-        if (onIt) queryBaseBase() // Settings opens straight away
+        if (onIt) queryRootRoot() // Settings opens straight away
     }
 
-    private fun queryBaseBase() {
+    private fun queryRootRoot() {
         if (askingHome) return
         askingHome = true
         Launcher.requestDefaultHome(this) { granted ->
@@ -465,7 +465,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         // past default_home. The grant then lands on the old, destroyed screen, where no ad can show: the live screen
         // takes it over and runs default_home's exit ad itself.
         if (isDestroyed || isFinishing) {
-            live?.get()?.takeIf { !it.isDestroyed && !it.isFinishing && it !== this }?.grantSpotOver() ?: run { grantPending = true }
+            live?.get()?.takeIf { !it.isDestroyed && !it.isFinishing && it !== this }?.grantPromoOver() ?: run { grantPending = true }
             return
         }
         grantPending = false
@@ -476,24 +476,24 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         if (viewModel.state.value.stepIndex < viewModel.steps.lastIndex && !ExitPromoRunner.busy()) {
             Views.outBy("next")
             viewModel.next()
-            Spots.exit(this, "onboarding.$DEFAULT_HOME_KEY") { ToggleShield.moveToBaseTask(this) }
+            Spots.exit(this, "onboarding.$DEFAULT_HOME_KEY") { ToggleShield.moveToRootJob(this) }
         } else advance()
     }
 
     /** A grant this screen didn't see (it opened past default_home): default_home's exit ad runs over the current step. */
-    private fun grantSpotOver() {
+    private fun grantPromoOver() {
         grantPending = false
         if (currentKey() == DEFAULT_HOME_KEY) return baseGranted()
         if (ExitPromoRunner.busy()) return
         homeGrantedAt = SystemClock.elapsedRealtime()
-        Spots.exit(this, "onboarding.$DEFAULT_HOME_KEY") { ToggleShield.moveToBaseTask(this) }
+        Spots.exit(this, "onboarding.$DEFAULT_HOME_KEY") { ToggleShield.moveToRootJob(this) }
     }
 
     /**
      * Done: always the app home first. With our launcher as the default home, it is started in Android's home stack behind
      * the app, so Back from the app home lands on it.
      */
-    private fun finishSetup() {
+    private fun finishOnboard() {
         if (isFinishing) return
         // A language picked on the last step reaches us a moment later (onConfigurationChanged): Home opened before then
         // stays in the old language. Wait for it, with a cap so a missed change never strands the user here.
@@ -508,7 +508,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         if (config.launcher.on && Launcher.isDefaultHome(this)) {
             runCatching {
                 startActivities(arrayOf(
-                    PrimeScreens.deckBaseIntent(this).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION),
+                    PrimeScreens.deckRootIntent(this).addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION),
                     home.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION),
                 ))
             }.onFailure { startActivity(home) }
@@ -522,7 +522,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
      */
     private fun wireTexts(step: Phase, state: OnboardLookStyle) {
         val preview = state.selection.firstOrNull()?.takeIf { step.key == LANG_KEY }
-            ?.let { viewModel.languageTag(it) }?.let(::inTongue) ?: this
+            ?.let { viewModel.languageTag(it) }?.let(::inLanguage) ?: this
         b.stepNameVw.text = preview.getText(step.name)
         b.titleVw.text = preview.getText(step.title).kitAccentBold(b.titleVw)
         b.subVw.text = preview.getText(step.sub)
@@ -540,7 +540,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     }
 
     /** This screen's resources in [tag]'s language, without changing the app's language. */
-    private fun inTongue(tag: String): Context =
+    private fun inLanguage(tag: String): Context =
         createConfigurationContext(Configuration(resources.configuration).apply { setLocale(Locale.forLanguageTag(tag)) })
 
     /** The language applied app-wide in place (no recreate): every word on screen again in the new language. */
@@ -548,7 +548,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         super.onConfigurationChanged(newConfig)
         viewModel.steps.getOrNull(viewModel.state.value.stepIndex)?.let { wireTexts(it, viewModel.state.value) }
         (b.listVw.adapter as? ChooseAdapter)?.let { it.notifyItemRangeChanged(0, it.itemCount) }
-        if (waitedForLocale) finishSetup()
+        if (waitedForLocale) finishOnboard()
     }
 
     private fun render(state: OnboardLookStyle) {
@@ -579,7 +579,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             if (obNumber > 0) b.prog.setProgressCompat(obNumber, !first)
             b.titleVw.updatePadding(top = resources.getDimensionPixelSize(if (hasBanner) SdpR.dimen._30sdp else SdpR.dimen._10sdp))
             b.skipVw.visibility = if (if (step.key == DEFAULT_HOME_KEY) viewModel.defaultHomeSkipButton else viewModel.skipButton) View.VISIBLE else View.GONE
-            onBaseBasePhase(step.key == DEFAULT_HOME_KEY)
+            onRootRootStep(step.key == DEFAULT_HOME_KEY)
             // As the reference: every step asks its `permissions.<step>` on open; permission_hub asks on its Allow button.
             if (step.key != PERMISSION_HUB_KEY) Grants.queryFor(this, step.key)
             b.favRowVw.visibility = if (state.stepIndex == viewModel.favIndex) View.VISIBLE else View.GONE
@@ -597,12 +597,12 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             ) {
                 MetricsTwo.click("option", step.key)
                 // Information rows (launcher, welcome, permissions): a tap does what the button does.
-                if (step.key in INFO_STEPS) primaryTask() else viewModel.select(it)
+                if (step.key in INFO_STEPS) primaryJob() else viewModel.select(it)
             }
             this.adapter = adapter
             b.listVw.layoutManager = GridLayoutManager(this, step.columns).apply {
                 spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int) = if (adapter.isSpot(position)) step.columns else 1
+                    override fun getSpanSize(position: Int) = if (adapter.isPromo(position)) step.columns else 1
                 }
             }
             b.listVw.adapter = adapter

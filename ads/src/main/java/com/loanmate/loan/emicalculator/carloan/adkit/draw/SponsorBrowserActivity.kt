@@ -74,11 +74,11 @@ class SponsorBrowserActivity : Activity() {
         fun kitBarsOf(insets: WindowInsetsCompat) = insets.getInsets(
             WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
         )
-        fun putFromRoot() {
+        fun putFromBase() {
             val bars = ViewCompat.getRootWindowInsets(root)?.let(::kitBarsOf) ?: return
             root.updatePadding(top = bars.top, bottom = bars.bottom)
         }
-        if (root.isAttachedToWindow) putFromRoot() else root.doOnAttach { putFromRoot() }
+        if (root.isAttachedToWindow) putFromBase() else root.doOnAttach { putFromBase() }
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val bars = kitBarsOf(insets)
             v.updatePadding(top = bars.top, bottom = bars.bottom)

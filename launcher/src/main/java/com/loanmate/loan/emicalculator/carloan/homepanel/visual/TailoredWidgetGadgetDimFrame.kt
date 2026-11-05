@@ -11,7 +11,7 @@ import android.widget.RelativeLayout
 import kotlinx.collections.immutable.toImmutableList
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
-import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.pullSlotCounter
+import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.pullBayTally
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.MAX_CLICK_DURATION
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.DeskViewerGridItem
 
@@ -76,8 +76,8 @@ class TailoredWidgetGadgetDimFrame(context: Context, attrs: AttributeSet, defSty
             it.provider.className == gridItem.className
         } ?: return
 
-        minResizeWidthCells = Math.min(context.launcherConfig.homeColumnCount, context.pullSlotCounter(providerInfo.minResizeWidth))
-        minResizeHeightCells = Math.min(context.launcherConfig.homeRowCount, context.pullSlotCounter(providerInfo.minResizeHeight))
+        minResizeWidthCells = Math.min(context.launcherConfig.homeColumnCount, context.pullBayTally(providerInfo.minResizeWidth))
+        minResizeHeightCells = Math.min(context.launcherConfig.homeRowCount, context.pullBayTally(providerInfo.minResizeHeight))
         redrawSnapshot()
 
         occupiedCells.clear()

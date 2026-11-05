@@ -35,7 +35,7 @@ object PackageInfoStore {
             val appInfo = info.applicationInfo ?: return
             editor.putString(KEY_LABEL + pkg, pm.getApplicationLabel(appInfo).toString())
             editor.putString(KEY_VERSION + pkg, info.versionName.orEmpty())
-            keepBadge(app, pkg, pm.getApplicationIcon(appInfo))
+            keepMark(app, pkg, pm.getApplicationIcon(appInfo))
         }
     }
 
@@ -47,11 +47,11 @@ object PackageInfoStore {
         return PackInfo(label, version, iconFile(app, pkg).takeIf { it.exists() })
     }
 
-    fun kitSeedAll(context: Context) {
+    fun kitSeedEvery(context: Context) {
         val app = context.applicationContext
         runCatching {
             val pm = app.packageManager
-            val installed = kitInstalledPackages(pm)
+            val installed = kitPresentPackages(pm)
             val store = prefs(app)
 
             store.edit {
@@ -90,7 +90,7 @@ object PackageInfoStore {
         stale.forEach { iconFile(context, it).delete() }
     }
 
-    private fun keepBadge(context: Context, pkg: String, drawable: Drawable) {
+    private fun keepMark(context: Context, pkg: String, drawable: Drawable) {
         val size = (48 * context.resources.displayMetrics.density).toInt().coerceIn(96, 192)
         val bitmap = drawable.toBitmap(size, size)
         val file = iconFile(context, pkg)
@@ -113,7 +113,7 @@ object PackageInfoStore {
         }
     }.getOrNull()
 
-    private fun kitInstalledPackages(pm: PackageManager): List<String> {
+    private fun kitPresentPackages(pm: PackageManager): List<String> {
         val apps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             pm.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0))
         } else {
