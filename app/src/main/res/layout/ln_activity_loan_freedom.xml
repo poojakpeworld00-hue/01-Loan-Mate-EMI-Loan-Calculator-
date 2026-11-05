@@ -351,7 +351,7 @@
                         android:fontFamily="@font/ln_sf_pro_semibold"
                         android:letterSpacing="0.06"
                         android:text="@string/ln_freedom_headline_remaining"
-                        android:textColor="@color/ln_text_secondary"
+                        android:textColor="@color/ln_brand_primary_light"
                         android:textSize="@dimen/_10ssp" />
 
                     <TextView
@@ -360,7 +360,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/ln_sfprodisplaybold"
-                        android:textColor="@color/ln_brand_primary"
+                        android:textColor="@color/ln_white"
                         android:textSize="@dimen/_22ssp"
                         tools:text="180 months" />
 
@@ -370,7 +370,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:fontFamily="@font/ln_sf_pro"
-                        android:textColor="@color/ln_brand_primary_dark"
+                        android:textColor="@color/ln_brand_primary_light"
                         android:textSize="@dimen/_11ssp"
                         tools:text="Debt-free on Apr 2041" />
                 </LinearLayout>

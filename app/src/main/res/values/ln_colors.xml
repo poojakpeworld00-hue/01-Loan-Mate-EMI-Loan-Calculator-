@@ -12,9 +12,9 @@
     <color name="ln_brand_primary_dark">#1A6FD6</color>
     <color name="ln_brand_primary_light">#E3F0FF</color>
     <color name="ln_brand_primary_tint">#F2F8FF</color>
-    <color name="ln_divider">#EAEDF2</color>
+    <color name="ln_divider">#E5EBF4</color>
     <color name="ln_grid_amber_bg">#FFE9C5</color>
-    <color name="ln_grid_amber_fg">#D58300</color>
+    <color name="ln_grid_amber_fg">#B45309</color>
     <color name="ln_grid_blue_bg">#E3F0FF</color>
     <color name="ln_grid_blue_fg">#3399FF</color>
     <color name="ln_grid_dark_bg">#E1E6F0</color>
@@ -28,12 +28,17 @@
     <color name="ln_grid_red_bg">#FFE0DC</color>
     <color name="ln_grid_red_fg">#D9382C</color>
     <color name="ln_grid_yellow_bg">#FFF1CC</color>
-    <color name="ln_grid_yellow_fg">#C68A00</color>
-    <color name="ln_stroke_default">#E2E6EE</color>
+    <color name="ln_grid_yellow_fg">#A16207</color>
+    <color name="ln_stroke_default">#E5EBF4</color>
     <color name="ln_stroke_selected">#3399FF</color>
     <color name="ln_text_on_primary">#FFFFFFFF</color>
-    <color name="ln_text_primary">#0F1733</color>
-    <color name="ln_text_secondary">#5A6478</color>
+    <color name="ln_text_primary">#16202E</color>
+    <color name="ln_text_secondary">#566175</color>
     <color name="ln_text_tertiary">#8A95AB</color>
     <color name="ln_white">#FFFFFFFF</color>
+    <!-- Design-canvas restyle (Nov 2026) -->
+    <color name="ln_chart_interest">#F5A524</color>
+    <color name="ln_segment_bg">#EBF1F8</color>
+    <color name="ln_white_08">#14FFFFFF</color>
+    <color name="ln_white_25">#40FFFFFF</color>
 </resources>

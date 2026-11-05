@@ -100,19 +100,14 @@ sealed class CalcInputPanel(val type: CalcKind) {
     ) {
         var yearsActive = startInYears
         val ctx = btnMonths.context
+        val paint: (TextView, Boolean) -> Unit = { btn, on ->
+            btn.setBackgroundResource(if (on) R.drawable.ln_bg_segment_on else 0)
+            btn.setTextColor(ContextCompat.getColor(ctx, if (on) R.color.ln_white else R.color.ln_text_secondary))
+            btn.isSelected = on
+        }
         val applyState: () -> Unit = {
-            btnYears.setTextColor(
-                ContextCompat.getColor(
-                    ctx,
-                    if (yearsActive) R.color.ln_brand_primary else R.color.ln_text_secondary
-                )
-            )
-            btnMonths.setTextColor(
-                ContextCompat.getColor(
-                    ctx,
-                    if (yearsActive) R.color.ln_text_secondary else R.color.ln_brand_primary
-                )
-            )
+            paint(btnYears, yearsActive)
+            paint(btnMonths, !yearsActive)
         }
         applyState()
         btnYears.setOnClickListener {

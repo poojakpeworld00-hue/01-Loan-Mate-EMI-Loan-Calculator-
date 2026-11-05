@@ -204,4 +204,7 @@
     <string name="ln_currency_symbol_aed">د.إ</string>
     <string name="ln_currency_sar">SAR</string>
     <string name="ln_currency_symbol_sar">﷼</string>
+    <string name="ln_tools_subtitle">أدوات تحويل مفيدة للأرقام اليومية</string>
+    <string name="ln_calc_legend_principal">أصل المبلغ</string>
+    <string name="ln_calc_legend_interest">الفائدة</string>
 </resources>

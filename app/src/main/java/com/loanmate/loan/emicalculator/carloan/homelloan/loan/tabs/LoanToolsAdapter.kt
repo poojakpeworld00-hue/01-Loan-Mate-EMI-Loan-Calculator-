@@ -16,6 +16,8 @@ class LoanToolsAdapter(
             b.tvTitle.setText(item.titleRes)
             b.tvSubtitle.setText(item.subtitleRes)
             b.ivIcon.setImageResource(item.iconRes)
+            b.iconHolder.setBackgroundResource(item.backgroundRes)
+            b.ivIcon.imageTintList = androidx.core.content.ContextCompat.getColorStateList(b.root.context, item.foregroundColorRes)
             val title = b.root.context.getString(item.titleRes)
             b.ivIcon.contentDescription = title
             b.itemRoot.setOnClickListener { onClick(item) }

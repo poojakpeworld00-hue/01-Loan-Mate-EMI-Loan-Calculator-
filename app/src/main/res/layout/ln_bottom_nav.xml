@@ -6,133 +6,124 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/ln_bg_bottom_nav"
-    android:elevation="@dimen/_4sdp"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingHorizontal="@dimen/_24sdp"
-    android:paddingVertical="@dimen/_8sdp">
+    android:paddingHorizontal="12dp"
+    android:paddingTop="9dp"
+    android:paddingBottom="12dp">
 
     <LinearLayout
         android:id="@+id/navHome"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_weight="1"
+        android:layout_marginEnd="6dp"
         android:background="@drawable/ln_bg_nav_pill"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:minHeight="@dimen/_44sdp"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/_6sdp">
+        android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:contentDescription="@string/ln_nav_home"
-            android:padding="@dimen/_3sdp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ln_ic_nav_home"
             app:tint="@color/ln_brand_primary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginTop="2dp"
             android:fontFamily="@font/ln_sf_pro_semibold"
             android:text="@string/ln_nav_home"
             android:textColor="@color/ln_brand_primary"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/navTools"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_weight="1"
+        android:layout_marginEnd="6dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:minHeight="@dimen/_44sdp"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/_6sdp">
+        android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:contentDescription="@string/ln_nav_tools"
-            android:padding="@dimen/_3sdp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ln_ic_nav_tools"
             app:tint="@color/ln_bottom_nav_inactive" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:fontFamily="@font/ln_sf_pro_medium"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/ln_sf_pro_semibold"
             android:text="@string/ln_nav_tools"
             android:textColor="@color/ln_bottom_nav_inactive"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/navHistory"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_weight="1"
+        android:layout_marginEnd="6dp"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:minHeight="@dimen/_44sdp"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/_6sdp">
+        android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:contentDescription="@string/ln_nav_history"
-            android:padding="@dimen/_3sdp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ln_ic_nav_history"
             app:tint="@color/ln_bottom_nav_inactive" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:fontFamily="@font/ln_sf_pro_medium"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/ln_sf_pro_semibold"
             android:text="@string/ln_nav_history"
             android:textColor="@color/ln_bottom_nav_inactive"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/navSetting"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_weight="1"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
-        android:minHeight="@dimen/_44sdp"
-        android:orientation="vertical"
-        android:paddingVertical="@dimen/_6sdp">
+        android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:contentDescription="@string/ln_nav_setting"
-            android:padding="@dimen/_3sdp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ln_ic_nav_setting"
             app:tint="@color/ln_bottom_nav_inactive" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:fontFamily="@font/ln_sf_pro_medium"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/ln_sf_pro_semibold"
             android:text="@string/ln_nav_setting"
             android:textColor="@color/ln_bottom_nav_inactive"
-            android:textSize="@dimen/_10ssp" />
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

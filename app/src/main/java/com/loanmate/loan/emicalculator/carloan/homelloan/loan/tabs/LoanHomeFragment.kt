@@ -80,6 +80,8 @@ class LoanHomeFragment : Fragment() {
         b.tvLabel.setText(tile.labelRes)
         b.tvSubtitle.setText(tile.subtitleRes)
         b.ivIcon.setImageResource(tile.iconRes)
+        b.ivIcon.setBackgroundResource(tile.backgroundRes)
+        b.ivIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), tile.foregroundColorRes)
         b.ivIcon.contentDescription = getString(tile.labelRes)
         b.tileRoot.setOnClickListener { route(tile.id, tile.labelRes, tile.iconRes) }
     }
@@ -88,6 +90,7 @@ class LoanHomeFragment : Fragment() {
         b.tvLabel.setText(tile.labelRes)
         b.iconHolder.setBackgroundResource(tile.backgroundRes)
         b.ivIcon.setImageResource(tile.iconRes)
+        b.ivIcon.imageTintList = ContextCompat.getColorStateList(requireContext(), tile.foregroundColorRes)
         b.ivIcon.contentDescription = getString(tile.labelRes)
         b.itemRoot.setOnClickListener { route(tile.id, tile.labelRes, tile.iconRes) }
     }

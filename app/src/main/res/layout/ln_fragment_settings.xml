@@ -5,9 +5,7 @@
     android:background="@color/ln_bg_screen"
     android:clipToPadding="false"
     android:overScrollMode="never"
-    android:paddingHorizontal="@dimen/_12sdp"
-    android:paddingTop="@dimen/_10sdp"
-    android:paddingBottom="@dimen/_18sdp"
+    android:padding="16dp"
     android:scrollbars="none">
 
     <LinearLayout
@@ -19,37 +17,39 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/ln_sfprodisplaybold"
-            android:letterSpacing="-0.02"
+            android:letterSpacing="-0.01"
             android:text="@string/ln_settings_title"
             android:textColor="@color/ln_text_primary"
-            android:textSize="@dimen/_22ssp" />
+            android:textSize="24sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginTop="2dp"
             android:fontFamily="@font/ln_sf_pro"
             android:text="@string/ln_settings_subtitle"
             android:textColor="@color/ln_text_secondary"
-            android:textSize="@dimen/_11ssp" />
+            android:textSize="14sp" />
 
         <!-- PREFERENCES -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/ln_sfprodisplaybold"
             android:letterSpacing="0.06"
             android:text="@string/ln_settings_section_preferences"
-            android:textColor="@color/ln_text_tertiary"
-            android:textSize="@dimen/_10ssp" />
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/ln_bg_banking_card"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp">
 
             <include
                 android:id="@+id/rowCurrency"
@@ -58,7 +58,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/ln_divider_inset" />
+                android:background="@color/ln_divider" />
 
             <include
                 android:id="@+id/rowLanguage"
@@ -70,19 +70,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/ln_sfprodisplaybold"
             android:letterSpacing="0.06"
             android:text="@string/ln_settings_section_support"
-            android:textColor="@color/ln_text_tertiary"
-            android:textSize="@dimen/_10ssp" />
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/ln_bg_banking_card"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp">
 
             <include
                 android:id="@+id/rowRate"
@@ -91,7 +93,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/ln_divider_inset" />
+                android:background="@color/ln_divider" />
 
             <include
                 android:id="@+id/rowShare"
@@ -102,19 +104,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/ln_sfprodisplaybold"
             android:letterSpacing="0.06"
             android:text="@string/ln_settings_section_legal"
-            android:textColor="@color/ln_text_tertiary"
-            android:textSize="@dimen/_10ssp" />
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/ln_bg_banking_card"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="14dp">
 
             <include
                 android:id="@+id/rowDisclaimer"
@@ -123,7 +127,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/ln_divider_inset" />
+                android:background="@color/ln_divider" />
 
             <include
                 android:id="@+id/rowPrivacy"
@@ -136,10 +140,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/_18sdp"
+            android:layout_marginTop="16dp"
             android:fontFamily="@font/ln_sf_pro"
-            android:textColor="@color/ln_text_tertiary"
-            android:textSize="@dimen/_10ssp" />
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

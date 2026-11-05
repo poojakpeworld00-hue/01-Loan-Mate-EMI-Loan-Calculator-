@@ -55,7 +55,7 @@ class LoanCalculatorActivity : AppCompatActivity() {
         currencySymbol = resolveCurrencySymbol()
 
         binding.tvTitle.setText(type.titleRes)
-        binding.tvCurrency.text = currencySymbol
+        binding.tvCurrency.text = "$currencySymbol ${LoanPrefs(this).selectedCurrency.ifEmpty { "USD" }}"
         binding.tvCurrency.visibility = View.VISIBLE
         binding.tvHeadlineSymbol.text = currencySymbol
         binding.lblHeadline.setText(type.headlineRes)

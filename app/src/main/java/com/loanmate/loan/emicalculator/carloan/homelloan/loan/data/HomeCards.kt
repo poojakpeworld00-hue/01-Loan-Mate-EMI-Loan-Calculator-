@@ -9,7 +9,9 @@ data class CalcCard(
     val id: String,
     @StringRes val labelRes: Int,
     @StringRes val subtitleRes: Int,
-    @DrawableRes val iconRes: Int
+    @DrawableRes val iconRes: Int,
+    @DrawableRes val backgroundRes: Int,
+    @ColorRes val foregroundColorRes: Int
 )
 
 /** Small grid tile inside the Banking Calculators card (colored square + label). */

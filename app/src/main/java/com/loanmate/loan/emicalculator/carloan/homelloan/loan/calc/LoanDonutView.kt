@@ -12,7 +12,7 @@ import kotlin.math.min
 
 /**
  * Minimal donut. Shows the foreground arc swept proportionally to [percentage]
- * (0..100) over a soft track. Stroke width scales with the view bounds.
+ * (0..100) in amber over a brand-blue track (principal vs interest). Stroke width scales with the view bounds.
  */
 class LoanDonutView @JvmOverloads constructor(
     context: Context,
@@ -22,12 +22,11 @@ class LoanDonutView @JvmOverloads constructor(
 
     private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = ContextCompat.getColor(context, R.color.ln_brand_primary_light)
+        color = ContextCompat.getColor(context, R.color.ln_brand_primary)
     }
     private val arcPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeCap = Paint.Cap.ROUND
-        color = ContextCompat.getColor(context, R.color.ln_brand_primary)
+        color = ContextCompat.getColor(context, R.color.ln_chart_interest)
     }
     private val ovalRect = RectF()
 
@@ -43,7 +42,7 @@ class LoanDonutView @JvmOverloads constructor(
         val side = min(width, height).toFloat()
         if (side <= 0) return
 
-        val stroke = side * 0.10f
+        val stroke = side * 0.17f
         trackPaint.strokeWidth = stroke
         arcPaint.strokeWidth = stroke
 

@@ -204,4 +204,7 @@
     <string name="ln_currency_symbol_aed">د.إ</string>
     <string name="ln_currency_sar">SAR</string>
     <string name="ln_currency_symbol_sar">﷼</string>
+    <string name="ln_tools_subtitle">रोज़मर्रा की संख्याओं के लिए उपयोगी कन्वर्टर</string>
+    <string name="ln_calc_legend_principal">मूलधन</string>
+    <string name="ln_calc_legend_interest">ब्याज</string>
 </resources>

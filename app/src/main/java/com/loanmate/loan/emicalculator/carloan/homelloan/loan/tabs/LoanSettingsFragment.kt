@@ -54,8 +54,8 @@ class LoanSettingsFragment : Fragment() {
             R.string.ln_settings_currency_title,
             R.string.ln_settings_currency_subtitle,
             R.drawable.ln_ic_set_currency,
-            R.drawable.ln_bg_grid_green,
-            R.color.ln_grid_green_fg
+            R.drawable.ln_bg_grid_blue,
+            R.color.ln_grid_blue_fg
         ) { startActivity(Intent(requireContext(), LoanCurrencyActivity::class.java)) }
 
         bindRow(
@@ -63,8 +63,8 @@ class LoanSettingsFragment : Fragment() {
             R.string.ln_settings_language_title,
             R.string.ln_settings_language_subtitle,
             R.drawable.ln_ic_set_language,
-            R.drawable.ln_bg_grid_purple,
-            R.color.ln_grid_purple_fg
+            R.drawable.ln_bg_grid_blue,
+            R.color.ln_grid_blue_fg
         ) { startActivity(Intent(requireContext(), LanguageActivity::class.java)) }
 
         // SUPPORT
@@ -73,8 +73,8 @@ class LoanSettingsFragment : Fragment() {
             R.string.ln_settings_rate_title,
             R.string.ln_settings_rate_subtitle,
             R.drawable.ln_ic_set_rate,
-            R.drawable.ln_bg_grid_yellow,
-            R.color.ln_grid_yellow_fg
+            R.drawable.ln_bg_grid_green,
+            R.color.ln_grid_green_fg
         ) { rate() }
 
         bindRow(
@@ -82,8 +82,8 @@ class LoanSettingsFragment : Fragment() {
             R.string.ln_settings_share_title,
             R.string.ln_settings_share_subtitle,
             R.drawable.ln_ic_set_share,
-            R.drawable.ln_bg_grid_pink,
-            R.color.ln_grid_pink_fg
+            R.drawable.ln_bg_grid_green,
+            R.color.ln_grid_green_fg
         ) { share() }
 
         // LEGAL
@@ -92,8 +92,8 @@ class LoanSettingsFragment : Fragment() {
             R.string.ln_settings_disclaimer_title,
             R.string.ln_settings_disclaimer_subtitle,
             R.drawable.ln_ic_set_disclaimer,
-            R.drawable.ln_bg_grid_red,
-            R.color.ln_grid_red_fg
+            R.drawable.ln_bg_grid_pink,
+            R.color.ln_grid_pink_fg
         ) { startActivity(Intent(requireContext(), LoanTermsActivity::class.java)) }
 
         bindRow(

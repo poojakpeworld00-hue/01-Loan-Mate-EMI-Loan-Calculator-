@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/itemRoot"
     android:layout_width="match_parent"
@@ -10,20 +11,22 @@
     android:focusable="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingVertical="@dimen/_6sdp">
+    android:paddingVertical="4dp">
 
+    <!-- Pastel rounded square; background + tint are set per tile in LoanHomeFragment. -->
     <FrameLayout
         android:id="@+id/iconHolder"
-        android:layout_width="@dimen/_45sdp"
-        android:layout_height="@dimen/_45sdp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:background="@drawable/ln_bg_grid_purple">
 
         <ImageView
             android:id="@+id/ivIcon"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_gravity="center"
-            android:src="@drawable/ln_home_rd_cal"
+            android:src="@drawable/ln_ic_bank_rd"
+            app:tint="@color/ln_grid_purple_fg"
             tools:ignore="ContentDescription" />
     </FrameLayout>
 
@@ -31,15 +34,14 @@
         android:id="@+id/tvLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginTop="6dp"
         android:ellipsize="end"
-        android:fontFamily="@font/ln_sf_pro_medium"
+        android:fontFamily="@font/ln_sf_pro_semibold"
         android:gravity="center"
-        android:lineSpacingMultiplier="1.1"
         android:maxLines="2"
-        android:paddingHorizontal="@dimen/_2sdp"
+        android:paddingHorizontal="2dp"
         android:textColor="@color/ln_text_primary"
-        android:textSize="@dimen/_10ssp"
+        android:textSize="12sp"
         tools:text="RD Calculator" />
 
 </LinearLayout>

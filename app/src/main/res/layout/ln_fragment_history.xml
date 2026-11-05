@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,10 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:minHeight="48dp"
             android:orientation="horizontal"
-            android:paddingHorizontal="@dimen/_14sdp"
-            android:paddingTop="@dimen/_14sdp"
-            android:paddingBottom="@dimen/_8sdp">
+            android:paddingHorizontal="16dp"
+            android:layout_marginTop="16dp">
 
             <TextView
                 android:id="@+id/tvHeaderTitle"
@@ -33,17 +33,20 @@
                 android:fontFamily="@font/ln_sfprodisplaybold"
                 android:letterSpacing="-0.01"
                 android:text="@string/ln_history_recent"
-                android:textColor="@color/ln_brand_primary"
-                android:textSize="@dimen/_16ssp" />
+                android:textColor="@color/ln_text_primary"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/tvHeaderCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ln_sf_pro_semibold"
-                android:letterSpacing="0.06"
-                android:textColor="@color/ln_text_tertiary"
-                android:textSize="@dimen/_11ssp"
+                android:background="@drawable/ln_bg_pill_light"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:letterSpacing="0.04"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:textColor="@color/ln_brand_primary_dark"
+                android:textSize="12sp"
                 tools:text="2 ITEMS" />
         </LinearLayout>
 
@@ -54,8 +57,9 @@
             android:layout_weight="1"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            android:paddingHorizontal="@dimen/_14sdp"
-            android:paddingBottom="@dimen/_18sdp"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="4dp"
             android:scrollbars="none"
             tools:listitem="@layout/ln_item_history" />
     </LinearLayout>
@@ -67,28 +71,38 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingHorizontal="@dimen/_28sdp">
+        android:paddingHorizontal="28dp"
+        android:paddingBottom="60dp">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:background="@drawable/ln_bg_circle_brand_tint"
+            android:importantForAccessibility="no"
+            android:padding="26dp"
+            android:src="@drawable/ln_ic_nav_history"
+            app:tint="@color/ln_brand_primary" />
 
         <TextView
             android:id="@+id/tvEmptyTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/ln_sfprodisplaybold"
-            android:letterSpacing="-0.01"
             android:text="@string/ln_history_empty_title"
             android:textColor="@color/ln_text_primary"
-            android:textSize="@dimen/_22ssp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tvEmptySubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_6sdp"
+            android:layout_marginTop="12dp"
             android:fontFamily="@font/ln_sf_pro"
             android:gravity="center"
             android:text="@string/ln_history_empty_subtitle"
             android:textColor="@color/ln_text_secondary"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="14sp" />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

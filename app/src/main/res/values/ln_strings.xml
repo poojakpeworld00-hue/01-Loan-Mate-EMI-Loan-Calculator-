@@ -205,4 +205,8 @@
     <string name="ln_currency_symbol_aed">د.إ</string>
     <string name="ln_currency_sar">SAR</string>
     <string name="ln_currency_symbol_sar">﷼</string>
+    <string name="ln_home_brand_name" translatable="false">Loan Mate</string>
+    <string name="ln_tools_subtitle">Handy converters for everyday numbers</string>
+    <string name="ln_calc_legend_principal">Principal</string>
+    <string name="ln_calc_legend_interest">Interest</string>
 </resources>

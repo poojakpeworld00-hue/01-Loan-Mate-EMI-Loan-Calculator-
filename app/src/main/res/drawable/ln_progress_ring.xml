@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Promo ring: translucent track + white arc, level set by ProgressBar progress. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape
+            android:innerRadius="33dp"
+            android:shape="ring"
+            android:thickness="9dp"
+            android:useLevel="false">
+            <solid android:color="@color/ln_white_25" />
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <rotate
+            android:fromDegrees="270"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="270">
+            <shape
+                android:innerRadius="33dp"
+                android:shape="ring"
+                android:thickness="9dp"
+                android:useLevel="true">
+                <solid android:color="@color/ln_white" />
+            </shape>
+        </rotate>
+    </item>
+</layer-list>
