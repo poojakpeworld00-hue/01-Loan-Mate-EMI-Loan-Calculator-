@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageBaseBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBaseBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootFabric
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootAllows
@@ -17,11 +17,11 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootA
  * nothing loads (or counts as an impression) off screen.
  */
 class HostSheetFragment : Fragment() {
-    private var binding: PageBaseBinding? = null
+    private var binding: ScreenBaseBinding? = null
     private var shown = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
-        PageBaseBinding.inflate(inflater, container, false).also {
+        ScreenBaseBinding.inflate(inflater, container, false).also {
             binding = it
             it.screen.padForOsBars()
         }.root

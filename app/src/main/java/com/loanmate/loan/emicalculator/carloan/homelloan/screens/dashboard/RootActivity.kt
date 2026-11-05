@@ -15,7 +15,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.homepanel.Launcher
 import com.loanmate.loan.emicalculator.carloan.homelloan.LoanTwo
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageBaseBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBaseBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.nudges.RateQuery
 
@@ -34,7 +34,7 @@ class RootActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageBaseBinding.inflate(layoutInflater)
+        val b = ScreenBaseBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.screen.padForOsBars()
         RootFabric(this, b).bind()

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import com.loanmate.loan.emicalculator.carloan.homepanel.Launcher
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxMessagesScrZoneBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpMessagesScrZoneBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
 import timber.log.Timber
 import kotlin.math.abs
@@ -22,7 +22,7 @@ import kotlin.math.abs
 class InboxScenePanel(
     context: Context,
     attributeSet: AttributeSet,
-) : CenterPanel<LxMessagesScrZoneBinding>(context, attributeSet) {
+) : CenterPanel<HpMessagesScrZoneBinding>(context, attributeSet) {
     private val gestureDetector = GestureDetectorCompat(context, object : SimpleOnGestureListener() {
         override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             if (velocityX < 0 && abs(velocityX) > abs(velocityY)) {
@@ -38,7 +38,7 @@ class InboxScenePanel(
 
     override fun setupFragment(activity: XCenterScene) {
         this.activity = activity
-        this.binding = LxMessagesScrZoneBinding.bind(this)
+        this.binding = HpMessagesScrZoneBinding.bind(this)
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {

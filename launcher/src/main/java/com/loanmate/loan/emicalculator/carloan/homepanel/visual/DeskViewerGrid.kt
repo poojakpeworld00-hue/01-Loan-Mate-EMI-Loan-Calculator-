@@ -59,7 +59,7 @@ import org.fossify.commons.helpers.isSPlus
 import com.loanmate.loan.emicalculator.carloan.homepanel.Launcher
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxHomeShowGridBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpHomeShowGridBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.pullDrawableForPkgName
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.homeScreenGridItemsDB
@@ -87,7 +87,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
     RelativeLayout(context, attrs, defStyle) {
     constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
 
-    private lateinit var binding: LxHomeShowGridBinding
+    private lateinit var binding: HpHomeShowGridBinding
     private var columnCount = context.launcherConfig.homeColumnCount
     private var dockSlotCount = context.launcherConfig.dockColumnCount
 
@@ -278,7 +278,7 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        binding = LxHomeShowGridBinding.bind(this)
+        binding = HpHomeShowGridBinding.bind(this)
     }
 
     fun pullGridItems() {
@@ -1202,10 +1202,10 @@ class DeskViewerGrid(context: Context, attrs: AttributeSet, defStyle: Int) :
     }
 
     private fun DeskViewerGridItem.pseudoWidgetLayout() = when (className) {
-        PSEUDO_WIDGET_CLOCK -> R.layout.lx_fake_gadget_digital_clock
-        PSEUDO_WIDGET_SEARCH -> R.layout.lx_fake_gadget_query_strip
-        PSEUDO_WIDGET_TIME -> R.layout.lx_fake_gadget_time
-        PSEUDO_WIDGET_GOOGLE_SEARCH -> R.layout.lx_fake_gadget_gfind_query
+        PSEUDO_WIDGET_CLOCK -> R.layout.hp_fake_gadget_digital_clock
+        PSEUDO_WIDGET_SEARCH -> R.layout.hp_fake_gadget_query_strip
+        PSEUDO_WIDGET_TIME -> R.layout.hp_fake_gadget_time
+        PSEUDO_WIDGET_GOOGLE_SEARCH -> R.layout.hp_fake_gadget_gfind_query
         else -> null
     }
 

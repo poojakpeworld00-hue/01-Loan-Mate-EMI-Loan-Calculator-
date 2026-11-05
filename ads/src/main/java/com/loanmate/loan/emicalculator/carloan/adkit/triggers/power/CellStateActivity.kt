@@ -39,7 +39,7 @@ class CellStateActivity : AppCompatActivity() {
         lifecycle.addObserver(SysDialogLoan(this) { finishAndRemoveTask() })
         presentOverLockAndWake()
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        setContentView(R.layout.page_battery_status)
+        setContentView(R.layout.sc_battery_status)
 
         val content = findViewById<View>(R.id.chargingFunctionalContent)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.chargingRoot)) { _, insets ->

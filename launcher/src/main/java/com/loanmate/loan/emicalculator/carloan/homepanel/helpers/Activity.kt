@@ -169,7 +169,7 @@ fun Activity.processGridCellOverlayTweaks(
         if ((isIcon || gridItem.type == ITEM_TYPE_FOLDER) && !isOnAllAppsFragment) {
             add(ItemMovesPanel.Action(org.fossify.commons.R.drawable.ic_rename_vector, org.fossify.commons.R.string.rename) { listener.rename(gridItem) })
         }
-        if (gridItem.type == ITEM_TYPE_WIDGET) add(ItemMovesPanel.Action(R.drawable.hs_ic_scale_vector, org.fossify.commons.R.string.resize) { listener.resize(gridItem) })
+        if (gridItem.type == ITEM_TYPE_WIDGET) add(ItemMovesPanel.Action(R.drawable.hpd_ic_scale_vector, org.fossify.commons.R.string.resize) { listener.resize(gridItem) })
         if (!isOnAllAppsFragment) add(ItemMovesPanel.Action(org.fossify.commons.R.drawable.ic_cross_vector, org.fossify.commons.R.string.remove) { listener.remove(gridItem) })
         if (isIcon && canAppletBeUninstalled(gridItem.packageName)) {
             add(ItemMovesPanel.Action(org.fossify.commons.R.drawable.ic_delete_vector, R.string.launcher_uninstall) { listener.uninstall(gridItem) })

@@ -9,9 +9,9 @@ import com.bumptech.glide.Glide
 import org.fossify.commons.extensions.getProperTextColor
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.CenterBaseScene
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxBinGadgetListEntriesKeeperBinding
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxBinGadgetListGroupBinding
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxBinGadgetPreviewBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpBinGadgetListEntriesKeeperBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpBinGadgetListGroupBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpBinGadgetPreviewBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.WIDGET_LIST_ITEMS_HOLDER
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.WIDGET_LIST_SECTION
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.GadgetsBrickKeeper
@@ -30,8 +30,8 @@ class GadgetsLoader(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = when (viewType) {
-            WIDGET_LIST_SECTION -> LxBinGadgetListGroupBinding.inflate(inflater, parent, false)
-            else -> LxBinGadgetListEntriesKeeperBinding.inflate(inflater, parent, false)
+            WIDGET_LIST_SECTION -> HpBinGadgetListGroupBinding.inflate(inflater, parent, false)
+            else -> HpBinGadgetListEntriesKeeperBinding.inflate(inflater, parent, false)
         }
 
         return ViewHolder(binding.root)
@@ -55,7 +55,7 @@ class GadgetsLoader(
     }
 
     private fun prepRollCluster(view: View, section: GadgetsStackCluster) {
-        LxBinGadgetListGroupBinding.bind(view).apply {
+        HpBinGadgetListGroupBinding.bind(view).apply {
             widgetAppTitleIx.text = section.appTitle
             widgetAppTitleIx.setTextColor(textColor)
             widgetAppIconIx.setImageDrawable(section.appIcon)
@@ -63,12 +63,12 @@ class GadgetsLoader(
     }
 
     private fun prepRollCellsRetainer(view: View, listItem: GadgetsStackLogsSaver) {
-        val binding = LxBinGadgetListEntriesKeeperBinding.bind(view)
+        val binding = HpBinGadgetListEntriesKeeperBinding.bind(view)
         binding.widgetRollCellsHolderIx.removeAllViews()
         binding.widgetRollCellsScrollFrameIx.scrollX = 0
         listItem.widgets.forEachIndexed { index, widget ->
             val imageSize = activity.resources.getDimension(R.dimen.launcher_widget_preview_size).toInt()
-            val widgetPreview = LxBinGadgetPreviewBinding.inflate(LayoutInflater.from(activity))
+            val widgetPreview = HpBinGadgetPreviewBinding.inflate(LayoutInflater.from(activity))
             binding.widgetRollCellsHolderIx.addView(widgetPreview.root)
 
             val endMargin = if (index == listItem.widgets.size - 1) {

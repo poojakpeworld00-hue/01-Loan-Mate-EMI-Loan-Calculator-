@@ -29,10 +29,10 @@ val CalculatorOrder.inputHint: Int
 @get:DrawableRes
 val CalculatorOrder.image: Int
     get() = when (this) {
-        CalculatorOrder.DIAMONDS_TO_DOLLARS -> R.drawable.cal1
-        CalculatorOrder.ELITE_PASS -> R.drawable.cal5
-        CalculatorOrder.DOLLARS_TO_DIAMONDS -> R.drawable.cal7
-        CalculatorOrder.DAILY -> R.drawable.cal6
+        CalculatorOrder.DIAMONDS_TO_DOLLARS -> R.drawable.lm_cal1
+        CalculatorOrder.ELITE_PASS -> R.drawable.lm_cal5
+        CalculatorOrder.DOLLARS_TO_DIAMONDS -> R.drawable.lm_cal7
+        CalculatorOrder.DAILY -> R.drawable.lm_cal6
     }
 
 fun ComputeResult.format(context: Context): String = when (this) {

@@ -47,8 +47,8 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.kit.device.PrimeScreens
 import com.loanmate.loan.emicalculator.carloan.homelloan.kit.device.ToggleShield
 import com.loanmate.loan.emicalculator.carloan.homelloan.kit.device.SysShortcutAim
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.SysShortcut
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageSetupBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.TraySetupBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenSetupBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.SheetSetupBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitAccentBold
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
@@ -73,7 +73,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         OnboardScreenModel(settingsRepository, config.value, Launcher.isDefaultHome(this@OnboardActivity), handle)
     }
     private val config get() = (application as LoanTwo).container.config.value
-    private lateinit var b: PageSetupBinding
+    private lateinit var b: ScreenSetupBinding
     /** Where Continue is pinned, and its layout there, to put it back after a step showed it in the list. */
     private lateinit var ctaHome: ViewGroup
     private lateinit var ctaParams: ViewGroup.LayoutParams
@@ -105,7 +105,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        b = PageSetupBinding.inflate(layoutInflater)
+        b = ScreenSetupBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.content.padForOsBars()
         b.glow.kitGlowPulse()
@@ -282,7 +282,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         val current = all[at]
         val steps = all.filter { it.key !in INFO_STEPS }.ifEmpty { all }
         val index = steps.indexOf(current).takeIf { it >= 0 } ?: steps.count { all.indexOf(it) < at }.coerceAtMost(steps.lastIndex)
-        val v = TraySetupBinding.inflate(layoutInflater)
+        val v = SheetSetupBinding.inflate(layoutInflater)
         val number = String.format(Locale.getDefault(), "%02d", index + 1)
         v.sheetBadge.text = number
         v.sheetEyebrow.text = getString(R.string.sh_mission, number, steps.size.toString())
@@ -364,7 +364,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     private var voicePausedByLeaving = false
 
     /** The voice guide card: play / pause / replay the clip in the app's language. */
-    private fun wireSpeechCoach(v: TraySetupBinding, index: Int) {
+    private fun wireSpeechCoach(v: SheetSetupBinding, index: Int) {
         val settings = (application as LoanTwo).container.settingsRepository
         releaseSpeech() // an earlier sheet's player, if its dismiss hasn't run yet
         val player = MediaPlayer.create(this, speechClip(settings.languages[settings.currentLanguageIndex()].tag)) ?: return
@@ -388,7 +388,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             }
         }
         fun show(playing: Boolean) {
-            v.voicePlay.setImageResource(if (playing) R.drawable.ic_pause else R.drawable.ic_play)
+            v.voicePlay.setImageResource(if (playing) R.drawable.glyph_pause else R.drawable.glyph_play)
             v.voicePlay.contentDescription = getString(if (playing) R.string.sh_pause else R.string.sh_play)
             v.voiceWave.playing = playing
             if (playing) { ripple.start(); v.voiceWave.post(tick) } else { ripple.cancel(); v.voiceRipple.alpha = 0f }
@@ -397,7 +397,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         player.setOnCompletionListener {
             show(false)
             v.voiceWave.progress = 1f
-            v.voicePlay.setImageResource(R.drawable.ic_replay)
+            v.voicePlay.setImageResource(R.drawable.glyph_replay)
             v.voicePlay.contentDescription = getString(R.string.sh_replay)
             v.voiceText.setText(R.string.sh_voice_done)
         }
@@ -420,15 +420,15 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
     }
 
     private fun speechClip(tag: String) = when (tag) {
-        "hi" -> R.raw.ob_voice_hi
-        "id" -> R.raw.ob_voice_in
-        "tr" -> R.raw.ob_voice_tr
-        "vi" -> R.raw.ob_voice_vi
-        "ar" -> R.raw.ob_voice_ar
-        "fr" -> R.raw.ob_voice_fr
-        "de" -> R.raw.ob_voice_de
-        "ja" -> R.raw.ob_voice_ja
-        else -> R.raw.ob_voice_en
+        "hi" -> R.raw.intro_voice_hi
+        "id" -> R.raw.intro_voice_in
+        "tr" -> R.raw.intro_voice_tr
+        "vi" -> R.raw.intro_voice_vi
+        "ar" -> R.raw.intro_voice_ar
+        "fr" -> R.raw.intro_voice_fr
+        "de" -> R.raw.intro_voice_de
+        "ja" -> R.raw.intro_voice_ja
+        else -> R.raw.intro_voice_en
     }
 
     private fun onBaseBasePhase(onIt: Boolean) {
@@ -436,7 +436,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         // The reference's animated demo replaces the option list on this step; its button carries the home icon.
         b.list.visibility = if (onIt) View.GONE else View.VISIBLE
         b.homeDemo.root.visibility = if (onIt) View.VISIBLE else View.GONE
-        b.next.icon = if (onIt) ContextCompat.getDrawable(this, R.drawable.ic_home) else null
+        b.next.icon = if (onIt) ContextCompat.getDrawable(this, R.drawable.glyph_home) else null
         b.next.iconGravity = com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_START
         if (onIt) homeDemo.start() else homeDemo.stop()
         if (onIt) queryBaseBase() // Settings opens straight away

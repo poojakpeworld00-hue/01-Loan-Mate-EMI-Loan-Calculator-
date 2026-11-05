@@ -25,7 +25,7 @@ import org.fossify.commons.extensions.getColoredDrawableWithColor
 import org.fossify.commons.extensions.realScreenSize
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.CenterBaseScene
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxBinHomeTitleBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpBinHomeTitleBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.tweenSize
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
 import com.loanmate.loan.emicalculator.carloan.homepanel.specs.EveryWidgetsKeeper
@@ -101,7 +101,7 @@ class CentersLoader(
             return AdViewHolder(host)
         }
 
-        val binding = LxBinHomeTitleBinding.inflate(
+        val binding = HpBinHomeTitleBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(binding.root)
@@ -254,7 +254,7 @@ class CentersLoader(
 
         @SuppressLint("ClickableViewAccessibility")
         fun bindView(launcher: WidgetCenter): View {
-            val binding = LxBinHomeTitleBinding.bind(itemView)
+            val binding = HpBinHomeTitleBinding.bind(itemView)
             fitToSlot()
             itemView.apply {
                 val sponsored = FeaturedCards.isSponsored(launcher)
@@ -283,8 +283,8 @@ class CentersLoader(
                         .load(FeaturedCards.logo(launcher))
                         .override(logoPx)
                         .transform(logoShape)
-                        .placeholder(R.drawable.hs_placeholder_drawable)
-                        .error(R.drawable.hs_placeholder_drawable)
+                        .placeholder(R.drawable.hpd_placeholder_drawable)
+                        .error(R.drawable.hpd_placeholder_drawable)
                         .into(icon)
                 } else if (ready != null) {
                     // Already decoded and in memory: set it in this frame. Going through Glide put
@@ -301,7 +301,7 @@ class CentersLoader(
                     icon.tag = wanted
                     icon.setImageDrawable(
                         activity.resources.getColoredDrawableWithColor(
-                            drawableId = R.drawable.hs_placeholder_drawable,
+                            drawableId = R.drawable.hpd_placeholder_drawable,
                             color = launcher.thumbnailColor
                         )
                     )

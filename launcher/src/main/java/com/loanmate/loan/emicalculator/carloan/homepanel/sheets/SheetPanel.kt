@@ -15,7 +15,7 @@ import android.os.Process
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.FrameLayout
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxBinQueryShortcutBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpBinQueryShortcutBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.appUsageDB
 import com.loanmate.loan.emicalculator.carloan.homepanel.aid.WidgetChoices
 import org.fossify.commons.extensions.beVisible
@@ -39,7 +39,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.abs
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxAllAppsZoneBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpAllAppsZoneBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.putRackSkin
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.fireApplet
@@ -56,7 +56,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.models.appLauncherCompa
 class SheetPanel(
     context: Context,
     attributeSet: AttributeSet
-) : CenterPanel<LxAllAppsZoneBinding>(context, attributeSet), EveryWidgetsKeeper {
+) : CenterPanel<HpAllAppsZoneBinding>(context, attributeSet), EveryWidgetsKeeper {
     companion object {
         private const val SEARCH_COLUMNS = 4
         private const val SEARCH_MAX_RESULTS = 8
@@ -95,7 +95,7 @@ class SheetPanel(
     @SuppressLint("ClickableViewAccessibility")
     override fun setupFragment(activity: XCenterScene) {
         this.activity = activity
-        this.binding = LxAllAppsZoneBinding.bind(this)
+        this.binding = HpAllAppsZoneBinding.bind(this)
 
         val layoutManager = binding.allAppsGridIx.layoutManager as MyGridLayoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -674,7 +674,7 @@ class SheetPanel(
         val inflater = LayoutInflater.from(context)
         val density = resources.displayMetrics.densityDpi
         shortcuts.forEach { shortcut ->
-            val row = LxBinQueryShortcutBinding.inflate(inflater, list, false)
+            val row = HpBinQueryShortcutBinding.inflate(inflater, list, false)
             row.queryHotlinkTextIx.text = shortcut.shortLabel ?: shortcut.longLabel ?: ""
             row.queryHotlinkIconIx.setImageDrawable(runCatching { launcherApps.getShortcutIconDrawable(shortcut, density) }.getOrNull())
             row.root.setOnClickListener {

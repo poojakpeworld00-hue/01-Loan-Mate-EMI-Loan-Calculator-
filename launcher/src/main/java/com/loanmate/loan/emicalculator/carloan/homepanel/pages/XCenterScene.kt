@@ -64,9 +64,9 @@ import org.fossify.commons.helpers.PERMISSION_READ_SMS
 import org.fossify.commons.helpers.ensureBackgroundThread
 import org.fossify.commons.helpers.isOreoMr1Plus
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxDisplayBaseBinding
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxAllAppsZoneBinding
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxGadgetsZoneBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpDisplayBaseBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpAllAppsZoneBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpGadgetsZoneBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.Launcher
 import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterLobbyAsRear
 import java.lang.ref.WeakReference
@@ -196,7 +196,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     private var wallpaperSupportsDarkText: Boolean? = null
 
     private lateinit var mDetector: GestureDetectorCompat
-    private val binding by viewBinding(LxDisplayBaseBinding::inflate)
+    private val binding by viewBinding(HpDisplayBaseBinding::inflate)
 
     companion object {
         const val EXTRA_OPEN_MESSAGES = "open_messages"
@@ -1328,7 +1328,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         binding.mainShowGridIx.root.concealResizeLines()
 
         concealSwipeHint()
-        if (fragment is LxAllAppsZoneBinding) {
+        if (fragment is HpAllAppsZoneBinding) {
             Launcher.events.onScreen(SCREEN_DRAWER)
             doneGuidePhase(CenterTourStop.SWIPE_UP_DRAWER)
 
@@ -1344,7 +1344,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         )
 
         if (
-            fragment is LxAllAppsZoneBinding
+            fragment is HpAllAppsZoneBinding
             && launcherConfig.showSearchBar
             && launcherConfig.autoShowKeyboardInAppDrawer
         ) {
@@ -1385,15 +1385,15 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
         reloadStatusBandGlyphs()
 
         hideKeyboard()
-        if (fragment is LxGadgetsZoneBinding) {
+        if (fragment is HpGadgetsZoneBinding) {
             wipeWidgetsLookup()
         }
         Handler(Looper.getMainLooper()).postDelayed({
-            if (fragment is LxAllAppsZoneBinding) {
+            if (fragment is HpAllAppsZoneBinding) {
                 fragment.allAppsGridIx.scrollToPosition(0)
                 fragment.root.restoreToFirstPage()
                 fragment.root.touchDownY = -1
-            } else if (fragment is LxGadgetsZoneBinding) {
+            } else if (fragment is HpGadgetsZoneBinding) {
                 fragment.widgetsRollIx.scrollToPosition(0)
                 fragment.root.touchDownY = -1
             }
@@ -2098,7 +2098,7 @@ class XCenterScene : CenterBaseScene(), FlickKeeper {
     }
 
     private fun slabBackgroundColor(fragment: ViewBinding): Int =
-        if (fragment is LxAllAppsZoneBinding) {
+        if (fragment is HpAllAppsZoneBinding) {
             getColor(R.color.launcher_all_app_bg)
         } else {
             getProperBackgroundColor()

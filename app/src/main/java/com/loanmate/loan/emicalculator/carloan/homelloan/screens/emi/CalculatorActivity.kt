@@ -9,8 +9,8 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnabl
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageReckonBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageRosterBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenReckonBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenRosterBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.CalculatorOrder
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.library.BrickTwo
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.library.BrickAdapter
@@ -24,7 +24,7 @@ class CalculatorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageRosterBinding.inflate(layoutInflater)
+        val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }
@@ -53,7 +53,7 @@ class ComputeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageReckonBinding.inflate(layoutInflater)
+        val b = ScreenReckonBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }

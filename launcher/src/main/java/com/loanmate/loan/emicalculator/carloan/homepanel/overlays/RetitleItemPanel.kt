@@ -4,13 +4,13 @@ import android.app.Activity
 import android.app.AlertDialog
 import org.fossify.commons.extensions.*
 import org.fossify.commons.helpers.ensureBackgroundThread
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxPopupRenameBinBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpPopupRenameBinBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.homeScreenGridItemsDB
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.DeskViewerGridItem
 
 class RetitleItemPanel(val activity: Activity, val item: DeskViewerGridItem, val callback: () -> Unit) {
     init {
-        val binding = LxPopupRenameBinBinding.inflate(activity.layoutInflater)
+        val binding = HpPopupRenameBinBinding.inflate(activity.layoutInflater)
         val view = binding.root
         binding.renameBoxEdittextIx.setText(item.title)
 

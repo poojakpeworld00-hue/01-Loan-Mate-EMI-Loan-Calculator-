@@ -15,8 +15,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellDhRailBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PartBaseShowcaseBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowDhRailBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PieceBaseShowcaseBinding
 import java.util.Date
 import java.util.Locale
 
@@ -26,13 +26,13 @@ import java.util.Locale
  * on Always) → 2 (the page shrinks away into a home screen: wallpaper, clock, "Press Home to open it", tiles, search,
  * dock), and the 3-pill rail above it follows. Animators honour the system "remove animations" setting.
  */
-class RootBootGallery(private val b: PartBaseShowcaseBinding) {
+class RootBootGallery(private val b: PieceBaseShowcaseBinding) {
     private val ctx = b.root.context
     private val res = ctx.resources
     private val dp = res.displayMetrics.density
     private val accent = ContextCompat.getColor(ctx, R.color.sh_primary)
     private val emphasized = PathInterpolator(0.2f, 0f, 0f, 1f)
-    private val rail = mutableListOf<CellDhRailBinding>()
+    private val rail = mutableListOf<RowDhRailBinding>()
     private val tiles = mutableListOf<View>()
     private val looping = mutableListOf<ValueAnimator>()
     private var tick = 0
@@ -57,7 +57,7 @@ class RootBootGallery(private val b: PartBaseShowcaseBinding) {
 
         val labels = listOf(R.string.dh_c1, R.string.dh_c2, R.string.dh_c3)
         labels.forEachIndexed { i, label ->
-            val pill = CellDhRailBinding.inflate(LayoutInflater.from(ctx), b.rail, false)
+            val pill = RowDhRailBinding.inflate(LayoutInflater.from(ctx), b.rail, false)
             pill.railLabel.setText(label)
             pill.root.clipToOutline = true
             b.rail.addView(pill.root, LinearLayout.LayoutParams(px(40), LinearLayout.LayoutParams.MATCH_PARENT).apply {
@@ -66,19 +66,19 @@ class RootBootGallery(private val b: PartBaseShowcaseBinding) {
             rail += pill
         }
         // Home screen tiles: the app's own sections; dock: phone basics.
-        listOf(R.drawable.ic_diamond, R.drawable.ic_star, R.drawable.ic_map, R.drawable.ic_bulb).forEach { icon ->
+        listOf(R.drawable.glyph_diamond, R.drawable.glyph_star, R.drawable.glyph_map, R.drawable.glyph_bulb).forEach { icon ->
             val slot = FrameLayout(ctx)
             val size = res.getDimensionPixelSize(com.intuit.sdp.R.dimen._34sdp)
-            slot.addView(View(ctx).apply { setBackgroundResource(R.drawable.bg_dh_ghost) }, FrameLayout.LayoutParams(size, size, android.view.Gravity.CENTER))
-            val tile = icon(icon, R.drawable.bg_dh_tile, 8).apply { alpha = 0f; scaleX = 0.55f; scaleY = 0.55f }
+            slot.addView(View(ctx).apply { setBackgroundResource(R.drawable.fill_dh_ghost) }, FrameLayout.LayoutParams(size, size, android.view.Gravity.CENTER))
+            val tile = icon(icon, R.drawable.fill_dh_tile, 8).apply { alpha = 0f; scaleX = 0.55f; scaleY = 0.55f }
             slot.addView(tile, FrameLayout.LayoutParams(size, size, android.view.Gravity.CENTER))
             tiles += tile
             b.tiles.addView(slot, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f))
         }
-        listOf(R.drawable.ic_call, R.drawable.ic_chat, R.drawable.ic_language, R.drawable.ic_camera).forEach { icon ->
+        listOf(R.drawable.glyph_call, R.drawable.glyph_chat, R.drawable.glyph_language, R.drawable.glyph_camera).forEach { icon ->
             val slot = FrameLayout(ctx)
             val size = res.getDimensionPixelSize(com.intuit.sdp.R.dimen._32sdp)
-            slot.addView(icon(icon, R.drawable.bg_dh_tile, 7), FrameLayout.LayoutParams(size, size, android.view.Gravity.CENTER))
+            slot.addView(icon(icon, R.drawable.fill_dh_tile, 7), FrameLayout.LayoutParams(size, size, android.view.Gravity.CENTER))
             b.dock.addView(slot, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f))
         }
     }
@@ -169,7 +169,7 @@ class RootBootGallery(private val b: PartBaseShowcaseBinding) {
                 setColor(if (act) 0xFF15213F.toInt() else ContextCompat.getColor(ctx, R.color.sh_card))
                 setStroke(px(1), if (act) 0xFF24407F.toInt() else ContextCompat.getColor(ctx, R.color.sh_border))
             }
-            p.railIcon.setImageResource(if (done) R.drawable.ic_check else RAIL_ICONS[i])
+            p.railIcon.setImageResource(if (done) R.drawable.glyph_check else RAIL_ICONS[i])
             p.railIcon.background.mutate().setTint(when { act -> accent; done -> 0xFF132143.toInt(); else -> 0xFF161E33.toInt() })
             p.railIcon.setColorFilter(when { act -> 0xFFFFFFFF.toInt(); done -> 0xFF8FB0FF.toInt(); else -> ContextCompat.getColor(ctx, R.color.sh_muted) })
             p.railLabel.alpha = 0f
@@ -227,6 +227,6 @@ class RootBootGallery(private val b: PartBaseShowcaseBinding) {
 
     private companion object {
         const val TICK_MS = 2600L
-        val RAIL_ICONS = listOf(R.drawable.ic_radio_checked, R.drawable.ic_touch_app, R.drawable.ic_home)
+        val RAIL_ICONS = listOf(R.drawable.glyph_radio_checked, R.drawable.glyph_touch_app, R.drawable.glyph_home)
     }
 }

@@ -11,7 +11,7 @@ class ToursScreenModel(repository: ShelfStore, args: SavedStateHandle) : ViewMod
     val guides: Boolean = args[ToursActivity.EXTRA_GUIDES] ?: false
     val articles: List<TourTwo> = if (guides) repository.diamondGuides() else repository.tips()
     val title = if (guides) R.string.tool_diamond else R.string.tool_tips
-    val icon = if (guides) R.drawable.ic_diamond else R.drawable.ic_bulb
+    val icon = if (guides) R.drawable.glyph_diamond else R.drawable.glyph_bulb
 
     /** The article opened on the article screen. */
     val index: Int = args[TourActivity.EXTRA_INDEX] ?: 0

@@ -34,7 +34,7 @@ object LayerPrimer {
             dialog = Dialog(activity).apply {
                 requestWindowFeature(Window.FEATURE_NO_TITLE)
                 setCancelable(false)
-                setContentView(R.layout.kit_part_fullscreen) // previous version: black screen, spinner, "Please Wait..."
+                setContentView(R.layout.pk_part_fullscreen) // previous version: black screen, spinner, "Please Wait..."
                 // Black, and drawn into the camera cutout: with the bars hidden, a transparent window let the screen
                 // behind show through the status-bar strip.
                 window?.setBackgroundDrawable(ColorDrawable(Color.BLACK))

@@ -17,7 +17,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.adkit.draw.AdvancePromoLead
 import com.loanmate.loan.emicalculator.carloan.adkit.draw.kitHasNetwork
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.TrayNoOnlineBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.SheetNoOnlineBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.leave.ExitDialogActivity
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -96,7 +96,7 @@ object NoConnected {
         a.javaClass.name.startsWith(APP_PACKAGE) && a !is ExitDialogActivity && !a.isFinishing
 
     private fun show(activity: Activity) {
-        val v = TrayNoOnlineBinding.inflate(activity.layoutInflater)
+        val v = SheetNoOnlineBinding.inflate(activity.layoutInflater)
         v.netRetry.setOnClickListener {
             MetricsTwo.click("retry", "no_internet")
             if (kitHasNetwork(app)) post(true)

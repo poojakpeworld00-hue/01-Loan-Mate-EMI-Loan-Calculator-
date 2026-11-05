@@ -8,13 +8,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.ScreenRecentSpotBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.PgRecentSpotBinding
 import com.loanmate.loan.emicalculator.carloan.adkit.triggers.PackTraitFrameActivity
 
 /** The ad screen a Recents press leads back to (RC `launcher.play_store_return`: bottom_ad, exit_ad on close). */
-class LatestPromoActivity : PackTraitFrameActivity<ScreenRecentSpotBinding>() {
+class LatestPromoActivity : PackTraitFrameActivity<PgRecentSpotBinding>() {
 
-    override fun inflateBinding(inflater: LayoutInflater) = ScreenRecentSpotBinding.inflate(inflater)
+    override fun inflateBinding(inflater: LayoutInflater) = PgRecentSpotBinding.inflate(inflater)
 
     override val screenName = "recents_event"
 

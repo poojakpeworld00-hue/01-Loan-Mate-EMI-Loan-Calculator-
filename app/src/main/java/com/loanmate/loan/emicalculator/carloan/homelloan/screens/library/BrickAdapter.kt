@@ -12,7 +12,7 @@ import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.LineupPromo
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellBlockBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowBlockBinding
 
 /** Adapter positions of the ad rows in a list of [tiles] items: after [after] items, then every [every] (0 = once), none after the last item. */
 internal fun spotStripPositions(tiles: Int, after: Int, every: Int): List<Int> {
@@ -33,7 +33,7 @@ class BrickAdapter(
     private val onClick: (Int) -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class PackKeeper(val b: CellBlockBinding) : RecyclerView.ViewHolder(b.root)
+    class PackKeeper(val b: RowBlockBinding) : RecyclerView.ViewHolder(b.root)
     private class PromoKeeper(val frame: FrameLayout) : RecyclerView.ViewHolder(frame)
 
     /** Adapter positions of the ad rows: the first after `after` tiles, the next ones every `every` tiles, none after the last tile. */
@@ -62,7 +62,7 @@ class BrickAdapter(
             // A late-loading ad's button must not take focus and scroll the list to it (key / D-pad navigation).
             descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         })
-        val b = CellBlockBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val b = RowBlockBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         (b.image.layoutParams as ConstraintLayout.LayoutParams).dimensionRatio = shape.ratio
         if (shape.fullBleed) {
             b.image.setPadding(0, 0, 0, 0)

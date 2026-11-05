@@ -20,10 +20,10 @@ import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.homelloan.LoanTwo
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.Follow
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageBootBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageFarewellBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellToolBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellFarewellReasonBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBootBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenFarewellBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowFarewellReasonBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.homebridge.OwnMark
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
@@ -49,19 +49,19 @@ class ExitPathActivity : AppCompatActivity() {
 
     /** Each reason has a quick fix; step 1 shows [TIPS] of them. */
     private enum class PackCause(val label: Int, val fix: Int, val fixButton: Int, val icon: Int) {
-        BROKEN(R.string.un_r_broken, R.string.un_fix_broken, R.string.un_fix_broken_btn, R.drawable.ic_replay),
-        ADS(R.string.un_r_ads, R.string.un_fix_ads, R.string.un_fix_settings_btn, R.drawable.ic_diamond),
-        CONTENT(R.string.un_r_content, R.string.un_fix_content, R.string.un_fix_content_btn, R.drawable.ic_search),
-        HARD(R.string.un_r_hard, R.string.un_fix_hard, R.string.un_fix_settings_btn, R.drawable.ic_settings),
-        NOT_NEEDED(R.string.un_r_not_needed, R.string.un_fix_not_needed, R.string.sh_home, R.drawable.ic_home),
+        BROKEN(R.string.un_r_broken, R.string.un_fix_broken, R.string.un_fix_broken_btn, R.drawable.glyph_replay),
+        ADS(R.string.un_r_ads, R.string.un_fix_ads, R.string.un_fix_settings_btn, R.drawable.glyph_diamond),
+        CONTENT(R.string.un_r_content, R.string.un_fix_content, R.string.un_fix_content_btn, R.drawable.glyph_search),
+        HARD(R.string.un_r_hard, R.string.un_fix_hard, R.string.un_fix_settings_btn, R.drawable.glyph_settings),
+        NOT_NEEDED(R.string.un_r_not_needed, R.string.un_fix_not_needed, R.string.sh_home, R.drawable.glyph_home),
     }
 
-    private lateinit var b: PageFarewellBinding
+    private lateinit var b: ScreenFarewellBinding
     private val container get() = (application as LoanTwo).container
     private var screen = ScreenTwo.STEP1
     private var picked: PackCause? = null
     private var paid = false
-    private var splash: PageBootBinding? = null
+    private var splash: ScreenBootBinding? = null
     private var timer: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class ExitPathActivity : AppCompatActivity() {
         val config = container.config.value
         if (!config.uninstallFlow.premium) return finish() // normal flow: there is no Uninstall entry that opens this
         kitEnableDarkEdgeToEdge()
-        b = PageFarewellBinding.inflate(layoutInflater)
+        b = ScreenFarewellBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.content.padForOsBars()
         b.glow.kitGlowPulse()
@@ -144,7 +144,7 @@ class ExitPathActivity : AppCompatActivity() {
                 b.sub.setText(R.string.un_sorry_body)
                 b.rows.removeAllViews()
                 TIPS.forEach { r ->
-                    CellToolBinding.inflate(layoutInflater, b.rows, true).apply {
+                    RowToolBinding.inflate(layoutInflater, b.rows, true).apply {
                         icon.setImageResource(r.icon)
                         name.setText(r.label)
                         sub.setText(r.fix)
@@ -187,7 +187,7 @@ class ExitPathActivity : AppCompatActivity() {
 
     /** The app's own splash (art, logo, name, bar) for `splash_ms`, as the reference shows its splash screen here. */
     private fun presentBoot(durationMs: Long) {
-        val s = PageBootBinding.inflate(layoutInflater, b.root, false)
+        val s = ScreenBootBinding.inflate(layoutInflater, b.root, false)
         b.root.addView(s.root)
         s.content.padForOsBars()
         splash = s
@@ -200,9 +200,9 @@ class ExitPathActivity : AppCompatActivity() {
         b.rows.removeAllViews()
         PackCause.entries.forEach { r ->
             val selected = picked == r
-            CellFarewellReasonBinding.inflate(layoutInflater, b.rows, true).apply {
+            RowFarewellReasonBinding.inflate(layoutInflater, b.rows, true).apply {
                 card.strokeColor = getColor(if (selected) R.color.sh_primary else R.color.sh_border)
-                radio.setImageResource(if (selected) R.drawable.ic_radio_checked else R.drawable.ic_radio_unchecked)
+                radio.setImageResource(if (selected) R.drawable.glyph_radio_checked else R.drawable.glyph_radio_unchecked)
                 if (selected) radio.setColorFilter(getColor(R.color.sh_primary))
                 label.setText(r.label)
                 row.setOnClickListener {

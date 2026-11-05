@@ -106,7 +106,7 @@ object LayerSpareLink {
         val size = (40 * density).toInt()
         val margin = (10 * density).toInt()
         val close = ImageView(overlay.context).apply {
-            setImageResource(R.drawable.glyph_close_cross)
+            setImageResource(R.drawable.mark_close_cross)
             setColorFilter(ContextCompat.getColor(context, R.color.on_ink))
             // Previous version geometry: top-end, 40dp from the top, 20dp from the edge.
             layoutParams = FrameLayout.LayoutParams(size, size, Gravity.TOP or Gravity.END).apply {

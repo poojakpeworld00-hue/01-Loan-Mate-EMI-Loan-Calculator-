@@ -15,8 +15,8 @@ import com.loanmate.loan.emicalculator.carloan.adkit.PromoPack
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageBaseBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellToolBlockBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBaseBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBlockBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.ShelfOrder
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.guides.ToursActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.emi.CalculatorActivity
@@ -32,7 +32,7 @@ import com.intuit.sdp.R as SdpR
  */
 class RootFabric(
     private val activity: Activity,
-    private val b: PageBaseBinding,
+    private val b: ScreenBaseBinding,
     /** RC place for the bottom and list ads: `screens.home`, or `launcher.host_app_panel` inside the launcher. */
     private val adPlace: String = PLACE,
 ) {
@@ -41,10 +41,10 @@ class RootFabric(
     private data class PackLoan(val icon: Int, val name: Int, val sub: Int, val open: () -> Intent)
 
     private val tools = listOf(
-        PackLoan(R.drawable.ic_bulb, R.string.tool_tips, R.string.tool_tips_sub) { ToursActivity.intent(activity, guides = false) },
-        PackLoan(R.drawable.ic_map, R.string.tool_maps, R.string.tool_maps_sub) { LineupActivity.intent(activity, ShelfOrder.MAPS) },
-        PackLoan(R.drawable.ic_diamond, R.string.tool_diamond, R.string.tool_diamond_sub) { ToursActivity.intent(activity, guides = true) },
-        PackLoan(R.drawable.ic_calc, R.string.tool_calculator, R.string.tool_calculator_sub) { Intent(activity, CalculatorActivity::class.java) },
+        PackLoan(R.drawable.glyph_bulb, R.string.tool_tips, R.string.tool_tips_sub) { ToursActivity.intent(activity, guides = false) },
+        PackLoan(R.drawable.glyph_map, R.string.tool_maps, R.string.tool_maps_sub) { LineupActivity.intent(activity, ShelfOrder.MAPS) },
+        PackLoan(R.drawable.glyph_diamond, R.string.tool_diamond, R.string.tool_diamond_sub) { ToursActivity.intent(activity, guides = true) },
+        PackLoan(R.drawable.glyph_calc, R.string.tool_calculator, R.string.tool_calculator_sub) { Intent(activity, CalculatorActivity::class.java) },
     )
 
     fun bind() {
@@ -58,7 +58,7 @@ class RootFabric(
             val line = LinearLayout(activity)
             b.tools.addView(line, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply { topMargin = gap })
             pair.forEachIndexed { i, tool ->
-                val card = CellToolBlockBinding.inflate(activity.layoutInflater, line, true)
+                val card = RowToolBlockBinding.inflate(activity.layoutInflater, line, true)
                 if (i > 0) (card.root.layoutParams as LinearLayout.LayoutParams).marginStart = gap
                 card.icon.setImageResource(tool.icon)
                 card.name.setText(tool.name)

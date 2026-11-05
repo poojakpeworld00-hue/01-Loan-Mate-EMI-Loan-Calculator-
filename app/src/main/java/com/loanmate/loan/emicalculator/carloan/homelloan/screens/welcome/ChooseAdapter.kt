@@ -7,8 +7,8 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellPickLatticeBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellPickStripBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowPickLatticeBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowPickStripBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.pop
 import com.intuit.sdp.R as SdpR
 
@@ -80,8 +80,8 @@ class ChooseAdapter(
         }
         val inflater = LayoutInflater.from(parent.context)
         return PackKeeper(
-            if (step.cards) CellPickLatticeBinding.inflate(inflater, parent, false).also { it.root.clipToOutline = true }
-            else CellPickStripBinding.inflate(inflater, parent, false)
+            if (step.cards) RowPickLatticeBinding.inflate(inflater, parent, false).also { it.root.clipToOutline = true }
+            else RowPickStripBinding.inflate(inflater, parent, false)
         )
     }
 
@@ -96,7 +96,7 @@ class ChooseAdapter(
         val name = ctx.getString(opt.name)
         val sub = opt.sub(ctx)
         when (val b = (holder as PackKeeper).binding) {
-            is CellPickLatticeBinding -> {
+            is RowPickLatticeBinding -> {
                 b.well.layoutParams.height = ctx.resources.getDimensionPixelSize(step.imageHeight)
                 b.image.setImageResource(opt.image)
                 b.image.scaleType = step.scale
@@ -108,7 +108,7 @@ class ChooseAdapter(
                 b.subText.text = sub
                 b.subText.visibility = if (sub.isEmpty()) View.GONE else View.VISIBLE
             }
-            is CellPickStripBinding -> {
+            is RowPickStripBinding -> {
                 b.image.visibility = if (opt.image != 0) View.VISIBLE else View.GONE
                 if (opt.image != 0) b.image.setImageResource(opt.image)
                 b.glyph.text = if (opt.image == 0) opt.glyph else ""

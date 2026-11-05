@@ -35,7 +35,7 @@ class NumericTimeGadgetProvider : AppWidgetProvider() {
         val textColor = context.pullWidgetCaptionTint(appWidgetId)
         val is24Hours = DateFormat.is24HourFormat(context)
 
-        val views = RemoteViews(context.packageName, R.layout.lx_gadget_digital_clock).apply {
+        val views = RemoteViews(context.packageName, R.layout.hp_gadget_digital_clock).apply {
             setInt(
                 R.id.widget_holderIx,
                 "setBackgroundColor",

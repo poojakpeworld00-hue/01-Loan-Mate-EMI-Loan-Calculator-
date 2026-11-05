@@ -22,8 +22,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageOptionsBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellToolBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenOptionsBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
@@ -33,12 +33,12 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.insertIn
 /** Settings: language, plus share, rate, privacy policy and terms. */
 class SettingsActivity : AppCompatActivity() {
     private val viewModel by toolViewForm { SettingsScreenModel(settingsRepository) }
-    private lateinit var languageRow: CellToolBinding
+    private lateinit var languageRow: RowToolBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageOptionsBinding.inflate(layoutInflater)
+        val b = ScreenOptionsBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         // As the reference: leaving Settings (arrow or Back) runs its `screens.settings` exit ad first.
@@ -50,11 +50,11 @@ class SettingsActivity : AppCompatActivity() {
         // launcher.default_home_banner: offer "Set as default home" while another launcher is the default.
         val launcher = (application as LoanTwo).container.config.value.launcher
         if (launcher.on && launcher.defaultHomeBanner && !Launcher.isDefaultHome(this)) {
-            row(b.appearance, R.drawable.ic_settings, R.string.set_default_home, null) {
+            row(b.appearance, R.drawable.glyph_settings, R.string.set_default_home, null) {
                 Launcher.requestDefaultHome(this) { granted -> if (granted) recreate() }
             }
         }
-        languageRow = row(b.appearance, R.drawable.ic_language, R.string.language, "") {
+        languageRow = row(b.appearance, R.drawable.glyph_language, R.string.language, "") {
             startActivity(Intent(this, LanguageActivity::class.java))
         }
 
@@ -64,22 +64,22 @@ class SettingsActivity : AppCompatActivity() {
             at = b.appearance.indexOfChild(languageRow.root) + 1,
         )
 
-        profileStrip(b.profile, R.drawable.ic_person, R.string.step_gender, "OB_2")
-        profileStrip(b.profile, R.drawable.ic_cake, R.string.step_age, "OB_3")
+        profileStrip(b.profile, R.drawable.glyph_person, R.string.step_gender, "OB_2")
+        profileStrip(b.profile, R.drawable.glyph_cake, R.string.step_age, "OB_3")
 
         // Remote Config `settings`: each of these four rows can be turned off per track (and country).
         val rows = (application as LoanTwo).container.config.value.settingsRows
-        if (rows.share) row(b.about, R.drawable.ic_share, R.string.share_app, getString(R.string.share_app_sub)) { share() }
-        if (rows.rate) row(b.about, R.drawable.ic_star, R.string.rate_app, getString(R.string.rate_app_sub)) { rate() }
-        if (rows.feedback) row(b.about, R.drawable.ic_mail, R.string.feedback, getString(R.string.feedback_sub)) { feedback() }
-        if (rows.update) row(b.about, R.drawable.ic_update, R.string.update_app, getString(R.string.update_app_sub)) {
+        if (rows.share) row(b.about, R.drawable.glyph_share, R.string.share_app, getString(R.string.share_app_sub)) { share() }
+        if (rows.rate) row(b.about, R.drawable.glyph_star, R.string.rate_app, getString(R.string.rate_app_sub)) { rate() }
+        if (rows.feedback) row(b.about, R.drawable.glyph_mail, R.string.feedback, getString(R.string.feedback_sub)) { feedback() }
+        if (rows.update) row(b.about, R.drawable.glyph_update, R.string.update_app, getString(R.string.update_app_sub)) {
             open(base.updateLink.ifBlank { storeUrl() })
         }
-        row(b.about, R.drawable.ic_shield, R.string.privacy_policy, null) { open(base.privacyLink.ifBlank { getString(R.string.privacy_policy_url) }) }
-        row(b.about, R.drawable.ic_document, R.string.terms, null) { open(base.termsLink.ifBlank { getString(R.string.terms_url) }) }
+        row(b.about, R.drawable.glyph_shield, R.string.privacy_policy, null) { open(base.privacyLink.ifBlank { getString(R.string.privacy_policy_url) }) }
+        row(b.about, R.drawable.glyph_document, R.string.terms, null) { open(base.termsLink.ifBlank { getString(R.string.terms_url) }) }
         // Spot consent (UMP): users in regions that require it can change their choice here.
         if (PromoPack.secrecyPicksRequired()) {
-            row(b.about, R.drawable.ic_shield, R.string.privacy_options, null) { PromoPack.presentSecrecyPicks(this) {} }
+            row(b.about, R.drawable.glyph_shield, R.string.privacy_options, null) { PromoPack.presentSecrecyPicks(this) {} }
         }
 
         b.version.text = getString(R.string.settings_version, packageManager.getPackageInfo(packageName, 0).versionName)
@@ -96,8 +96,8 @@ class SettingsActivity : AppCompatActivity() {
         Views.show("settings")
     }
 
-    private fun row(parent: ViewGroup, @DrawableRes icon: Int, @StringRes name: Int, sub: String?, onClick: () -> Unit): CellToolBinding {
-        val r = CellToolBinding.inflate(layoutInflater, parent, true)
+    private fun row(parent: ViewGroup, @DrawableRes icon: Int, @StringRes name: Int, sub: String?, onClick: () -> Unit): RowToolBinding {
+        val r = RowToolBinding.inflate(layoutInflater, parent, true)
         r.icon.setImageResource(icon)
         r.name.setText(name)
         r.sub.text = sub
@@ -115,7 +115,7 @@ class SettingsActivity : AppCompatActivity() {
         val step = setupPhases(settings.languages).first { it.key == stepKey }
         val labels = step.opts.map { getString(it.name) }
         fun current() = settings.answer(stepKey)?.firstOrNull() ?: step.defaultSel.firstOrNull()
-        lateinit var r: CellToolBinding
+        lateinit var r: RowToolBinding
         r = row(parent, icon, name, current()?.let(labels::getOrNull).orEmpty()) {
             MaterialAlertDialogBuilder(this)
                 .setTitle(step.title)

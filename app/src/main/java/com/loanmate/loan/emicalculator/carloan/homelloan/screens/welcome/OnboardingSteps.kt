@@ -42,7 +42,7 @@ private fun map(@StringRes kind: Int, players: Int): (Context) -> String =
     { it.getString(R.string.map_players, it.getString(kind), players) }
 
 /** Age-step portraits: game characters whose in-game age falls in each band (17, 20, 25, 35, 45). */
-private val AGE_AVATARS = listOf(R.drawable.av_age1, R.drawable.av_age2, R.drawable.av_age3, R.drawable.av_age4, R.drawable.av_age5)
+private val AGE_AVATARS = listOf(R.drawable.face_age1, R.drawable.face_age2, R.drawable.face_age3, R.drawable.face_age4, R.drawable.face_age5)
 
 const val LANG_KEY = "OB_1"
 const val FAV_KEY = "OB_5"
@@ -86,9 +86,9 @@ private val QUESTION_STEPS = listOf(
     Phase(
         "OB_2", R.string.gender_title, R.string.gender_sub, R.string.step_gender,
         opts = listOf(
-            PackChoice(R.string.gender_male, image = R.drawable.av_male),
-            PackChoice(R.string.gender_female, image = R.drawable.av_female),
-            PackChoice(R.string.gender_other, image = R.drawable.av_other),
+            PackChoice(R.string.gender_male, image = R.drawable.face_male),
+            PackChoice(R.string.gender_female, image = R.drawable.face_female),
+            PackChoice(R.string.gender_other, image = R.drawable.face_other),
         ),
     ),
     Phase(
@@ -102,48 +102,48 @@ private val QUESTION_STEPS = listOf(
     Phase(
         "OB_4", R.string.style_title, R.string.style_sub, R.string.step_style, cards = true, columns = 2, imageHeight = SdpR.dimen._65sdp,
         opts = listOf(
-            PackChoice(R.string.style_stealth, s(R.string.style_stealth_sub), R.drawable.gc1, "S"),
-            PackChoice(R.string.style_rush, s(R.string.style_rush_sub), R.drawable.gc2, "R"),
-            PackChoice(R.string.style_street, s(R.string.style_street_sub), R.drawable.gc3, "St"),
-            PackChoice(R.string.style_tactical, s(R.string.style_tactical_sub), R.drawable.gc4, "T"),
-            PackChoice(R.string.style_survivor, s(R.string.style_survivor_sub), R.drawable.gc5, "Su"),
-            PackChoice(R.string.style_chill, s(R.string.style_chill_sub), R.drawable.gc6, "C"),
+            PackChoice(R.string.style_stealth, s(R.string.style_stealth_sub), R.drawable.lm_gc1, "S"),
+            PackChoice(R.string.style_rush, s(R.string.style_rush_sub), R.drawable.lm_gc2, "R"),
+            PackChoice(R.string.style_street, s(R.string.style_street_sub), R.drawable.lm_gc3, "St"),
+            PackChoice(R.string.style_tactical, s(R.string.style_tactical_sub), R.drawable.lm_gc4, "T"),
+            PackChoice(R.string.style_survivor, s(R.string.style_survivor_sub), R.drawable.lm_gc5, "Su"),
+            PackChoice(R.string.style_chill, s(R.string.style_chill_sub), R.drawable.lm_gc6, "C"),
         ),
     ),
     Phase(
         FAV_KEY, R.string.fav_title, R.string.fav_sub, R.string.step_fav, cards = true, columns = 2, multi = true,
         imageHeight = SdpR.dimen._53sdp, scale = ScaleType.FIT_CENTER,
         opts = listOf(
-            PackChoice(R.string.cat_characters, s(R.string.cat_characters_sub), R.drawable.fc_characters, "C"),
-            PackChoice(R.string.cat_bundles, s(R.string.cat_bundles_sub), R.drawable.fc_bundles2, "B"),
-            PackChoice(R.string.cat_weapons, s(R.string.cat_weapons_sub), R.drawable.fc_weapons2, "W"),
-            PackChoice(R.string.cat_pets, s(R.string.cat_pets_sub), R.drawable.fc_pets2, "P"),
-            PackChoice(R.string.cat_emotes, s(R.string.cat_emotes_sub), R.drawable.fc_emotes, "E"),
-            PackChoice(R.string.cat_vehicles, s(R.string.cat_vehicles_sub), R.drawable.fc_vehicles, "V"),
+            PackChoice(R.string.cat_characters, s(R.string.cat_characters_sub), R.drawable.card_characters, "C"),
+            PackChoice(R.string.cat_bundles, s(R.string.cat_bundles_sub), R.drawable.card_bundles2, "B"),
+            PackChoice(R.string.cat_weapons, s(R.string.cat_weapons_sub), R.drawable.card_weapons2, "W"),
+            PackChoice(R.string.cat_pets, s(R.string.cat_pets_sub), R.drawable.card_pets2, "P"),
+            PackChoice(R.string.cat_emotes, s(R.string.cat_emotes_sub), R.drawable.card_emotes, "E"),
+            PackChoice(R.string.cat_vehicles, s(R.string.cat_vehicles_sub), R.drawable.card_vehicles, "V"),
         ),
     ),
     Phase(
         "OB_6", R.string.q_mode_title, R.string.q_mode_sub, R.string.step_mode, cards = true, columns = 2,
-        banner = R.drawable.q_mode, imageHeight = SdpR.dimen._77sdp,
+        banner = R.drawable.lm_q_mode, imageHeight = SdpR.dimen._77sdp,
         opts = listOf(
-            PackChoice(R.string.mode_br, image = R.drawable.gm1, glyph = "BR"),
-            PackChoice(R.string.mode_br_ranked, image = R.drawable.gm2, glyph = "R"),
-            PackChoice(R.string.mode_cs, image = R.drawable.gm3, glyph = "CS"),
-            PackChoice(R.string.mode_cs_ranked, image = R.drawable.gm4, glyph = "R"),
+            PackChoice(R.string.mode_br, image = R.drawable.lm_gm1, glyph = "BR"),
+            PackChoice(R.string.mode_br_ranked, image = R.drawable.lm_gm2, glyph = "R"),
+            PackChoice(R.string.mode_cs, image = R.drawable.lm_gm3, glyph = "CS"),
+            PackChoice(R.string.mode_cs_ranked, image = R.drawable.lm_gm4, glyph = "R"),
         ),
     ),
     Phase(
         "OB_7", R.string.q_weapon_title, R.string.q_weapon_sub, R.string.step_weapon, cards = true, columns = 2,
-        banner = R.drawable.q_weapon, imageHeight = SdpR.dimen._58sdp, scale = ScaleType.FIT_CENTER,
+        banner = R.drawable.lm_q_weapon, imageHeight = SdpR.dimen._58sdp, scale = ScaleType.FIT_CENTER,
         opts = listOf(
-            PackChoice(R.string.weapon_rifle, s(R.string.weapon_rifle_models), R.drawable.fc_weapons2, "R"),
-            PackChoice(R.string.weapon_smg, s(R.string.weapon_smg_models), R.drawable.w_smg, "S"),
-            PackChoice(R.string.weapon_sniper, s(R.string.weapon_sniper_models), R.drawable.w_sni, "Sn"),
-            PackChoice(R.string.weapon_shotgun, s(R.string.weapon_shotgun_models), R.drawable.w_sg, "Sg"),
+            PackChoice(R.string.weapon_rifle, s(R.string.weapon_rifle_models), R.drawable.card_weapons2, "R"),
+            PackChoice(R.string.weapon_smg, s(R.string.weapon_smg_models), R.drawable.lm_w_smg, "S"),
+            PackChoice(R.string.weapon_sniper, s(R.string.weapon_sniper_models), R.drawable.lm_w_sni, "Sn"),
+            PackChoice(R.string.weapon_shotgun, s(R.string.weapon_shotgun_models), R.drawable.lm_w_sg, "Sg"),
         ),
     ),
     Phase(
-        "OB_8", R.string.q_goal_title, R.string.q_goal_sub, R.string.step_goal, banner = R.drawable.q_goal,
+        "OB_8", R.string.q_goal_title, R.string.q_goal_sub, R.string.step_goal, banner = R.drawable.lm_q_goal,
         opts = listOf(
             PackChoice(R.string.goal_headshot, glyph = "◎"),
             PackChoice(R.string.goal_movement, glyph = "↗"),
@@ -153,16 +153,16 @@ private val QUESTION_STEPS = listOf(
     ),
     Phase(
         "OB_9", R.string.q_char_title, R.string.q_char_sub, R.string.step_char, cards = true, columns = 2, centered = true,
-        banner = R.drawable.q_char, imageHeight = SdpR.dimen._93sdp, scale = ScaleType.FIT_END,
+        banner = R.drawable.lm_q_char, imageHeight = SdpR.dimen._93sdp, scale = ScaleType.FIT_END,
         opts = listOf(
-            PackChoice(R.string.char_alok, image = R.drawable.ch_alok, glyph = "A"),
-            PackChoice(R.string.char_chrono, image = R.drawable.ch_chrono, glyph = "C"),
-            PackChoice(R.string.char_k, image = R.drawable.ch_k, glyph = "K"),
-            PackChoice(R.string.char_kelly, image = R.drawable.ch_kelly, glyph = "Ke"),
+            PackChoice(R.string.char_alok, image = R.drawable.opt_alok, glyph = "A"),
+            PackChoice(R.string.char_chrono, image = R.drawable.opt_chrono, glyph = "C"),
+            PackChoice(R.string.char_k, image = R.drawable.opt_k, glyph = "K"),
+            PackChoice(R.string.char_kelly, image = R.drawable.opt_kelly, glyph = "Ke"),
         ),
     ),
     Phase(
-        "OB_10", R.string.q_guide_title, R.string.q_guide_sub, R.string.step_tips, banner = R.drawable.q_guide,
+        "OB_10", R.string.q_guide_title, R.string.q_guide_sub, R.string.step_tips, banner = R.drawable.lm_q_guide,
         opts = listOf(
             PackChoice(R.string.guide_pro, glyph = "★"),
             PackChoice(R.string.guide_settings, glyph = "⚙"),
@@ -171,7 +171,7 @@ private val QUESTION_STEPS = listOf(
         ),
     ),
     Phase(
-        "OB_11", R.string.q_room_title, R.string.q_room_sub, R.string.step_room, banner = R.drawable.q_room,
+        "OB_11", R.string.q_room_title, R.string.q_room_sub, R.string.step_room, banner = R.drawable.lm_q_room,
         opts = listOf(
             PackChoice(R.string.room_love, glyph = "♥"),
             PackChoice(R.string.room_sometimes, glyph = "~"),
@@ -180,16 +180,16 @@ private val QUESTION_STEPS = listOf(
     ),
     Phase(
         "OB_12", R.string.q_map_title, R.string.q_map_sub, R.string.step_map, cards = true, columns = 2,
-        banner = R.drawable.q_map, imageHeight = SdpR.dimen._72sdp,
+        banner = R.drawable.lm_q_map, imageHeight = SdpR.dimen._72sdp,
         opts = listOf(
-            PackChoice(R.string.map_bermuda, map(R.string.map_classic, 52), R.drawable.map_bermuda, "B"),
-            PackChoice(R.string.map_purgatory, map(R.string.map_strategy, 48), R.drawable.map_purgatory, "P"),
-            PackChoice(R.string.map_kalahari, map(R.string.map_desert, 40), R.drawable.map_kalahari, "K"),
-            PackChoice(R.string.map_alpine, map(R.string.map_ranked, 50), R.drawable.map_alpine, "A"),
+            PackChoice(R.string.map_bermuda, map(R.string.map_classic, 52), R.drawable.chart_bermuda, "B"),
+            PackChoice(R.string.map_purgatory, map(R.string.map_strategy, 48), R.drawable.chart_purgatory, "P"),
+            PackChoice(R.string.map_kalahari, map(R.string.map_desert, 40), R.drawable.chart_kalahari, "K"),
+            PackChoice(R.string.map_alpine, map(R.string.map_ranked, 50), R.drawable.chart_alpine, "A"),
         ),
     ),
     Phase(
-        "OB_13", R.string.q_daily_title, R.string.q_daily_sub, R.string.step_daily, banner = R.drawable.q_tips,
+        "OB_13", R.string.q_daily_title, R.string.q_daily_sub, R.string.step_daily, banner = R.drawable.lm_q_tips,
         opts = listOf(
             PackChoice(R.string.daily_yes, glyph = "✓"),
             PackChoice(R.string.daily_later, glyph = "…"),

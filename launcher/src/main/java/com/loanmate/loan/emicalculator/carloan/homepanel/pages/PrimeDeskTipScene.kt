@@ -104,7 +104,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
 
     enum class Position { TOP, BOTTOM }
 
-    /** SHEET: the design bottom sheet ([R.layout.lx_home_hint_sheet]); the others use the old card layout. */
+    /** SHEET: the design bottom sheet ([R.layout.hp_home_hint_sheet]); the others use the old card layout. */
     enum class Control { SWITCH, NONE, SHEET }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,7 +118,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
         if (kind.control == Control.SHEET) {
             showSheet()
         } else {
-            setContentView(R.layout.lx_default_home_hint_scr)
+            setContentView(R.layout.hp_default_home_hint_scr)
             putType()
         }
 
@@ -147,7 +147,7 @@ class PrimeDeskTipScene : AppCompatActivity() {
 
     private fun showSheet() {
         enableEdgeToEdge()
-        setContentView(R.layout.lx_home_hint_sheet)
+        setContentView(R.layout.hp_home_hint_sheet)
         val d = resources.displayMetrics.density
         val label = appLabel()
 

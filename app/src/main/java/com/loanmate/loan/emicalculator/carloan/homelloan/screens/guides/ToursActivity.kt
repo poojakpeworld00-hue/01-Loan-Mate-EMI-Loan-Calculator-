@@ -11,9 +11,9 @@ import android.view.View
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageGuideBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageGuidesBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellToolBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenGuideBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenGuidesBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowToolBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.listAd
@@ -26,14 +26,14 @@ class ToursActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageGuidesBinding.inflate(layoutInflater)
+        val b = ScreenGuidesBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }
 
         b.header.title.setText(viewModel.title)
         viewModel.articles.forEachIndexed { i, a ->
-            val row = CellToolBinding.inflate(layoutInflater, b.rows, true)
+            val row = RowToolBinding.inflate(layoutInflater, b.rows, true)
             row.icon.setImageResource(viewModel.icon)
             row.name.text = a.title
             row.sub.text = a.summary
@@ -67,7 +67,7 @@ class TourActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageGuideBinding.inflate(layoutInflater)
+        val b = ScreenGuideBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }

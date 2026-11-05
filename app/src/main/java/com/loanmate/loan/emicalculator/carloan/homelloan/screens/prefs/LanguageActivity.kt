@@ -8,7 +8,7 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnabl
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageTongueBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenTongueBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
@@ -22,7 +22,7 @@ class LanguageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageTongueBinding.inflate(layoutInflater)
+        val b = ScreenTongueBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }

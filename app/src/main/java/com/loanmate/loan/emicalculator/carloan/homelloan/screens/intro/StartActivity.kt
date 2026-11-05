@@ -19,7 +19,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.LoanSpecHolder
 import com.loanmate.loan.emicalculator.carloan.homelloan.kit.device.NoConnected
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageBootBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBootBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
@@ -61,7 +61,7 @@ class StartActivity : AppCompatActivity() {
         // Our task was removed for Recents (ToggleShield): the app reopens where the user was, without the splash.
         if (savedInstanceState == null && ToggleShield.takeProceed()) return route(resume = true)
         if (savedInstanceState == null) RateQuery.countEnter(this)
-        val b = PageBootBinding.inflate(layoutInflater)
+        val b = ScreenBootBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.content.padForOsBars()
 

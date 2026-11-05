@@ -16,7 +16,7 @@ import org.fossify.commons.extensions.normalizeString
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
 import com.loanmate.loan.emicalculator.carloan.homepanel.adapters.SceneWidgetsLoader
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxSideScrZoneBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpSideScrZoneBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.fireApplet
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.WidgetCenter
 import com.loanmate.loan.emicalculator.carloan.homepanel.onboard.CenterAdsToggles
@@ -27,7 +27,7 @@ import kotlin.math.abs
 class WidgetsScenePanel(
     context: Context,
     attributeSet: AttributeSet,
-) : CenterPanel<LxSideScrZoneBinding>(context, attributeSet) {
+) : CenterPanel<HpSideScrZoneBinding>(context, attributeSet) {
     private var launchers = emptyList<WidgetCenter>()
     private var resultsCap = COLLAPSED_RESULTS
 
@@ -54,12 +54,12 @@ class WidgetsScenePanel(
 
     override fun setupFragment(activity: XCenterScene) {
         this.activity = activity
-        this.binding = LxSideScrZoneBinding.bind(this)
+        this.binding = HpSideScrZoneBinding.bind(this)
 
-        suggestedAdapter = SceneWidgetsLoader(R.layout.lx_bin_scr_grid_app) { tapApp(it, "panel") }
-        recentAdapter = SceneWidgetsLoader(R.layout.lx_bin_scr_grid_app) { tapApp(it, "panel_recent") }
-        resultsAdapter = SceneWidgetsLoader(R.layout.lx_bin_scr_outcome) { tapApp(it, "panel_search") }
-        searchInAdapter = SceneWidgetsLoader(R.layout.lx_bin_scr_query_inc) {
+        suggestedAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_grid_app) { tapApp(it, "panel") }
+        recentAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_grid_app) { tapApp(it, "panel_recent") }
+        resultsAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_outcome) { tapApp(it, "panel_search") }
+        searchInAdapter = SceneWidgetsLoader(R.layout.hp_bin_scr_query_inc) {
             com.loanmate.loan.emicalculator.carloan.homepanel.Launcher.events.onClick("panel_search_in_app")
             lookupInApplet(it)
         }

@@ -9,7 +9,7 @@ import android.os.Bundle
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageRosterBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenRosterBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.ShelfOrder
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForOsBars
@@ -22,7 +22,7 @@ class LineupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageRosterBinding.inflate(layoutInflater)
+        val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }

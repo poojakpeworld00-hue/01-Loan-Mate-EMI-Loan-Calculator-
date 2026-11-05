@@ -18,9 +18,9 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.LoanA
 /** Icon and name shown for [this] in the Home permission sheet. */
 val LoanAllow.display: Pair<Int, Int>
     get() = when (this) {
-        LoanAllow.NOTIFICATION -> R.drawable.ic_bell to R.string.ph_notif
+        LoanAllow.NOTIFICATION -> R.drawable.glyph_bell to R.string.ph_notif
         // FFF declares only the notification permission; the others are never pending, so they share a generic row.
-        else -> R.drawable.ic_shield to R.string.perm_title
+        else -> R.drawable.glyph_shield to R.string.perm_title
     }
 
 /** Remote Config `permissions.<screen>`: which runtime permissions a screen asks, in order (reference app rules). */

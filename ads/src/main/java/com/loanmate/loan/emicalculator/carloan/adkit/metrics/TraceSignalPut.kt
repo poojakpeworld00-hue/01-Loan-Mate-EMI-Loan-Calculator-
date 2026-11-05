@@ -79,7 +79,7 @@ object TraceSignalPut {
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
             )
             val notification = NotificationCompat.Builder(app, CHANNEL)
-                .setSmallIcon(R.drawable.ic_ad)
+                .setSmallIcon(R.drawable.glyph_ad)
                 .setContentTitle("Analytics events: $count")
                 .setContentText("Last: $last")
                 .setContentIntent(open)

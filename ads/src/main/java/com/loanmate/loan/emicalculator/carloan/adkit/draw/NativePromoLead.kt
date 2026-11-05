@@ -81,10 +81,10 @@ class NativePromoLead(private val place: String = PromoSignals.place) {
         val ad = ads.random()
 
         val layoutId = when (type) {
-            NativePromoLook.BIG_NATIVE -> R.layout.house_spot_slab_a
-            NativePromoLook.MID_NATIVE -> R.layout.house_spot_slab_b
-            NativePromoLook.BANNER -> R.layout.house_spot_strip
-            NativePromoLook.FULLSCREEN_NATIVE -> R.layout.house_spot_fullpage
+            NativePromoLook.BIG_NATIVE -> R.layout.inh_spot_slab_a
+            NativePromoLook.MID_NATIVE -> R.layout.inh_spot_slab_b
+            NativePromoLook.BANNER -> R.layout.inh_spot_strip
+            NativePromoLook.FULLSCREEN_NATIVE -> R.layout.inh_spot_fullpage
         }
         val view = try {
             LayoutInflater.from(container.context).inflate(layoutId, container, false)

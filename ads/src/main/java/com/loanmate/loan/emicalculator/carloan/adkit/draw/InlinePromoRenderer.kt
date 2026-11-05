@@ -27,12 +27,12 @@ import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoDelays
 import com.loanmate.loan.emicalculator.carloan.adkit.rules.ScreenPromoMapper
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import com.loanmate.loan.emicalculator.carloan.adkit.bridge.PromoSignals
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AdGmsEmbeddedLargeBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AduGmsEmbeddedLargeBinding
 import androidx.core.content.ContextCompat
 import com.loanmate.loan.emicalculator.carloan.adkit.R
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AdGmsEmbeddedFullpageBinding
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AdGmsEmbeddedMediumAltBinding
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AdGmsEmbeddedMediumBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AduGmsEmbeddedFullpageBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AduGmsEmbeddedMediumAltBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AduGmsEmbeddedMediumBinding
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -187,11 +187,11 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                     return@forNativeAd
                 }
                 val root: View = when (kind) {
-                    0 -> AdGmsEmbeddedLargeBinding.inflate(context.layoutInflater)
+                    0 -> AduGmsEmbeddedLargeBinding.inflate(context.layoutInflater)
                         .also { largeEmbeddedLayout(ad, it, context) }.root
-                    1 -> AdGmsEmbeddedMediumBinding.inflate(context.layoutInflater)
+                    1 -> AduGmsEmbeddedMediumBinding.inflate(context.layoutInflater)
                         .also { mediumEmbeddedLayout(ad, it, context) }.root
-                    else -> AdGmsEmbeddedMediumAltBinding.inflate(context.layoutInflater)
+                    else -> AduGmsEmbeddedMediumAltBinding.inflate(context.layoutInflater)
                         .also { mediumEmbeddedLayoutAlt(ad, it, context) }.root
                 }
                 ad.setOnPaidEventListener { PromoSignals.paid(it, "native_unit", unitId, ad.responseInfo, place) }
@@ -253,7 +253,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
                         if (nativeAd != null) {
                             val rootView: View = run {
-                                val binding = AdGmsEmbeddedLargeBinding.inflate(context.layoutInflater)
+                                val binding = AduGmsEmbeddedLargeBinding.inflate(context.layoutInflater)
                                 largeEmbeddedLayout(nativeAd!!, binding, context)
                                 binding.root
                                 }
@@ -343,7 +343,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 if (context.isFinishing || context.isDestroyed) return@post
 
                 if (nativeAd != null) {
-                    val binding = AdGmsEmbeddedFullpageBinding.inflate(context.layoutInflater)
+                    val binding = AduGmsEmbeddedFullpageBinding.inflate(context.layoutInflater)
 
                     isFullNativeShowing = true
                     fullpageEmbeddedLayout(nativeAd!!, binding, context) {
@@ -427,7 +427,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                 if (!wait.kitArrived() || fired || activity.isFinishing || activity.isDestroyed) {
                     ad.destroy(); dropOverlay(); return@forNativeAd miss()
                 }
-                val binding = AdGmsEmbeddedFullpageBinding.inflate(activity.layoutInflater)
+                val binding = AduGmsEmbeddedFullpageBinding.inflate(activity.layoutInflater)
                 isFullNativeShowing = true
                 fullpageEmbeddedLayout(ad, binding, activity) {
                     isFullNativeShowing = false
@@ -455,7 +455,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
     private fun fullpageEmbeddedLayout(
         nativeAd: NativeAd,
-        binding: AdGmsEmbeddedFullpageBinding,
+        binding: AduGmsEmbeddedFullpageBinding,
         context: Activity,
         onClose: () -> Unit,
     ) {
@@ -524,7 +524,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
     private fun largeEmbeddedLayout(
         nativeAd: NativeAd,
-        binding: AdGmsEmbeddedLargeBinding,
+        binding: AduGmsEmbeddedLargeBinding,
         context: Activity
     ) {
         binding.apply {
@@ -608,7 +608,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                     try {
                         if (context.isFinishing || context.isDestroyed) return@post
                         if (nativeAd != null) {
-                            val binding = AdGmsEmbeddedMediumBinding.inflate(context.layoutInflater)
+                            val binding = AduGmsEmbeddedMediumBinding.inflate(context.layoutInflater)
                             mediumEmbeddedLayout(
                                 nativeAd!!,
                                 binding,
@@ -664,7 +664,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
     private fun mediumEmbeddedLayout(
         nativeAd: NativeAd,
-        binding: AdGmsEmbeddedMediumBinding,
+        binding: AduGmsEmbeddedMediumBinding,
         context: Activity
     ) {
         binding.apply {
@@ -750,7 +750,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
                     try {
                         if (context.isFinishing || context.isDestroyed) return@post
                         if (Companion.nativeAd != null) {
-                            val binding = AdGmsEmbeddedMediumAltBinding.inflate(context.layoutInflater)
+                            val binding = AduGmsEmbeddedMediumAltBinding.inflate(context.layoutInflater)
                             mediumEmbeddedLayoutAlt(
                                 Companion.nativeAd!!,
                                 binding,
@@ -806,7 +806,7 @@ class InlinePromoRenderer(private val place: String = PromoSignals.place) {
 
     private fun mediumEmbeddedLayoutAlt(
         nativeAd: NativeAd,
-        binding: AdGmsEmbeddedMediumAltBinding,
+        binding: AduGmsEmbeddedMediumAltBinding,
         context: Activity
     ) {
         binding.apply {

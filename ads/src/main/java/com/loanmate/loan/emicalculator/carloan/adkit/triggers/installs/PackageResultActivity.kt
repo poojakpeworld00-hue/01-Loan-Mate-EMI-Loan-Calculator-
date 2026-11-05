@@ -27,13 +27,13 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.loanmate.loan.emicalculator.carloan.adkit.R
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.ScreenParcelYieldBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.PgParcelYieldBinding
 import com.loanmate.loan.emicalculator.carloan.adkit.triggers.PackTraitFrameActivity
 import com.loanmate.loan.emicalculator.carloan.adkit.triggers.SysDialogLoan
 
-class PackageResultActivity : PackTraitFrameActivity<ScreenParcelYieldBinding>() {
+class PackageResultActivity : PackTraitFrameActivity<PgParcelYieldBinding>() {
 
-    override fun inflateBinding(inflater: LayoutInflater) = ScreenParcelYieldBinding.inflate(inflater)
+    override fun inflateBinding(inflater: LayoutInflater) = PgParcelYieldBinding.inflate(inflater)
 
     override val screenName = "package_event"
 
@@ -85,11 +85,11 @@ class PackageResultActivity : PackTraitFrameActivity<ScreenParcelYieldBinding>()
     }
 
     private fun wireHeader() = with(binding) {
-        pkgresHeroVw.setBackgroundResource(R.drawable.form_pkgres_hero_installed)
-        pkgresBadgeVw.setBackgroundResource(R.drawable.form_pkgres_badge_installed)
-        pkgresBadgeIconVw.setImageResource(if (installed) R.drawable.sym_shield_check else R.drawable.sym_check)
+        pkgresHeroVw.setBackgroundResource(R.drawable.shp_pkgres_hero_installed)
+        pkgresBadgeVw.setBackgroundResource(R.drawable.shp_pkgres_badge_installed)
+        pkgresBadgeIconVw.setImageResource(if (installed) R.drawable.icn_shield_check else R.drawable.icn_check)
         pkgresStatusVw.apply {
-            setBackgroundResource(R.drawable.form_pkgres_status_installed)
+            setBackgroundResource(R.drawable.shp_pkgres_status_installed)
             setText(if (installed) R.string.pkgres_privacy_status else R.string.pkgres_optimize_status)
             setTextColor(getColor(R.color.pkgres_installed))
         }
@@ -216,7 +216,7 @@ class PackageResultActivity : PackTraitFrameActivity<ScreenParcelYieldBinding>()
     }
 
     private fun addRow(title: String, value: String, dotColor: Int) {
-        val row = LayoutInflater.from(this).inflate(R.layout.row_pkgres_test, binding.pkgresChecksVw, false)
+        val row = LayoutInflater.from(this).inflate(R.layout.ln_pkgres_test, binding.pkgresChecksVw, false)
         row.findViewById<TextView>(R.id.pkgresRowTitleVw).text = title
         row.findViewById<TextView>(R.id.pkgresRowValueVw).text = value
         row.findViewById<View>(R.id.pkgresRowDotVw).background.mutate().setTint(getColor(dotColor))

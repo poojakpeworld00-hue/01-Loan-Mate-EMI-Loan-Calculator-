@@ -26,7 +26,7 @@ import org.fossify.commons.helpers.ensureBackgroundThread
 import com.loanmate.loan.emicalculator.carloan.homepanel.R
 import com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene
 import com.loanmate.loan.emicalculator.carloan.homepanel.adapters.GadgetsLoader
-import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.LxGadgetsZoneBinding
+import com.loanmate.loan.emicalculator.carloan.homepanel.databinding.HpGadgetsZoneBinding
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.launcherConfig
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.pullInitialSlotDims
 import com.loanmate.loan.emicalculator.carloan.homepanel.helpers.prepRackBackdrop
@@ -43,7 +43,7 @@ import com.loanmate.loan.emicalculator.carloan.homepanel.models.GadgetsStackLogs
 import com.loanmate.loan.emicalculator.carloan.homepanel.models.GadgetsStackCluster
 
 class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
-    CenterPanel<LxGadgetsZoneBinding>(context, attributeSet), GadgetsBrickKeeper {
+    CenterPanel<HpGadgetsZoneBinding>(context, attributeSet), GadgetsBrickKeeper {
     private var lastTouchCoords = Pair(0f, 0f)
     private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
     var touchDownY = -1
@@ -53,7 +53,7 @@ class GadgetsPanel(context: Context, attributeSet: AttributeSet) :
     @SuppressLint("ClickableViewAccessibility")
     override fun setupFragment(activity: XCenterScene) {
         this.activity = activity
-        this.binding = LxGadgetsZoneBinding.bind(this)
+        this.binding = HpGadgetsZoneBinding.bind(this)
         getAppWidgets()
 
         binding.widgetsRollIx.setOnTouchListener { v, event ->

@@ -16,7 +16,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.model.PromoBayType
 import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoFetchStyle
 import com.loanmate.loan.emicalculator.carloan.adkit.rules.PromoSettingsBox
 import com.loanmate.loan.emicalculator.carloan.adkit.bridge.PromoSignals
-import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AdGmsEmbeddedCompactBinding
+import com.loanmate.loan.emicalculator.carloan.adkit.databinding.AduGmsEmbeddedCompactBinding
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
@@ -147,7 +147,7 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
 
     private fun presentCached(context: Activity, layout: FrameLayout, shimmer: ShimmerFrameLayout?) {
         val ad = nativeAdBanner ?: return kitStripMissing(context, layout, shimmer)
-        val binding = AdGmsEmbeddedCompactBinding.inflate(context.layoutInflater)
+        val binding = AduGmsEmbeddedCompactBinding.inflate(context.layoutInflater)
         populateGmsEmbedded(ad, binding, context)
 
         layout.removeAllViews()
@@ -169,7 +169,7 @@ class InlineBarRenderer(private val place: String = PromoSignals.place) {
     }
 
     private fun populateGmsEmbedded(
-        nativeAd: NativeAd, binding: AdGmsEmbeddedCompactBinding, context: Activity
+        nativeAd: NativeAd, binding: AduGmsEmbeddedCompactBinding, context: Activity
     ) {
         val unit = PromoSettingsBox.getInstance(context).getString("googleNative")
         nativeAd.setOnPaidEventListener { PromoSignals.paid(it, "native_strip", unit, nativeAd.responseInfo, place) }

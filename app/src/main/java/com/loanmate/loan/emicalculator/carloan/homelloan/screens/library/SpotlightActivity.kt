@@ -16,8 +16,8 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnabl
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.PageFocusBinding
-import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.CellStatBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenFocusBinding
+import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.RowStatBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.ShelfOrder
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolViewForm
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
@@ -35,7 +35,7 @@ class SpotlightActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         kitEnableDarkEdgeToEdge()
-        val b = PageFocusBinding.inflate(layoutInflater)
+        val b = ScreenFocusBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForOsBars()
         b.header.back.setOnClickListener { finish() }
@@ -53,7 +53,7 @@ class SpotlightActivity : AppCompatActivity() {
         b.name.text = item.name
         b.desc.text = item.desc
         item.stats.forEach { (label, value) ->
-            val s = CellStatBinding.inflate(layoutInflater, b.stats, true)
+            val s = RowStatBinding.inflate(layoutInflater, b.stats, true)
             s.label.setText(label)
             s.value.text = value
         }

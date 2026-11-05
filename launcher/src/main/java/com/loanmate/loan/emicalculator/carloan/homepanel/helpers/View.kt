@@ -55,7 +55,7 @@ fun View.prepRackBackdrop(
 }
 
 fun MySearchMenu.putRackSkin() {
-    val res = com.loanmate.loan.emicalculator.carloan.homepanel.R.drawable.hs_shelf_query_back
+    val res = com.loanmate.loan.emicalculator.carloan.homepanel.R.drawable.hpd_shelf_query_back
     val dp = resources.displayMetrics.density
     setBackgroundColor(Color.TRANSPARENT)
 
