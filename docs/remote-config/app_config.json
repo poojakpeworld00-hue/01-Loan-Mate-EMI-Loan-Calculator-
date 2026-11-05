@@ -76,13 +76,13 @@
       },
       "colors": {
         "light": {
-          "button": "#3399FF",
+          "button": "#16A34A",
           "button_text": "#FFFFFF",
           "background": "#FFFFFF",
           "text": "#16202E"
         },
         "dark": {
-          "button": "#3399FF",
+          "button": "#16A34A",
           "button_text": "#FFFFFF",
           "background": "#FFFFFF",
           "text": "#16202E"
