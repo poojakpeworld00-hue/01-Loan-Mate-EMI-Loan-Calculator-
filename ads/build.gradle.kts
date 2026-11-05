@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.loanmate.loan.emicalculator.carloan.homelloan.ads"
+    namespace = "com.loanmate.loan.emicalculator.carloan.adkit"
     compileSdk {
         version = release(37)
     }

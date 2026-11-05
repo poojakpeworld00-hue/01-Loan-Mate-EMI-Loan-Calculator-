@@ -42,7 +42,7 @@
     <application>
         <!-- Launcher home (HOME role). Names are fully qualified: the host namespace differs. -->
         <activity
-            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.launcher.screens.XHubStage"
+            android:name="com.loanmate.loan.emicalculator.carloan.homepanel.pages.XCenterScene"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
@@ -63,7 +63,7 @@
 
         <!-- Coach-mark over the system "Default home app" list: its own task (empty affinity). -->
         <activity
-            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.launcher.screens.MainLobbyHintStage"
+            android:name="com.loanmate.loan.emicalculator.carloan.homepanel.pages.PrimeDeskTipScene"
             android:screenOrientation="portrait"
             android:excludeFromRecents="true"
             android:exported="false"
@@ -73,7 +73,7 @@
 
         <!-- Double-tap to lock (device admin). -->
         <receiver
-            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.launcher.listeners.SecureCallerManagerListener"
+            android:name="com.loanmate.loan.emicalculator.carloan.homepanel.hooks.SafeDialerManagerListener"
             android:exported="true"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
             <meta-data
@@ -85,7 +85,7 @@
         </receiver>
 
         <receiver
-            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.launcher.gadgets.AnalogClockWidgetProvider"
+            android:name="com.loanmate.loan.emicalculator.carloan.homepanel.widgetry.DialTimeGadgetProvider"
             android:exported="true"
             android:label="@string/launcher_analog_clock_widget">
             <intent-filter>
@@ -97,7 +97,7 @@
         </receiver>
 
         <receiver
-            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.launcher.gadgets.DigitalClockWidgetProvider"
+            android:name="com.loanmate.loan.emicalculator.carloan.homepanel.widgetry.NumericTimeGadgetProvider"
             android:exported="true"
             android:label="@string/launcher_digital_clock_widget">
             <intent-filter>

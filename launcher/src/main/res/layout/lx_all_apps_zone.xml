@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.loanmate.loan.emicalculator.carloan.homelloan.launcher.panes.BoardPane xmlns:android="http://schemas.android.com/apk/res/android"
+<com.loanmate.loan.emicalculator.carloan.homepanel.sheets.SheetPanel xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/all_apps_holderIx"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:elevation="@dimen/launcher_drawer_search_z"
         app:applyWindowInsets="false" />
 
-    <com.loanmate.loan.emicalculator.carloan.homelloan.launcher.ui.FadeAwayMatrixPane
+    <com.loanmate.loan.emicalculator.carloan.homepanel.visual.DimGoneGridPanel
         android:id="@+id/all_apps_gridIx"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -139,4 +139,4 @@
         android:textStyle="italic"
         android:visibility="gone" />
 
-</com.loanmate.loan.emicalculator.carloan.homelloan.launcher.panes.BoardPane>
+</com.loanmate.loan.emicalculator.carloan.homepanel.sheets.SheetPanel>

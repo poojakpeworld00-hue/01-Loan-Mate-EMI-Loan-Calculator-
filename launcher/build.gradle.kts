@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.loanmate.loan.emicalculator.carloan.homelloan.launcher"
+    namespace = "com.loanmate.loan.emicalculator.carloan.homepanel"
     compileSdk {
         version = release(37)
     }

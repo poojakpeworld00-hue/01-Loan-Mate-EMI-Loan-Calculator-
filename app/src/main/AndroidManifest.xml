@@ -15,7 +15,7 @@
     <uses-permission android:name="org.fossify.android.permission.WRITE_GLOBAL_SETTINGS" tools:node="remove" />
 
     <application
-        android:name=".Tool2"
+        android:name=".LoanTwo"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:enableOnBackInvokedCallback="true"
@@ -28,7 +28,7 @@
         android:theme="@style/Theme.SkinHubSkinsBundles"
         tools:targetApi="33">
         <activity
-            android:name=".presentation.splash.BootActivity"
+            android:name=".presentation.splash.StartActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/launcher_name"
@@ -41,45 +41,45 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.onboarding.SetupActivity"
+            android:name=".presentation.onboarding.OnboardActivity"
             android:excludeFromRecents="true"
             android:configChanges="locale|layoutDirection"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.home.BaseActivity"
+            android:name=".presentation.home.RootActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.catalog.RosterActivity"
+            android:name=".presentation.catalog.LineupActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.catalog.FocusActivity"
+            android:name=".presentation.catalog.SpotlightActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.articles.GuidesActivity"
+            android:name=".presentation.articles.ToursActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.articles.GuideActivity"
+            android:name=".presentation.articles.TourActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.calculator.ReckonerActivity"
+            android:name=".presentation.calculator.CalculatorActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.calculator.ReckonActivity"
+            android:name=".presentation.calculator.ComputeActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.settings.OptionsActivity"
+            android:name=".presentation.settings.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.settings.TongueActivity"
+            android:name=".presentation.settings.LanguageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.uninstall.FarewellRouteActivity"
+            android:name=".presentation.uninstall.ExitPathActivity"
             android:configChanges="locale|layoutDirection"
             android:excludeFromRecents="true"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.uninstall.FarewellModalActivity"
+            android:name=".presentation.uninstall.ExitDialogActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -117,7 +117,7 @@
 
         <!-- Silent `rc_sync` push: re-syncs Remote Config at once (no notification is shown). -->
         <service
-            android:name=".data.remote.config.RcAlignNotifyService"
+            android:name=".data.remote.config.RemoteSyncAlertService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
