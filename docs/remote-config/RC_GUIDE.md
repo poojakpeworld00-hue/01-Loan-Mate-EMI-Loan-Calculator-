@@ -8,7 +8,7 @@ Firebase project `skin-emotes-7823f`. The app reads **one JSON string parameter*
 | `app_config_debug` | debug builds | Google test ad units; fetched on every launch |
 | `home_profile_rules`, `home_profile_probes` | launcher (optional) | grid/icon profile tables; empty = launcher built-ins |
 
-Parsed by `AppConfigParser` (`app/src/main/java/com/fffskintools/skin/tools/emotes/data/remote/config/`). Missing key or wrong type → the code default; unknown names are dropped; invalid JSON keeps the previous config.
+Parsed by `AppConfigParser` (`app/src/main/java/com/loanmate/loan/emicalculator/carloan/homelloan/data/remote/config/`). Missing key or wrong type → the code default; unknown names are dropped; invalid JSON keeps the previous config.
 
 ## Editing and publishing
 

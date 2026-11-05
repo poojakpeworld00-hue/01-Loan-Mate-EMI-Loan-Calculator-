@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.fffskintools.skin.tools.launcher.panes.GadgetsStagePane xmlns:android="http://schemas.android.com/apk/res/android"
+<com.loanmate.loan.emicalculator.carloan.homelloan.launcher.panes.GadgetsStagePane xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/start_page_holderIx"
@@ -258,4 +258,4 @@
 
     </ScrollView>
 
-</com.fffskintools.skin.tools.launcher.panes.GadgetsStagePane>
+</com.loanmate.loan.emicalculator.carloan.homelloan.launcher.panes.GadgetsStagePane>

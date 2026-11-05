@@ -252,7 +252,7 @@
                                 tools:text="0:12" />
                         </LinearLayout>
 
-                        <com.fffskintools.skin.tools.emotes.presentation.onboarding.WaveView
+                        <com.loanmate.loan.emicalculator.carloan.homelloan.presentation.onboarding.WaveView
                             android:id="@+id/voiceWave"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_20sdp"

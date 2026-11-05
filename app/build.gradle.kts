@@ -24,13 +24,13 @@ tasks.matching { it.name == "preReleaseBuild" }.configureEach {
 configurations.configureEach { exclude(group = "com.android.support") }
 
 android {
-    namespace = "com.fffskintools.skin.tools.emotes"
+    namespace = "com.loanmate.loan.emicalculator.carloan.homelloan"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.fffskintools.skin.tools.emotes"
+        applicationId = "com.loanmate.loan.emicalculator.carloan.homelloan"
         minSdk = 26
         targetSdk = 37
         versionCode = 1

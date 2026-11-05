@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fffskintools.skin.tools.ads"
+    namespace = "com.loanmate.loan.emicalculator.carloan.homelloan.ads"
     compileSdk {
         version = release(37)
     }

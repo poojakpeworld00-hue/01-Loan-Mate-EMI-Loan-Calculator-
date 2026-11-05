@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.fffskintools.skin.tools.launcher"
+    namespace = "com.loanmate.loan.emicalculator.carloan.homelloan.launcher"
     compileSdk {
         version = release(37)
     }

@@ -70,7 +70,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.fffskintools.skin.tools.ads.events.charging.BatteryEnergyView
+        <com.loanmate.loan.emicalculator.carloan.homelloan.ads.events.charging.BatteryEnergyView
             android:id="@+id/chargingEnergyView"
             android:layout_width="0dp"
             android:layout_height="0dp"

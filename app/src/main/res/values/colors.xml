@@ -11,7 +11,7 @@
     <color name="sh_muted">#8E9BB8</color>
     <color name="sh_dim">#5A6785</color>
     <color name="sh_primary">#2D6BFF</color>
-    <color name="sh_accent">#1F55D9</color>
+    <color name="sh_accent">#1E88E5</color>
     <!-- Accent at 14% over the card. -->
     <color name="sh_chip">#132143</color>
     <color name="sh_border">#2D6BFF</color>

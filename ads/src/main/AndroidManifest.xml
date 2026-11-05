@@ -16,7 +16,7 @@
 
     <application>
         <activity
-            android:name="com.fffskintools.skin.tools.ads.render.PatronWebActivity"
+            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.ads.render.PatronWebActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:excludeFromRecents="true"
@@ -24,7 +24,7 @@
             android:theme="@style/Theme.AdKit.Web" />
 
         <activity
-            android:name="com.fffskintools.skin.tools.ads.events.pkgresult.ParcelYieldActivity"
+            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.ads.events.pkgresult.ParcelYieldActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTask"
@@ -33,7 +33,7 @@
             android:theme="@style/Theme.AdKit.PackageResult" />
 
         <activity
-            android:name="com.fffskintools.skin.tools.ads.events.charging.BatteryStatusActivity"
+            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.ads.events.charging.BatteryStatusActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTask"
@@ -44,7 +44,7 @@
             android:turnScreenOn="true" />
 
         <activity
-            android:name="com.fffskintools.skin.tools.ads.events.recent.RecentSpotActivity"
+            android:name="com.loanmate.loan.emicalculator.carloan.homelloan.ads.events.recent.RecentSpotActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTop"
