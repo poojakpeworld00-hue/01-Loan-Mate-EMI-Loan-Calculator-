@@ -46,7 +46,7 @@ class LoanHomeFragment : Fragment() {
 
     private fun initListeners() {
         binding.btnPromoCta.setOnClickListener {
-            startActivity(Intent(requireContext(), FreedomCountdownActivity::class.java))
+            LoanTabs.open(this, "loan_freedom", Intent(requireContext(), FreedomCountdownActivity::class.java))
         }
     }
 
@@ -99,11 +99,9 @@ class LoanHomeFragment : Fragment() {
     private fun route(tileId: String, titleRes: Int, iconRes: Int) {
         val type = tileIdToCalculatorType[tileId]
         if (type != null) {
-            startActivity(LoanCalculatorActivity.newIntent(requireContext(), type))
+            LoanTabs.open(this, "calc_${type.name.lowercase()}", LoanCalculatorActivity.newIntent(requireContext(), type))
         } else {
-            startActivity(
-                CalcPlaceholderActivity.newIntent(requireContext(), titleRes, iconRes)
-            )
+            LoanTabs.open(this, "tile_$tileId", CalcPlaceholderActivity.newIntent(requireContext(), titleRes, iconRes))
         }
     }
 

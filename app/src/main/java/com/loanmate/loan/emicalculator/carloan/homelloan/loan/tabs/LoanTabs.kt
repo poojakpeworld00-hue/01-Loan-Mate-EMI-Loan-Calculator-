@@ -6,7 +6,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import android.content.Intent
 import androidx.fragment.app.Fragment
+import com.loanmate.loan.emicalculator.carloan.adkit.Spots
+import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootFabric
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.LnBottomNavBinding
 
@@ -22,6 +26,13 @@ object LoanTabs {
         HISTORY -> LoanHistoryFragment()
         SETTINGS -> LoanSettingsFragment()
         else -> LoanHomeFragment()
+    }
+
+    /** Opens a screen from a tab the way the old home did: count the [button] click, run the `screens.home` exit ad, then go. */
+    fun open(fragment: Fragment, button: String, intent: Intent) {
+        val activity = fragment.requireActivity()
+        MetricsTwo.click(button)
+        Spots.exit(activity, RootFabric.PLACE) { activity.startActivity(intent) }
     }
 
     /** Highlights [tab] in an `ln_bottom_nav` bar (the reference's updateNavState). */

@@ -72,7 +72,7 @@ class LoanHistoryFragment : Fragment() {
 
     private fun openCalculator(item: HistoryEntry) {
         val type = CalcKind.fromIdOrNull(item.calculatorTypeName) ?: return
-        startActivity(LoanCalculatorActivity.newIntent(requireContext(), type, item))
+        LoanTabs.open(this, "history_item", LoanCalculatorActivity.newIntent(requireContext(), type, item))
     }
 
     private fun confirmDelete(item: HistoryEntry) {
