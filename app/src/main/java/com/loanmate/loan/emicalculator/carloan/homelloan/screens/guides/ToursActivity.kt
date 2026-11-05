@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenGuideBinding
@@ -25,7 +25,7 @@ class ToursActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenGuidesBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForSysBars()
@@ -66,7 +66,7 @@ class TourActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenGuideBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForSysBars()

@@ -58,7 +58,7 @@ data class OriginPlan(
 )
 
 data class OnboardSpec(
-    /** Code default for a first launch that never reached Remote Config: every FFF step, so onboarding isn't skipped. */
+    /** Code default for a first launch that never reached Remote Config: every loan step, so onboarding isn't skipped. */
     val order: List<OnboardScreen> = OnboardScreen.entries.filter { it !in OnboardScreen.EXTRA },
     val skipButton: Boolean = false,
     val defaultHomeSkipButton: Boolean = false,
@@ -66,13 +66,11 @@ data class OnboardSpec(
     val defaultHomeAutoOpenSettingsSec: Int = 3,
 )
 
-/** Onboarding screen names exactly as they appear in Remote Config (FFF steps + the launcher step). */
+/** Onboarding screen names exactly as they appear in Remote Config (loan steps + the launcher step). */
 enum class OnboardScreen(val key: String) {
-    // The FFF questions, as OB_1… in Remote Config (the reference app's names): OB_1 language, OB_2 gender, OB_3 age,
-    // OB_4 fighter style, OB_5 fav content, OB_6 game mode, OB_7 weapon, OB_8 goal, OB_9 character, OB_10 tip type,
-    // OB_11 custom rooms, OB_12 map, OB_13 daily tips.
-    LANGUAGE("OB_1"), GENDER("OB_2"), AGE("OB_3"), STYLE("OB_4"), FAV("OB_5"), MODE("OB_6"), WEAPON("OB_7"),
-    GOAL("OB_8"), CHAR("OB_9"), TIPS("OB_10"), ROOM("OB_11"), MAP("OB_12"), DAILY("OB_13"),
+    // The loan questions, in the design's order. OB_2 / OB_3 keep gender / age (Settings shows those answers).
+    LANGUAGE("OB_1"), CURRENCY("OB_4"), AMOUNT("OB_5"), LOAN_TYPE("OB_6"), REPAYMENT("OB_7"),
+    GENDER("OB_2"), AGE("OB_3"), EMPLOYMENT("OB_8"), EXISTING_EMI("OB_9"),
 
     /** Not in the default order: a welcome screen after the questions. */
     WELCOME("welcome"),

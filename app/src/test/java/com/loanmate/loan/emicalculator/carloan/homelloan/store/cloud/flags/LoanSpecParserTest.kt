@@ -23,7 +23,7 @@ class LoanSpecParserTest {
     fun `debug template parses every FFF place`() {
         val c = LoanSpecParser.parse(doc("app_config_debug"), Follow.A, "")
         assertFalse(c.ads.on) // organic track: ads off, as the reference config
-        assertEquals(14, c.onboarding.order.size) // OB_1…OB_13 + default_home
+        assertEquals(10, c.onboarding.order.size) // the 9 loan steps + default_home
         assertEquals(OnboardScreen.LANGUAGE, c.onboarding.order.first())
         assertTrue(c.launcher.on)
         assertEquals(listOf(PromoStep.INTER), c.ads.places["screens.splash"]!!.exitAd!!.ads)
@@ -45,7 +45,7 @@ class LoanSpecParserTest {
     fun `missing keys fall back to defaults`() {
         val c = LoanSpecParser.parse("{}", Follow.A, "IN")
         assertFalse(c.ads.on)
-        assertEquals(13, c.onboarding.order.size) // every FFF step, no default_home
+        assertEquals(9, c.onboarding.order.size) // every loan step, no default_home
         assertFalse(c.launcher.on)
         assertFalse(c.onboarding.skipButton)
         assertEquals(4, c.base.splashWaitSec)

@@ -35,7 +35,7 @@ class OnboardScreenModel(
     }
     val skipButton = config.onboarding.skipButton
     val defaultHomeSkipButton = config.onboarding.defaultHomeSkipButton
-    val favIndex = steps.indexOfFirst { it.key == FAV_KEY }
+    val favIndex = steps.indexOfFirst { it.multi }
 
     private val _state = MutableStateFlow(
         OnboardLookStyle(

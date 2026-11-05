@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Onboarding option row (design list card): glyph tile, name over meta, check ring at the end. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/_4sdp"
-    android:background="@drawable/fill_option">
+    android:layout_marginHorizontal="4dp"
+    android:layout_marginVertical="4dp"
+    android:background="@drawable/ob_option">
 
     <TextView
         android:id="@+id/watermarkVw"
-        style="@style/SH.Watermark"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/_minus2sdp"
-        android:layout_marginBottom="@dimen/_minus13sdp"
-        android:textSize="@dimen/_43ssp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:minHeight="@dimen/_45sdp"
-        android:paddingHorizontal="@dimen/_10sdp"
-        android:paddingVertical="@dimen/_8sdp">
+        android:minHeight="60dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp">
 
         <FrameLayout
-            android:layout_width="@dimen/_28sdp"
-            android:layout_height="@dimen/_28sdp"
-            android:background="@drawable/fill_icon_circle">
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/ob_tile">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageVw"
@@ -42,15 +42,15 @@
                 android:gravity="center"
                 android:importantForAccessibility="no"
                 android:includeFontPadding="false"
-                android:textColor="@color/glyph_on_option"
-                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/ob_tile_glyph"
+                android:textSize="15sp"
                 android:textStyle="bold" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginStart="14dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -59,17 +59,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewStart"
-                android:textColor="@color/text_on_option"
-                android:textSize="@dimen/_12ssp"
+                android:textColor="@color/ob_ink"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/subTextVw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:textAlignment="viewStart"
-                android:textColor="@color/sub_on_option"
-                android:textSize="@dimen/_9ssp" />
+                android:textColor="@color/ob_sub_opt"
+                android:textSize="12sp" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="10dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/ob_check" />
     </LinearLayout>
 </FrameLayout>

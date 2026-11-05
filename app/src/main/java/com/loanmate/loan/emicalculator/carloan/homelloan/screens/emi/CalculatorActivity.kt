@@ -5,7 +5,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import android.content.Intent
 import android.os.Bundle
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
@@ -23,7 +23,7 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.listAd
 class CalculatorActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForSysBars()
@@ -52,7 +52,7 @@ class ComputeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenReckonBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForSysBars()

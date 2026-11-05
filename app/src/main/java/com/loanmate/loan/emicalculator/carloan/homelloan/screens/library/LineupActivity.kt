@@ -6,7 +6,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenRosterBinding
@@ -21,7 +21,7 @@ class LineupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenRosterBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForSysBars()

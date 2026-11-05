@@ -6,7 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.addCallback
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
@@ -33,7 +33,7 @@ class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenBaseBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.screen.padForSysBars()

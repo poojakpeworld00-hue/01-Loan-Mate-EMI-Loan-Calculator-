@@ -11,7 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.view.animation.OvershootInterpolator
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.loanmate.loan.emicalculator.carloan.adkit.PromoPack
@@ -40,7 +40,7 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.ShipO
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.OnboardScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.access.Grants
 
-/** Splash, Sticker Pop "Sticker Stack": bobbing logo sticker over the art while consent, config and the splash ad run, then routes. */
+/** Splash, "Splash Loader" blue tile: ring loader and status lines while consent, config and the splash ad run, then routes. */
 class StartActivity : AppCompatActivity() {
     private val viewModel by toolScreenModel { StartScreenModel(settingsRepository) }
 
@@ -57,7 +57,7 @@ class StartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         // Our task was removed for Recents (ToggleShield): the app reopens where the user was, without the splash.
         if (savedInstanceState == null && ToggleShield.takeAdvance()) return route(resume = true)
         if (savedInstanceState == null) RateQuery.countJoin(this)
@@ -66,32 +66,20 @@ class StartActivity : AppCompatActivity() {
         b.contentVw.padForSysBars()
 
         b.glowVw.kitGlowPulse()
-        b.bgVw.scaleX = 1.1f; b.bgVw.scaleY = 1.1f
-        b.bgVw.animate().scaleX(1f).scaleY(1f).setDuration(SPLASH_MS).setInterpolator(DecelerateInterpolator()).start()
-
-        b.logoVw.alpha = 0f; b.logoVw.scaleX = 0.6f; b.logoVw.scaleY = 0.6f
-        b.logoVw.animate().alpha(1f).scaleX(1f).scaleY(1f).setStartDelay(60).setDuration(600)
-            .setInterpolator(OvershootInterpolator(2f)).start()
-        listOf(b.brandVw to 210L, b.tagVw to 300L, b.mottoVw to 360L).forEach { (v, delay) ->
-            v.alpha = 0f
-            v.animate().alpha(1f).setStartDelay(delay).setDuration(600).start()
+        b.logoVw.alpha = 0f; b.logoVw.scaleX = 0.82f; b.logoVw.scaleY = 0.82f; b.logoVw.translationY = 10f
+        b.logoVw.animate().alpha(1f).scaleX(1f).scaleY(1f).translationY(0f).setStartDelay(100).setDuration(650)
+            .setInterpolator(OvershootInterpolator(1.4f)).start()
+        listOf(b.nameVw to 450L, b.tagVw to 600L, b.bottomVw to 700L).forEach { (v, delay) ->
+            v.alpha = 0f; v.translationY = 12f
+            v.animate().alpha(1f).translationY(0f).setStartDelay(delay).setDuration(500).setInterpolator(DecelerateInterpolator(2f)).start()
         }
-        b.ring1Vw.kitRingExit(0)
-        b.ring2Vw.kitRingExit(800)
-        b.tileShineVw.kitShine(b.tileVw, 2400)
-        b.tileVw.clipToOutline = true
-        // The whole logo bobs, so the sticker's hard shadow moves with it.
-        ObjectAnimator.ofFloat(b.logoVw, View.TRANSLATION_Y, 0f, -resources.getDimension(SdpR.dimen._6sdp)).apply {
-            duration = 1500
-            repeatMode = ValueAnimator.REVERSE
-            repeatCount = ValueAnimator.INFINITE
-            interpolator = AccelerateDecelerateInterpolator()
-            start()
-        }
+        b.ring1Vw.kitRingExit(1050)
+        b.ring2Vw.kitRingExit(2150)
+        kitCycleMessages(b)
 
         val progress = ObjectAnimator.ofInt(b.prog, "progress", 0, 90).apply {
             duration = LoanSpecHolder.current.value.base.splashWaitSec * 1000L + CONFIG_WAIT_MS / 2
-            addUpdateListener { b.percentVw.text = getString(R.string.splash_percent, it.animatedValue as Int) }
+            addUpdateListener { b.ringVw.progress = it.animatedValue as Int }
             start()
         }
         // Reference startup order: consent → preload → hold → config → splash ad → route.
@@ -119,7 +107,7 @@ class StartActivity : AppCompatActivity() {
             suspendCancellableCoroutine { done -> Grants.queryFor(this@StartActivity, "splash") { done.resume(Unit) } }
             progress.cancel()
             b.prog.setProgressCompat(100, true)
-            b.percentVw.text = getString(R.string.splash_percent, 100)
+            b.ringVw.setProgressCompat(100, true)
             Spots.exit(this@StartActivity, Spots.SPLASH) { Views.outBy("next"); route() }
         }
     }
@@ -127,6 +115,24 @@ class StartActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         Views.show("splash")
+    }
+
+    /** The design's four status lines, 0.9 s each with pulsing dots; the last one stays until the splash routes. */
+    private fun kitCycleMessages(b: ScreenBootBinding) {
+        val lines = listOf(R.string.splash_msg_1, R.string.splash_msg_2, R.string.splash_msg_3, R.string.splash_msg_4)
+        lifecycleScope.launch {
+            var tick = 0
+            while (true) {
+                val line = (tick / 3).coerceAtMost(lines.lastIndex)
+                if (tick % 3 == 0 && tick / 3 <= lines.lastIndex) {
+                    b.msgVw.alpha = 0f; b.msgVw.translationY = 8f
+                    b.msgVw.animate().alpha(1f).translationY(0f).setDuration(320).start()
+                }
+                b.msgVw.text = getString(lines[line]) + ".".repeat(tick % 3 + 1)
+                tick++
+                delay(300)
+            }
+        }
     }
 
     /** Design "ringOut": the outline grows from 0.8× to 1.5× while fading out, every 2 s. */

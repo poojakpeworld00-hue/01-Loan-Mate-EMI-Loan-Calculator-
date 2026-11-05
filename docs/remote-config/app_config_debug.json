@@ -859,18 +859,14 @@
     "onboarding": {
       "order": [
         "OB_1",
-        "OB_2",
-        "OB_3",
         "OB_4",
         "OB_5",
         "OB_6",
         "OB_7",
+        "OB_2",
+        "OB_3",
         "OB_8",
         "OB_9",
-        "OB_10",
-        "OB_11",
-        "OB_12",
-        "OB_13",
         "default_home"
       ],
       "skip_button": true,
@@ -1891,18 +1887,14 @@
       "order": [
         "default_home",
         "OB_1",
-        "OB_2",
-        "OB_3",
         "OB_4",
         "OB_5",
         "OB_6",
         "OB_7",
+        "OB_2",
+        "OB_3",
         "OB_8",
-        "OB_9",
-        "OB_10",
-        "OB_11",
-        "OB_12",
-        "OB_13"
+        "OB_9"
       ],
       "skip_button": true,
       "default_home": {

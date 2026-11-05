@@ -1,211 +1,161 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Splash, Sticker Pop "Sticker Stack": full-bleed art fading into the dot grid, outlined logo sticker, tilted tag, outlined progress bar. -->
+<!-- Splash, "Splash Loader" blue tile: gradient logo tile with a ring loader, name and tagline, rotating status line, progress bar. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/sh_splash">
+    android:background="@drawable/ob_splash_bg">
 
-    <ImageView
-        android:id="@+id/bgVw"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:importantForAccessibility="no"
-        android:scaleType="centerCrop"
-        android:src="@drawable/pack_bb" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/fill_splash_fade" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/fill_dot_grid" />
-
-    <View
-        android:id="@+id/glowVw"
-        android:layout_width="@dimen/_350sdp"
-        android:layout_height="@dimen/_240sdp"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="@dimen/_minus60sdp"
-        android:layout_marginEnd="@dimen/_minus50sdp"
-        android:background="@drawable/fill_corner_glow" />
-
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/contentVw"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingHorizontal="24dp">
 
-        <LinearLayout
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1.2" />
+
+        <FrameLayout
+            android:id="@+id/logoVw"
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            android:clipChildren="false">
+
+            <View
+                android:id="@+id/glowVw"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ob_glow" />
+
+            <View
+                android:id="@+id/ring1Vw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:background="@drawable/ob_halo" />
+
+            <View
+                android:id="@+id/ring2Vw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:background="@drawable/ob_halo" />
+
+            <FrameLayout
+                android:id="@+id/tileVw"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ob_logo_tile"
+                android:elevation="10dp">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/ringVw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:max="100"
+                    app:indicatorColor="@color/white"
+                    app:indicatorSize="58dp"
+                    app:indicatorTrackGapSize="4dp"
+                    app:trackColor="@color/ob_tile_soft"
+                    app:trackCornerRadius="4dp"
+                    app:trackThickness="7dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:importantForAccessibility="no"
+                    android:includeFontPadding="false"
+                    android:text="%"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/nameVw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="@dimen/_95sdp"
+            android:layout_marginTop="22dp"
+            android:letterSpacing="-0.015"
+            android:text="@string/launcher_name"
+            android:textColor="@color/ob_ink"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tagVw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:letterSpacing="0.02"
+            android:text="@string/splash_tagline"
+            android:textColor="@color/ob_muted"
+            android:textSize="14sp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/bottomVw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="36dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <FrameLayout
-                android:id="@+id/logoVw"
-                android:layout_width="@dimen/_87sdp"
-                android:layout_height="@dimen/_87sdp">
+            <TextView
+                android:id="@+id/msgVw"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:accessibilityLiveRegion="polite"
+                android:gravity="center"
+                android:textColor="@color/ob_ink2"
+                android:textSize="15sp" />
 
-                <View
-                    android:id="@+id/ring1Vw"
-                    android:alpha="0"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/fill_logo_ring" />
-
-                <View
-                    android:id="@+id/ring2Vw"
-                    android:alpha="0"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/fill_logo_ring" />
-
-                <!-- Hard offset shadow under the sticker. -->
-                <View
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/fill_logo_tile"
-                    android:translationX="5dp"
-                    android:translationY="5dp" />
-
-                <FrameLayout
-                    android:id="@+id/tileVw"
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_70sdp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/fill_logo_tile"
-                    android:foreground="@drawable/fill_logo_edge">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:importantForAccessibility="no"
-                        android:scaleType="centerCrop"
-                        android:src="@mipmap/ic_launcher" />
-
-                    <View
-                        android:id="@+id/tileShineVw"
-                        android:layout_width="@dimen/_25sdp"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/fill_shine"
-                        android:rotation="20"
-                        android:scaleY="1.6" />
-                </FrameLayout>
-            </FrameLayout>
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/prog"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:max="100"
+                app:indicatorColor="@color/ob_accent"
+                app:indicatorTrackGapSize="0dp"
+                app:trackColor="@color/ob_track"
+                app:trackCornerRadius="2dp"
+                app:trackStopIndicatorSize="0dp"
+                app:trackThickness="4dp" />
 
             <LinearLayout
-                android:id="@+id/brandVw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_12sdp">
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:importantForAccessibility="no"
+                    android:src="@drawable/glyph_shield"
+                    app:tint="@color/ob_accent" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/brand_extrabold"
-                    android:letterSpacing="-0.03"
-                    android:text="@string/brand_skin"
-                    android:textColor="@color/sh_text"
-                    android:textSize="@dimen/_27ssp"
-                    app:fontFamily="@font/brand_extrabold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:fontFamily="@font/brand_extrabold"
-                    android:letterSpacing="-0.03"
-                    android:text="@string/brand_emotes"
-                    android:textColor="@color/sh_primary"
-                    android:textSize="@dimen/_27ssp"
-                    app:fontFamily="@font/brand_extrabold" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tagVw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:background="@drawable/fill_sticker_tag"
-                android:fontFamily="@font/brand_extrabold"
-                android:letterSpacing="0.1"
-                android:paddingHorizontal="@dimen/_7sdp"
-                android:paddingVertical="@dimen/_2sdp"
-                android:rotation="-4"
-                android:text="@string/splash_tag"
-                android:textColor="@color/sh_on_accent"
-                android:textSize="@dimen/_9ssp"
-                app:fontFamily="@font/brand_extrabold" />
-
-            <TextView
-                android:id="@+id/mottoVw"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
-                android:letterSpacing="0.22"
-                android:text="@string/splash_motto"
-                android:textColor="@color/sh_muted"
-                android:textSize="@dimen/_8ssp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_marginHorizontal="@dimen/_40sdp"
-            android:layout_marginBottom="@dimen/_40sdp"
-            android:orientation="vertical">
-
-            <!-- Sticker Pop progress (as onboarding): a 14dp bar with a 2dp neon edge; the accent fill grows inside it. -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="14dp"
-                android:background="@drawable/fill_progress_frame"
-                android:padding="2dp">
-
-                <com.google.android.material.progressindicator.LinearProgressIndicator
-                    android:id="@+id/prog"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:max="100"
-                    app:indicatorColor="@color/sh_primary"
-                    app:indicatorTrackGapSize="0dp"
-                    app:trackColor="@android:color/transparent"
-                    app:trackCornerRadius="5dp"
-                    app:trackStopIndicatorSize="0dp"
-                    app:trackThickness="10dp" />
-            </FrameLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_6sdp">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/splash_loading"
-                    android:textColor="@color/sh_muted"
-                    android:textSize="@dimen/_9ssp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/percentVw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/sh_muted"
-                    android:textSize="@dimen/_9ssp"
-                    android:textStyle="bold" />
+                    android:layout_marginStart="6dp"
+                    android:text="@string/splash_secure"
+                    android:textColor="@color/ob_muted"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 </FrameLayout>

@@ -58,24 +58,24 @@
     <string name="skip">Not now</string>
     <!-- Under the step name in the Sticker Pop step header: "of 13". -->
     <string name="step_of_total">out of %1$d</string>
-    <string name="next">Next</string>
-    <string name="get_started">Let\'s Begin →</string>
+    <string name="next">Continue</string>
+    <string name="get_started">Continue</string>
     <string name="back">Return</string>
 
     <!-- Language -->
-    <string name="lang_title">Pick your <b>language</b></string>
-    <string name="lang_sub">Switch it later from Settings whenever you like.</string>
+    <string name="lang_title">Choose Language</string>
+    <string name="lang_sub">You can change it any time from Settings.</string>
 
     <!-- Gender -->
-    <string name="gender_title">A little about <b>you</b></string>
-    <string name="gender_sub">Helps us suggest content that fits.</string>
-    <string name="gender_male">Man</string>
-    <string name="gender_female">Woman</string>
-    <string name="gender_other">Prefer other</string>
+    <string name="gender_title">Select Gender</string>
+    <string name="gender_sub">Choose the option that applies to you.</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_other">Prefer not to say</string>
 
     <!-- Age -->
-    <string name="age_title">What is your <b>age</b>?</string>
-    <string name="age_sub">Select an age range</string>
+    <string name="age_title">Select Age</string>
+    <string name="age_sub">Choose your age range.</string>
     <string name="age_under_18">Below 18</string>
     <string name="age_teen">Teen</string>
     <string name="age_young_adult">Young grown-up</string>
@@ -224,8 +224,8 @@
     <string name="apply">Save</string>
     <!-- Onboarding step names -->
     <string name="step_lang">Language</string>
-    <string name="step_gender">About you</string>
-    <string name="step_age">Age range</string>
+    <string name="step_gender">Gender</string>
+    <string name="step_age">Age</string>
     <string name="step_style">Play style</string>
     <string name="step_fav">Favourites</string>
     <string name="step_mode">Mode</string>
@@ -338,4 +338,95 @@
     <string name="net_body">Make sure Wi-Fi or mobile data is on, then retry.</string>
     <string name="net_retry">Try again</string>
     <string name="net_settings">Go to settings</string>
+
+    <!-- Loan Mate splash + onboarding (Claude Design "Loan Cash" flow). -->
+    <string name="splash_tagline">EMI Loan Calculator</string>
+    <string name="splash_secure">Private &amp; Secure</string>
+    <string name="splash_msg_1">Fetching Your Data</string>
+    <string name="splash_msg_2">Getting Things Ready</string>
+    <string name="splash_msg_3">Just a Moment</string>
+    <string name="splash_msg_4">Preparing Your Experience</string>
+    <string name="step_currency">Currency</string>
+    <string name="cur_title">Choose Currency</string>
+    <string name="cur_sub">Every amount in the app will show in this currency.</string>
+    <string name="cur_usd">US Dollar</string>
+    <string name="cur_inr">Indian Rupee</string>
+    <string name="cur_kwd">Kuwaiti Dinar</string>
+    <string name="cur_bhd">Bahraini Dinar</string>
+    <string name="cur_omr">Omani Rial</string>
+    <string name="cur_jod">Jordanian Dinar</string>
+    <string name="cur_gbp">British Pound</string>
+    <string name="cur_eur">Euro</string>
+    <string name="cur_chf">Swiss Franc</string>
+    <string name="cur_aed">UAE Dirham</string>
+    <string name="cur_sar">Saudi Riyal</string>
+    <string name="step_amount">Amount</string>
+    <string name="amt_title">Loan Amount</string>
+    <string name="amt_sub">Roughly how much are you planning to borrow?</string>
+    <string name="amt_1">Up to 10,000</string>
+    <string name="amt_1_sub">Small, quick needs</string>
+    <string name="amt_2">10,000 – 50,000</string>
+    <string name="amt_2_sub">Gadgets, repairs, short trips</string>
+    <string name="amt_3">50,000 – 2,00,000</string>
+    <string name="amt_3_sub">Bigger plans and purchases</string>
+    <string name="amt_4">2,00,000 – 10,00,000</string>
+    <string name="amt_4_sub">Car, education or renovation</string>
+    <string name="amt_5">Above 10,00,000</string>
+    <string name="amt_5_sub">Home or business goals</string>
+    <string name="step_type">Loan type</string>
+    <string name="type_title">Choose Loan Type</string>
+    <string name="type_sub">Select the loan you are planning for.</string>
+    <string name="type_personal">Personal Loan</string>
+    <string name="type_personal_sub">For travel, weddings or everyday needs</string>
+    <string name="type_home">Home Loan</string>
+    <string name="type_home_sub">Buy, build or renovate your home</string>
+    <string name="type_car">Car Loan</string>
+    <string name="type_car_sub">Finance a new or used car</string>
+    <string name="type_education">Education Loan</string>
+    <string name="type_education_sub">Tuition and study costs at home or abroad</string>
+    <string name="type_business">Business Loan</string>
+    <string name="type_business_sub">Working capital to grow your business</string>
+    <string name="type_gold">Gold Loan</string>
+    <string name="type_gold_sub">Borrow against your gold jewellery</string>
+    <string name="type_medical">Medical Loan</string>
+    <string name="type_medical_sub">Cover hospital and treatment bills</string>
+    <string name="type_travel">Travel Loan</string>
+    <string name="type_travel_sub">Pay for flights, stays and holidays</string>
+    <string name="step_repay">Repayment</string>
+    <string name="rep_title">Repayment Period</string>
+    <string name="rep_sub">How long would you like to repay the loan?</string>
+    <string name="rep_6m">6 months</string>
+    <string name="rep_1y">1 year</string>
+    <string name="rep_2y">2 years</string>
+    <string name="rep_3y">3 years</string>
+    <string name="rep_5y">5 years</string>
+    <string name="rep_short">Higher EMI, less interest</string>
+    <string name="rep_balanced">Balanced EMI and interest</string>
+    <string name="rep_long">Lower EMI, more interest</string>
+    <string name="age_r1">18–25</string>
+    <string name="age_r2">26–35</string>
+    <string name="age_r3">36–45</string>
+    <string name="age_r4">46–60</string>
+    <string name="age_r5">60+</string>
+    <string name="age_years">years</string>
+    <string name="step_emp">Employment</string>
+    <string name="emp_title">Employment Type</string>
+    <string name="emp_sub">Select the option that best describes you.</string>
+    <string name="emp_salaried">Salaried</string>
+    <string name="emp_salaried_sub">Regular salary from an employer</string>
+    <string name="emp_self">Self-Employed</string>
+    <string name="emp_self_sub">You earn from your own practice or trade</string>
+    <string name="emp_business">Business Owner</string>
+    <string name="emp_business_sub">You own and run a business</string>
+    <string name="emp_freelancer">Freelancer</string>
+    <string name="emp_freelancer_sub">Project-based work for clients</string>
+    <string name="emp_student">Student</string>
+    <string name="emp_student_sub">Currently studying full-time or part-time</string>
+    <string name="emp_unemployed">Unemployed</string>
+    <string name="emp_unemployed_sub">Not working at the moment</string>
+    <string name="step_emi">Existing EMI</string>
+    <string name="emi_title">Do you have any existing EMIs?</string>
+    <string name="emi_sub">This helps us suggest an EMI you can manage.</string>
+    <string name="emi_yes">Yes</string>
+    <string name="emi_no">No</string>
 </resources>

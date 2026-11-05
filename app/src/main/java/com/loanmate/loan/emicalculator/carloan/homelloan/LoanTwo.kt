@@ -53,6 +53,8 @@ class LoanTwo : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Light only: ads and the launcher follow the app, not the phone, theme.
+        androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO)
         FaultLog.install(this)
         container = LoanCenter(this)
 

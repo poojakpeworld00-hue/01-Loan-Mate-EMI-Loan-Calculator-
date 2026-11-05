@@ -9,7 +9,7 @@ import android.view.View
 import android.os.SystemClock
 import android.provider.Settings
 import androidx.activity.addCallback
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,7 +68,7 @@ class ExitPathActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val config = container.config.value
         if (!config.uninstallFlow.premium) return finish() // normal flow: there is no Uninstall entry that opens this
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         b = ScreenFarewellBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.contentVw.padForSysBars()

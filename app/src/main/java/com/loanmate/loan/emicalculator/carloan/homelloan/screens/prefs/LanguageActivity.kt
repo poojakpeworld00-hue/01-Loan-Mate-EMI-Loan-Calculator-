@@ -4,7 +4,7 @@ import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.MetricsTwo
 import com.loanmate.loan.emicalculator.carloan.adkit.metrics.Views
 import android.os.Bundle
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
@@ -21,7 +21,7 @@ class LanguageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         val b = ScreenTongueBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.root.padForSysBars()

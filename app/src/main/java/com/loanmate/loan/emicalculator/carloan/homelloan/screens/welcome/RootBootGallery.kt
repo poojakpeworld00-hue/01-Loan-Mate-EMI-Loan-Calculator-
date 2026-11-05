@@ -166,12 +166,12 @@ class RootBootGallery(private val b: PieceBaseShowcaseBinding) {
             }
             p.root.background = GradientDrawable().apply {
                 cornerRadius = 20 * dp
-                setColor(if (act) 0xFF15213F.toInt() else ContextCompat.getColor(ctx, R.color.sh_card))
-                setStroke(px(1), if (act) 0xFF24407F.toInt() else ContextCompat.getColor(ctx, R.color.sh_border))
+                setColor(if (act) 0xFFE3F0FF.toInt() else ContextCompat.getColor(ctx, R.color.sh_card))
+                setStroke(px(1), if (act) 0xFF3399FF.toInt() else ContextCompat.getColor(ctx, R.color.sh_border))
             }
             p.railIconVw.setImageResource(if (done) R.drawable.glyph_check else RAIL_ICONS[i])
-            p.railIconVw.background.mutate().setTint(when { act -> accent; done -> 0xFF132143.toInt(); else -> 0xFF161E33.toInt() })
-            p.railIconVw.setColorFilter(when { act -> 0xFFFFFFFF.toInt(); done -> 0xFF8FB0FF.toInt(); else -> ContextCompat.getColor(ctx, R.color.sh_muted) })
+            p.railIconVw.background.mutate().setTint(when { act -> accent; done -> 0xFFE3F0FF.toInt(); else -> 0xFF161E33.toInt() })
+            p.railIconVw.setColorFilter(when { act -> 0xFFFFFFFF.toInt(); done -> 0xFF1A6FD6.toInt(); else -> ContextCompat.getColor(ctx, R.color.sh_muted) })
             p.railLabelVw.alpha = 0f
             p.railLabelVw.translationX = -6 * dp
             if (act) p.railLabelVw.animate().alpha(1f).translationX(0f).setStartDelay(200).setDuration(450).setInterpolator(emphasized).start()
@@ -216,7 +216,7 @@ class RootBootGallery(private val b: PieceBaseShowcaseBinding) {
     private fun icon(src: Int, bg: Int, padSdp: Int) = ImageView(ctx).apply {
         setImageResource(src)
         setBackgroundResource(bg)
-        setColorFilter(0xFF8FB0FF.toInt())
+        setColorFilter(0xFF1A6FD6.toInt())
         val p = (padSdp * res.getDimension(com.intuit.sdp.R.dimen._1sdp)).toInt()
         setPadding(p, p, p, p)
     }

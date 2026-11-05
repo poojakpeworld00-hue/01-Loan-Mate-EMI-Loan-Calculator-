@@ -16,12 +16,9 @@ fun View.padForSysBars() {
     }
 }
 
-/**
- * Edge-to-edge with light status / navigation bar icons always: the app is dark only, so following the phone's own light
- * theme would draw dark icons on our dark background.
- */
-fun androidx.activity.ComponentActivity.kitEnableDarkEdgeToEdge() {
-    val bars = androidx.activity.SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+/** Edge-to-edge with dark status / navigation bar icons always: the app is light only. */
+fun androidx.activity.ComponentActivity.kitEnableLightEdgeToEdge() {
+    val bars = androidx.activity.SystemBarStyle.light(android.graphics.Color.TRANSPARENT, android.graphics.Color.TRANSPARENT)
     enableEdgeToEdge(statusBarStyle = bars, navigationBarStyle = bars)
     window.maskNavBar()
 }

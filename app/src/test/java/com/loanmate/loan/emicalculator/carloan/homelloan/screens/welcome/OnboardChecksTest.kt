@@ -6,7 +6,7 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.Short
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.OnboardSpec
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.OnboardScreen.DEFAULT_HOME
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.OnboardScreen.LANGUAGE
-import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.OnboardScreen.DAILY
+import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.OnboardScreen.EXISTING_EMI
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.SysShortcut
 import com.loanmate.loan.emicalculator.carloan.homelloan.store.cloud.flags.SysShortcuts
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.OnboardChecks.ShortcutResult
@@ -14,14 +14,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class OnboardChecksTest {
-    private val order = listOf(LANGUAGE, DEFAULT_HOME, DAILY)
+    private val order = listOf(LANGUAGE, DEFAULT_HOME, EXISTING_EMI)
     private fun config(launcherOn: Boolean) =
         LoanSpec(onboarding = OnboardSpec(order = order), launcher = StarterConfig(on = launcherOn))
 
     @Test fun baseBaseOnlyWhenDeckOnAndNotBase() {
         assertEquals(order, OnboardChecks.views2(config(true), isDefaultHome = false))
-        assertEquals(listOf(LANGUAGE, DAILY), OnboardChecks.views2(config(true), isDefaultHome = true))
-        assertEquals(listOf(LANGUAGE, DAILY), OnboardChecks.views2(config(false), isDefaultHome = false))
+        assertEquals(listOf(LANGUAGE, EXISTING_EMI), OnboardChecks.views2(config(true), isDefaultHome = true))
+        assertEquals(listOf(LANGUAGE, EXISTING_EMI), OnboardChecks.views2(config(false), isDefaultHome = false))
     }
 
     @Test fun keys() {

@@ -125,7 +125,7 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/brand_bold"
                         android:textAlignment="viewStart"
-                        android:textColor="#C4CEE6"
+                        android:textColor="#566175"
                         android:textSize="@dimen/_10ssp"
                         tools:text="3 of 13 done" />
 
@@ -247,7 +247,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/brand_bold"
                                 android:fontFeatureSettings="tnum"
-                                android:textColor="#C4CEE6"
+                                android:textColor="#566175"
                                 android:textSize="@dimen/_10ssp"
                                 tools:text="0:12" />
                         </LinearLayout>
@@ -269,7 +269,7 @@
                     android:lineSpacingMultiplier="1.15"
                     android:text="@string/sh_voice_text"
                     android:textAlignment="viewStart"
-                    android:textColor="#C4CEE6"
+                    android:textColor="#566175"
                     android:textSize="@dimen/_10ssp" />
             </LinearLayout>
 
@@ -314,10 +314,10 @@
                 android:gravity="center"
                 android:minHeight="@dimen/_37sdp"
                 android:text="@string/sh_home"
-                android:textColor="#C4CEE6"
+                android:textColor="#566175"
                 android:textSize="@dimen/_12ssp"
                 app:drawableStartCompat="@drawable/glyph_home"
-                app:drawableTint="#C4CEE6" />
+                app:drawableTint="#566175" />
 
             <TextView
                 android:id="@+id/sheetSavedVw"
@@ -357,6 +357,6 @@
             android:importantForAccessibility="no"
             android:padding="@dimen/_5sdp"
             android:src="@drawable/glyph_close"
-            app:tint="#C4CEE6" />
+            app:tint="#566175" />
     </FrameLayout>
 </FrameLayout>

@@ -1,15 +1,12 @@
 package com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome
 
 import android.content.Context
-import android.widget.ImageView.ScaleType
-import androidx.annotation.DimenRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
 import com.loanmate.loan.emicalculator.carloan.homelloan.logic.entity.Tongue
-import com.intuit.sdp.R as SdpR
 
-/** One selectable answer: a row shows [glyph] (or [image] as an avatar) in its icon circle; a card shows [image] with [glyph] as watermark. */
+/** One selectable answer: a row shows [glyph] (or [image] as an avatar) in its tile; a card shows [image] or [glyph] in its icon tile. */
 data class PackChoice(
     @StringRes val name: Int,
     val sub: (Context) -> String = { "" },
@@ -22,30 +19,22 @@ data class Phase(
     val key: String,
     @StringRes val title: Int,
     @StringRes val sub: Int,
-    /** Short name shown under the step counter. */
+    /** Short name shown next to the step counter. */
     @StringRes val name: Int,
     val opts: List<PackChoice>,
-    /** Image cards instead of icon rows. */
+    /** Header icon on the gradient tile. */
+    @DrawableRes val icon: Int,
+    /** Icon cards instead of rows. */
     val cards: Boolean = false,
     val columns: Int = 1,
     val multi: Boolean = false,
-    @DrawableRes val banner: Int = 0,
-    /** Card image-well height. */
-    @DimenRes val imageHeight: Int = SdpR.dimen._66sdp,
-    val scale: ScaleType = ScaleType.CENTER_CROP,
     val centered: Boolean = false,
     val defaultSel: Set<Int> = setOf(0),
 )
 
 private fun s(@StringRes id: Int): (Context) -> String = { it.getString(id) }
-private fun map(@StringRes kind: Int, players: Int): (Context) -> String =
-    { it.getString(R.string.map_players, it.getString(kind), players) }
-
-/** Age-step portraits: game characters whose in-game age falls in each band (17, 20, 25, 35, 45). */
-private val AGE_AVATARS = listOf(R.drawable.face_age1, R.drawable.face_age2, R.drawable.face_age3, R.drawable.face_age4, R.drawable.face_age5)
 
 const val LANG_KEY = "OB_1"
-const val FAV_KEY = "OB_5"
 const val DEFAULT_HOME_KEY = "default_home"
 const val WELCOME_KEY = "welcome"
 const val PERMISSION_HUB_KEY = "permission_hub"
@@ -60,140 +49,113 @@ fun tongueStep(languages: List<Tongue>) =
         languages.map { l ->
             PackChoice(l.nativeName, { c -> c.getString(l.name).takeIf { it != c.getString(l.nativeName) }.orEmpty() }, glyph = l.glyph)
         },
+        icon = R.drawable.glyph_language,
     )
 
-/** Every onboarding step (the 13 FFF questions + the launcher's set-as-default-home step); Remote Config picks and orders them. */
+/** Every onboarding step (the loan questions + the launcher's set-as-default-home step); Remote Config picks and orders them. */
 fun setupPhases(languages: List<Tongue>): List<Phase> =
     listOf(tongueStep(languages)) + QUESTION_STEPS + listOf(WELCOME_STEP, PERMISSION_HUB_STEP, DEFAULT_HOME_STEP)
 
 private val WELCOME_STEP = Phase(
-    WELCOME_KEY, R.string.wl_title, R.string.wl_sub, R.string.step_welcome, defaultSel = emptySet(),
+    WELCOME_KEY, R.string.wl_title, R.string.wl_sub, R.string.step_welcome, defaultSel = emptySet(), icon = R.drawable.glyph_star,
     opts = listOf(PackChoice(R.string.wl_c1, glyph = "★"), PackChoice(R.string.wl_c2, glyph = "◆"), PackChoice(R.string.wl_c3, glyph = "◈")),
 )
 
 private val PERMISSION_HUB_STEP = Phase(
-    PERMISSION_HUB_KEY, R.string.ph_title, R.string.ph_sub, R.string.step_permissions, defaultSel = emptySet(),
+    PERMISSION_HUB_KEY, R.string.ph_title, R.string.ph_sub, R.string.step_permissions, defaultSel = emptySet(), icon = R.drawable.glyph_bell,
     opts = listOf(PackChoice(R.string.ph_notif, { it.getString(R.string.ph_notif_sub) }, glyph = "✦")),
 )
 
 /** Set as default home: three numbered instructions (not answers), then the system "Default home app" chooser. */
 private val DEFAULT_HOME_STEP = Phase(
-    DEFAULT_HOME_KEY, R.string.dh_title, R.string.dh_sub, R.string.step_default_home, defaultSel = emptySet(),
+    DEFAULT_HOME_KEY, R.string.dh_title, R.string.dh_sub, R.string.step_default_home, defaultSel = emptySet(), icon = R.drawable.glyph_home,
     opts = listOf(PackChoice(R.string.dh_c1, glyph = "1"), PackChoice(R.string.dh_c2, glyph = "2"), PackChoice(R.string.dh_c3, glyph = "3")),
 )
 
+/** Claude Design "Loan Cash" onboarding: currency → amount → loan type → repayment → gender → age → employment → existing EMI. */
 private val QUESTION_STEPS = listOf(
     Phase(
-        "OB_2", R.string.gender_title, R.string.gender_sub, R.string.step_gender,
+        "OB_4", R.string.cur_title, R.string.cur_sub, R.string.step_currency, icon = R.drawable.ob_ic_coin,
         opts = listOf(
-            PackChoice(R.string.gender_male, image = R.drawable.face_male),
-            PackChoice(R.string.gender_female, image = R.drawable.face_female),
-            PackChoice(R.string.gender_other, image = R.drawable.face_other),
+            "USD" to "$", "INR" to "₹", "KWD" to "KD", "BHD" to "BD", "OMR" to "RO", "JOD" to "JD",
+            "GBP" to "£", "EUR" to "€", "CHF" to "Fr", "AED" to "د.إ", "SAR" to "﷼",
+        ).zip(
+            listOf(
+                R.string.cur_usd, R.string.cur_inr, R.string.cur_kwd, R.string.cur_bhd, R.string.cur_omr, R.string.cur_jod,
+                R.string.cur_gbp, R.string.cur_eur, R.string.cur_chf, R.string.cur_aed, R.string.cur_sar,
+            )
+        ) { (code, sym), name -> PackChoice(name, { "$code · $sym" }, glyph = sym) },
+    ),
+    Phase(
+        "OB_5", R.string.amt_title, R.string.amt_sub, R.string.step_amount, icon = R.drawable.ob_ic_cash, defaultSel = setOf(1),
+        opts = listOf(
+            PackChoice(R.string.amt_1, s(R.string.amt_1_sub), glyph = "💵"),
+            PackChoice(R.string.amt_2, s(R.string.amt_2_sub), glyph = "💰"),
+            PackChoice(R.string.amt_3, s(R.string.amt_3_sub), glyph = "🏦"),
+            PackChoice(R.string.amt_4, s(R.string.amt_4_sub), glyph = "🏠"),
+            PackChoice(R.string.amt_5, s(R.string.amt_5_sub), glyph = "🏢"),
         ),
     ),
     Phase(
-        "OB_3", R.string.age_title, R.string.age_sub, R.string.step_age, defaultSel = setOf(1),
+        "OB_6", R.string.type_title, R.string.type_sub, R.string.step_type, icon = R.drawable.ob_ic_stack, cards = true, columns = 2,
         opts = listOf(
-            R.string.age_under_18 to R.string.age_teen, R.string.age_18_24 to R.string.age_young_adult,
-            R.string.age_25_34 to R.string.age_adult, R.string.age_35_44 to R.string.age_professional,
-            R.string.age_45 to R.string.age_mature,
-        ).zip(AGE_AVATARS) { (n, sub), avatar -> PackChoice(n, s(sub), avatar) },
-    ),
-    Phase(
-        "OB_4", R.string.style_title, R.string.style_sub, R.string.step_style, cards = true, columns = 2, imageHeight = SdpR.dimen._65sdp,
-        opts = listOf(
-            PackChoice(R.string.style_stealth, s(R.string.style_stealth_sub), R.drawable.lm_gc1, "S"),
-            PackChoice(R.string.style_rush, s(R.string.style_rush_sub), R.drawable.lm_gc2, "R"),
-            PackChoice(R.string.style_street, s(R.string.style_street_sub), R.drawable.lm_gc3, "St"),
-            PackChoice(R.string.style_tactical, s(R.string.style_tactical_sub), R.drawable.lm_gc4, "T"),
-            PackChoice(R.string.style_survivor, s(R.string.style_survivor_sub), R.drawable.lm_gc5, "Su"),
-            PackChoice(R.string.style_chill, s(R.string.style_chill_sub), R.drawable.lm_gc6, "C"),
+            PackChoice(R.string.type_personal, s(R.string.type_personal_sub), glyph = "🤝"),
+            PackChoice(R.string.type_home, s(R.string.type_home_sub), glyph = "🏠"),
+            PackChoice(R.string.type_car, s(R.string.type_car_sub), glyph = "🚗"),
+            PackChoice(R.string.type_education, s(R.string.type_education_sub), glyph = "🎓"),
+            PackChoice(R.string.type_business, s(R.string.type_business_sub), glyph = "💼"),
+            PackChoice(R.string.type_gold, s(R.string.type_gold_sub), glyph = "🪙"),
+            PackChoice(R.string.type_medical, s(R.string.type_medical_sub), glyph = "🏥"),
+            PackChoice(R.string.type_travel, s(R.string.type_travel_sub), glyph = "✈️"),
         ),
     ),
     Phase(
-        FAV_KEY, R.string.fav_title, R.string.fav_sub, R.string.step_fav, cards = true, columns = 2, multi = true,
-        imageHeight = SdpR.dimen._53sdp, scale = ScaleType.FIT_CENTER,
+        "OB_7", R.string.rep_title, R.string.rep_sub, R.string.step_repay, icon = R.drawable.ob_ic_calendar, defaultSel = setOf(3),
         opts = listOf(
-            PackChoice(R.string.cat_characters, s(R.string.cat_characters_sub), R.drawable.card_characters, "C"),
-            PackChoice(R.string.cat_bundles, s(R.string.cat_bundles_sub), R.drawable.card_bundles2, "B"),
-            PackChoice(R.string.cat_weapons, s(R.string.cat_weapons_sub), R.drawable.card_weapons2, "W"),
-            PackChoice(R.string.cat_pets, s(R.string.cat_pets_sub), R.drawable.card_pets2, "P"),
-            PackChoice(R.string.cat_emotes, s(R.string.cat_emotes_sub), R.drawable.card_emotes, "E"),
-            PackChoice(R.string.cat_vehicles, s(R.string.cat_vehicles_sub), R.drawable.card_vehicles, "V"),
+            PackChoice(R.string.rep_6m, s(R.string.rep_short), glyph = "6M"),
+            PackChoice(R.string.rep_1y, s(R.string.rep_short), glyph = "1Y"),
+            PackChoice(R.string.rep_2y, s(R.string.rep_balanced), glyph = "2Y"),
+            PackChoice(R.string.rep_3y, s(R.string.rep_balanced), glyph = "3Y"),
+            PackChoice(R.string.rep_5y, s(R.string.rep_long), glyph = "5Y"),
         ),
     ),
     Phase(
-        "OB_6", R.string.q_mode_title, R.string.q_mode_sub, R.string.step_mode, cards = true, columns = 2,
-        banner = R.drawable.lm_q_mode, imageHeight = SdpR.dimen._77sdp,
+        "OB_2", R.string.gender_title, R.string.gender_sub, R.string.step_gender, icon = R.drawable.glyph_person,
+        cards = true, columns = 2, centered = true, defaultSel = setOf(2),
         opts = listOf(
-            PackChoice(R.string.mode_br, image = R.drawable.lm_gm1, glyph = "BR"),
-            PackChoice(R.string.mode_br_ranked, image = R.drawable.lm_gm2, glyph = "R"),
-            PackChoice(R.string.mode_cs, image = R.drawable.lm_gm3, glyph = "CS"),
-            PackChoice(R.string.mode_cs_ranked, image = R.drawable.lm_gm4, glyph = "R"),
+            PackChoice(R.string.gender_male, glyph = "♂"),
+            PackChoice(R.string.gender_female, glyph = "♀"),
+            PackChoice(R.string.gender_other, glyph = "⊘"),
         ),
     ),
     Phase(
-        "OB_7", R.string.q_weapon_title, R.string.q_weapon_sub, R.string.step_weapon, cards = true, columns = 2,
-        banner = R.drawable.lm_q_weapon, imageHeight = SdpR.dimen._58sdp, scale = ScaleType.FIT_CENTER,
+        "OB_3", R.string.age_title, R.string.age_sub, R.string.step_age, icon = R.drawable.glyph_cake,
+        cards = true, columns = 2, centered = true, defaultSel = setOf(1),
         opts = listOf(
-            PackChoice(R.string.weapon_rifle, s(R.string.weapon_rifle_models), R.drawable.card_weapons2, "R"),
-            PackChoice(R.string.weapon_smg, s(R.string.weapon_smg_models), R.drawable.lm_w_smg, "S"),
-            PackChoice(R.string.weapon_sniper, s(R.string.weapon_sniper_models), R.drawable.lm_w_sni, "Sn"),
-            PackChoice(R.string.weapon_shotgun, s(R.string.weapon_shotgun_models), R.drawable.lm_w_sg, "Sg"),
+            PackChoice(R.string.age_r1, s(R.string.age_years), glyph = "🎒"),
+            PackChoice(R.string.age_r2, s(R.string.age_years), glyph = "💼"),
+            PackChoice(R.string.age_r3, s(R.string.age_years), glyph = "🏠"),
+            PackChoice(R.string.age_r4, s(R.string.age_years), glyph = "🏅"),
+            PackChoice(R.string.age_r5, s(R.string.age_years), glyph = "🪑"),
         ),
     ),
     Phase(
-        "OB_8", R.string.q_goal_title, R.string.q_goal_sub, R.string.step_goal, banner = R.drawable.lm_q_goal,
+        "OB_8", R.string.emp_title, R.string.emp_sub, R.string.step_emp, icon = R.drawable.ob_ic_briefcase, cards = true, columns = 2,
         opts = listOf(
-            PackChoice(R.string.goal_headshot, glyph = "◎"),
-            PackChoice(R.string.goal_movement, glyph = "↗"),
-            PackChoice(R.string.goal_diamonds, glyph = "◆"),
-            PackChoice(R.string.goal_rank, glyph = "▲"),
+            PackChoice(R.string.emp_salaried, s(R.string.emp_salaried_sub), glyph = "💼"),
+            PackChoice(R.string.emp_self, s(R.string.emp_self_sub), glyph = "🧰"),
+            PackChoice(R.string.emp_business, s(R.string.emp_business_sub), glyph = "🏪"),
+            PackChoice(R.string.emp_freelancer, s(R.string.emp_freelancer_sub), glyph = "💻"),
+            PackChoice(R.string.emp_student, s(R.string.emp_student_sub), glyph = "🎓"),
+            PackChoice(R.string.emp_unemployed, s(R.string.emp_unemployed_sub), glyph = "⏳"),
         ),
     ),
     Phase(
-        "OB_9", R.string.q_char_title, R.string.q_char_sub, R.string.step_char, cards = true, columns = 2, centered = true,
-        banner = R.drawable.lm_q_char, imageHeight = SdpR.dimen._93sdp, scale = ScaleType.FIT_END,
+        "OB_9", R.string.emi_title, R.string.emi_sub, R.string.step_emi, icon = R.drawable.ob_ic_receipt,
+        cards = true, columns = 2, centered = true, defaultSel = setOf(1),
         opts = listOf(
-            PackChoice(R.string.char_alok, image = R.drawable.opt_alok, glyph = "A"),
-            PackChoice(R.string.char_chrono, image = R.drawable.opt_chrono, glyph = "C"),
-            PackChoice(R.string.char_k, image = R.drawable.opt_k, glyph = "K"),
-            PackChoice(R.string.char_kelly, image = R.drawable.opt_kelly, glyph = "Ke"),
-        ),
-    ),
-    Phase(
-        "OB_10", R.string.q_guide_title, R.string.q_guide_sub, R.string.step_tips, banner = R.drawable.lm_q_guide,
-        opts = listOf(
-            PackChoice(R.string.guide_pro, glyph = "★"),
-            PackChoice(R.string.guide_settings, glyph = "⚙"),
-            PackChoice(R.string.guide_maps, glyph = "◈"),
-            PackChoice(R.string.guide_events, glyph = "✦"),
-        ),
-    ),
-    Phase(
-        "OB_11", R.string.q_room_title, R.string.q_room_sub, R.string.step_room, banner = R.drawable.lm_q_room,
-        opts = listOf(
-            PackChoice(R.string.room_love, glyph = "♥"),
-            PackChoice(R.string.room_sometimes, glyph = "~"),
-            PackChoice(R.string.room_no, glyph = "✕"),
-        ),
-    ),
-    Phase(
-        "OB_12", R.string.q_map_title, R.string.q_map_sub, R.string.step_map, cards = true, columns = 2,
-        banner = R.drawable.lm_q_map, imageHeight = SdpR.dimen._72sdp,
-        opts = listOf(
-            PackChoice(R.string.map_bermuda, map(R.string.map_classic, 52), R.drawable.chart_bermuda, "B"),
-            PackChoice(R.string.map_purgatory, map(R.string.map_strategy, 48), R.drawable.chart_purgatory, "P"),
-            PackChoice(R.string.map_kalahari, map(R.string.map_desert, 40), R.drawable.chart_kalahari, "K"),
-            PackChoice(R.string.map_alpine, map(R.string.map_ranked, 50), R.drawable.chart_alpine, "A"),
-        ),
-    ),
-    Phase(
-        "OB_13", R.string.q_daily_title, R.string.q_daily_sub, R.string.step_daily, banner = R.drawable.lm_q_tips,
-        opts = listOf(
-            PackChoice(R.string.daily_yes, glyph = "✓"),
-            PackChoice(R.string.daily_later, glyph = "…"),
-            PackChoice(R.string.daily_no, glyph = "✕"),
+            PackChoice(R.string.emi_yes, glyph = "🧾"),
+            PackChoice(R.string.emi_no, glyph = "✅"),
         ),
     ),
 )

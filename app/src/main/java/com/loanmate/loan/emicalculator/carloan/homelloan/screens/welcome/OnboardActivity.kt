@@ -26,11 +26,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import androidx.activity.addCallback
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableDarkEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitEnableLightEdgeToEdge
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
+import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitShine
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.withResumed
@@ -52,10 +53,8 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.SheetSetupB
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitAccentBold
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.toolScreenModel
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitCollectWhenStarted
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitGlowPulse
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.maskNavBar
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
-import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.kitShine
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.dashboard.RootActivity
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.access.Grants
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome.OnboardChecks.ShortcutResult
@@ -104,13 +103,10 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        kitEnableDarkEdgeToEdge()
+        kitEnableLightEdgeToEdge()
         b = ScreenSetupBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.contentVw.padForSysBars()
-        b.glowVw.kitGlowPulse()
-        b.ctaShineVw.kitShine(b.ctaVw, 3200)
-        b.ctaVw.clipToOutline = true
         ctaHome = b.ctaVw.parent as ViewGroup
         ctaParams = b.ctaVw.layoutParams
         // A key forwarded to a fresh screen was the press that reopened it, not one on our step.
@@ -301,7 +297,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             append(" · ").append(resources.getQuantityString(R.plurals.sh_to_go, left, left))
         }
         v.sheetSavedVw.text = SpannableStringBuilder(getString(R.string.sh_saved)).apply {
-            setSpan(ForegroundColorSpan(0xFFC4CEE6.toInt()), 0, length, 0)
+            setSpan(ForegroundColorSpan(0xFF566175.toInt()), 0, length, 0)
             setSpan(StyleSpan(Typeface.BOLD), 0, length, 0)
             append(" ").append(getString(R.string.sh_saved_text))
         }
@@ -345,7 +341,7 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             val seg = View(this).apply {
                 background = GradientDrawable().apply {
                     cornerRadius = radius
-                    setColor(if (k <= index) accent else 0x1AFFFFFF)
+                    setColor(if (k <= index) accent else 0x1A16202E)
                 }
                 if (k == index) ObjectAnimator.ofFloat(this, View.ALPHA, 0.35f, 1f).apply {
                     duration = 800
@@ -436,8 +432,8 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
         // The reference's animated demo replaces the option list on this step; its button carries the home icon.
         b.listVw.visibility = if (onIt) View.GONE else View.VISIBLE
         b.homeDemoVw.root.visibility = if (onIt) View.VISIBLE else View.GONE
-        b.nextVw.icon = if (onIt) ContextCompat.getDrawable(this, R.drawable.glyph_home) else null
-        b.nextVw.iconGravity = com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_START
+        b.nextVw.icon = ContextCompat.getDrawable(this, if (onIt) R.drawable.glyph_home else R.drawable.glyph_arrow_forward)
+        b.nextVw.iconGravity = if (onIt) com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_START else com.google.android.material.button.MaterialButton.ICON_GRAVITY_TEXT_END
         if (onIt) homeDemo.start() else homeDemo.stop()
         if (onIt) queryRootRoot() // Settings opens straight away
     }
@@ -560,13 +556,6 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             val dir = if (state.stepIndex >= shownStep) 1 else -1
             val first = shownStep == -1
             shownStep = state.stepIndex
-            val hasBanner = step.banner != 0
-            b.bannerBoxVw.visibility = if (hasBanner) View.VISIBLE else View.GONE
-            if (hasBanner) {
-                b.bannerVw.setImageResource(step.banner)
-                b.bannerVw.scaleX = 1.12f; b.bannerVw.scaleY = 1.12f
-                b.bannerVw.animate().scaleX(1f).scaleY(1f).setDuration(900).start()
-            }
             b.backVw.visibility = if (state.stepIndex == 0) View.INVISIBLE else View.VISIBLE
             // As the reference: the tracker counts only the OB_ screens; welcome / permission_hub / default_home sit outside it.
             val obSteps = steps.filter { it.key !in INFO_STEPS }
@@ -575,9 +564,9 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             b.progFrame.visibility = b.trackerVw.visibility
             b.prog.max = obSteps.size.coerceAtLeast(1)
             b.stepNumVw.text = "%02d".format(obNumber)
+            b.stepIconVw.setImageResource(step.icon)
             b.stepTotalVw.text = getString(R.string.step_of_total, obSteps.size)
             if (obNumber > 0) b.prog.setProgressCompat(obNumber, !first)
-            b.titleVw.updatePadding(top = resources.getDimensionPixelSize(if (hasBanner) SdpR.dimen._30sdp else SdpR.dimen._10sdp))
             b.skipVw.visibility = if (if (step.key == DEFAULT_HOME_KEY) viewModel.defaultHomeSkipButton else viewModel.skipButton) View.VISIBLE else View.GONE
             onRootRootStep(step.key == DEFAULT_HOME_KEY)
             // As the reference: every step asks its `permissions.<step>` on open; permission_hub asks on its Allow button.

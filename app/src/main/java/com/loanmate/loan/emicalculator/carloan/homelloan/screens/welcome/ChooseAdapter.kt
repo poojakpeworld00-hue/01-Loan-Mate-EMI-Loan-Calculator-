@@ -1,5 +1,6 @@
 package com.loanmate.loan.emicalculator.carloan.homelloan.screens.welcome
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,7 +81,7 @@ class ChooseAdapter(
         }
         val inflater = LayoutInflater.from(parent.context)
         return PackKeeper(
-            if (step.cards) RowPickLatticeBinding.inflate(inflater, parent, false).also { it.root.clipToOutline = true }
+            if (step.cards) RowPickLatticeBinding.inflate(inflater, parent, false)
             else RowPickStripBinding.inflate(inflater, parent, false)
         )
     }
@@ -97,10 +98,10 @@ class ChooseAdapter(
         val sub = opt.sub(ctx)
         when (val b = (holder as PackKeeper).binding) {
             is RowPickLatticeBinding -> {
-                b.wellVw.layoutParams.height = ctx.resources.getDimensionPixelSize(step.imageHeight)
-                b.imageVw.setImageResource(opt.image)
-                b.imageVw.scaleType = step.scale
-                b.watermarkVw.text = opt.glyph
+                b.imageVw.visibility = if (opt.image != 0) View.VISIBLE else View.GONE
+                if (opt.image != 0) b.imageVw.setImageResource(opt.image)
+                b.watermarkVw.text = if (opt.image == 0) opt.glyph else ""
+                b.captionsVw.gravity = if (step.centered) Gravity.CENTER_HORIZONTAL else Gravity.START
                 val align = if (step.centered) View.TEXT_ALIGNMENT_CENTER else View.TEXT_ALIGNMENT_VIEW_START
                 b.nameVw.textAlignment = align
                 b.subTextVw.textAlignment = align
