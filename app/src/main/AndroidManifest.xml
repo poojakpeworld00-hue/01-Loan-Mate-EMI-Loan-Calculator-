@@ -49,24 +49,6 @@
             android:name=".screens.dashboard.RootActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".screens.library.LineupActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screens.library.SpotlightActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screens.guides.ToursActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screens.guides.TourActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screens.emi.CalculatorActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".screens.emi.ComputeActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".screens.prefs.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity

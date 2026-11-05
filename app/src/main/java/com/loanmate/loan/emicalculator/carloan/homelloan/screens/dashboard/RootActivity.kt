@@ -19,9 +19,10 @@ import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.ScreenBaseB
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.shared.padForSysBars
 import com.loanmate.loan.emicalculator.carloan.homelloan.screens.nudges.RateQuery
 
-/** Home, as in Claude Design "Skin Hub Onboarding v2"; content in [RootFabric]. */
+/** Home: the loan tabs, content in [RootFabric]. */
 class RootActivity : AppCompatActivity() {
     private val config get() = (application as LoanTwo).container.config.value
+    private lateinit var fabric: RootFabric
     private val askRate = Runnable { RateQuery.perhapsQuery(this, config.prompts) }
 
     /** Home pressed on our screen while we are the default home: `launcher.home_button`. Recents is ToggleShield's. */
@@ -37,7 +38,7 @@ class RootActivity : AppCompatActivity() {
         val b = ScreenBaseBinding.inflate(layoutInflater)
         setContentView(b.root)
         b.screen.padForSysBars()
-        RootFabric(this, b).bind()
+        fabric = RootFabric(this, b, supportFragmentManager).also { it.bind() }
         if (savedInstanceState == null) {
             // first_home: once, on the Home visit right after onboarding.
             if ((application as LoanTwo).container.settingsRepository.takeFirstHome()) MetricsTwo.log(MetricsTwo.FIRST_HOME)
@@ -48,6 +49,7 @@ class RootActivity : AppCompatActivity() {
         // As the reference: when we are the default home, leaving lands on our launcher home.
         onBackPressedDispatcher.addCallback(this) {
             MetricsTwo.hotkeyPress("back")
+            if (fabric.back()) return@addCallback
             Spots.backButton(this@RootActivity) { leave() }
         }
     }

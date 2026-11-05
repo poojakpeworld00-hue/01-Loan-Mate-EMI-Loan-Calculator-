@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ported from LoanSmart EMI Calculator (light palette). -->
+<!-- Ported from Loan Mate EMI Calculator (light palette). -->
 <resources>
     <string name="ln_action_accept_continue">Accept &amp; Continue</string>
     <string name="ln_action_back">Back</string>
@@ -33,7 +33,7 @@
     <string name="ln_cd_radio_unselected">Not selected</string>
     <string name="ln_cd_tool_action">Open</string>
     <string name="ln_ci_currency">Currency</string>
-    <string name="ln_ci_disclaimer">Please note: LoanSmart - Loan EMI Calculator is a calculation and estimation utility only. …More</string>
+    <string name="ln_ci_disclaimer">Please note: Loan Mate : EMI Loan Calculator is a calculation and estimation utility only. …More</string>
     <string name="ln_ci_down_payment">Down Payment</string>
     <string name="ln_ci_enter_here">Enter Here</string>
     <string name="ln_ci_expected_interest_rate">Expected Interest Rate</string>
@@ -122,7 +122,7 @@
     <string name="ln_home_banking_subtitle">Precision calculators for better money management</string>
     <string name="ln_home_banking_title_1">Banking</string>
     <string name="ln_home_banking_title_2">Calculators</string>
-    <string name="ln_home_brand_caption">LoanSmart 👋</string>
+    <string name="ln_home_brand_caption">Loan Mate 👋</string>
     <string name="ln_home_brand_title">Loan EMI Calculator</string>
     <string name="ln_home_calc_auto">Auto Calculator</string>
     <string name="ln_home_calc_auto_subtitle">Quick Calculations all…</string>
@@ -155,7 +155,7 @@
     <string name="ln_settings_currency_title">Currency</string>
     <string name="ln_settings_disclaimer_subtitle">Financial advice limitations</string>
     <string name="ln_settings_disclaimer_title">Disclaimer</string>
-    <string name="ln_settings_footer">LoanSmart v2.4.0 (Build 1082)</string>
+    <string name="ln_settings_footer">Loan Mate v%1$s</string>
     <string name="ln_settings_language_subtitle">Application display language</string>
     <string name="ln_settings_language_title">Language</string>
     <string name="ln_settings_privacy_subtitle">How we handle your data</string>
@@ -170,7 +170,7 @@
     <string name="ln_settings_subtitle">Manage your preferences and account security</string>
     <string name="ln_settings_title">Settings</string>
     <string name="ln_terms_agree_checkbox">I have read and agree to the Terms &amp; Conditions and Privacy Policy.</string>
-    <string name="ln_terms_intro">Please read these Terms &amp; Conditions carefully before using LoanSmart EMI Calculator.</string>
+    <string name="ln_terms_intro">Please read these Terms &amp; Conditions carefully before using Loan Mate EMI Calculator.</string>
     <string name="ln_terms_section_1_body">By accessing or using this application, you agree to be bound by these Terms &amp; Conditions and our Privacy Policy. If you do not agree, please do not use the app.</string>
     <string name="ln_terms_section_1_title">1. Acceptance of Terms</string>
     <string name="ln_terms_section_2_body">All calculations are for informational and indicative purposes only. We do not guarantee the accuracy of results and are not liable for any financial decisions you make based on them.</string>

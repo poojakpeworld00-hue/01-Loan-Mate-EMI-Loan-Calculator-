@@ -132,12 +132,12 @@
 
         <!-- Footer -->
         <TextView
+            android:id="@+id/footerVw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_18sdp"
             android:fontFamily="@font/ln_sf_pro"
-            android:text="@string/ln_settings_footer"
             android:textColor="@color/ln_text_tertiary"
             android:textSize="@dimen/_10ssp" />
 

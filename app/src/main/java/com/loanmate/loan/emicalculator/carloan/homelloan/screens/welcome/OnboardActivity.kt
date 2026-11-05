@@ -17,6 +17,7 @@ import java.util.Locale
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.loanmate.loan.emicalculator.carloan.homelloan.loan.data.LoanPrefs
 import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -500,6 +501,9 @@ class OnboardActivity : AppCompatActivity(), SysShortcutAim {
             return
         }
         window.decorView.removeCallbacks(finishAnyway)
+        viewModel.steps.indexOfFirst { it.key == CURRENCY_KEY }.takeIf { it >= 0 }
+            ?.let { viewModel.state.value.selections[it].firstOrNull() }
+            ?.let { LoanPrefs(this).setCurrencyCode(CURRENCIES[it].first) }
         val home = Intent(this, RootActivity::class.java)
         if (config.launcher.on && Launcher.isDefaultHome(this)) {
             runCatching {

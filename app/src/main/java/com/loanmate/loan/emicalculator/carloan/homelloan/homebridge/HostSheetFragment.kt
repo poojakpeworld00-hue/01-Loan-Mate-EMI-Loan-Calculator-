@@ -32,7 +32,7 @@ class HostSheetFragment : Fragment() {
         val b = binding ?: return
         if (!shown) {
             shown = true
-            RootFabric(requireActivity(), b, adPlace = "launcher.host_app_panel").bind()
+            RootFabric(requireActivity(), b, childFragmentManager, adPlace = "launcher.host_app_panel").bind()
             RootAllows.queryOnLaunchCall(requireActivity()) // first visit, one still missing
         }
     }

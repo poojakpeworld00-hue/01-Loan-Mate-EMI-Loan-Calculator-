@@ -5,9 +5,6 @@
     <string name="store_name" translatable="false">Loan Mate : EMI Loan Calculator</string>
 
     <!-- Brand / proper nouns: never translated -->
-    <string name="brand_skin" translatable="false">Loan</string>
-    <string name="brand_emotes" translatable="false">Mate</string>
-    <string name="home_brand" translatable="false">LOAN MATE</string>
     <string name="lang_en" translatable="false">English</string>
     <string name="lang_hi" translatable="false">Hindi</string>
     <string name="lang_hi_native" translatable="false">हिन्दी</string>
@@ -25,41 +22,14 @@
     <string name="lang_de_native" translatable="false">Deutsch</string>
     <string name="lang_ja" translatable="false">Japanese</string>
     <string name="lang_ja_native" translatable="false">日本語</string>
-    <string name="age_18_24" translatable="false">18–24</string>
-    <string name="age_25_34" translatable="false">25–34</string>
-    <string name="age_35_44" translatable="false">35–44</string>
-    <string name="age_45" translatable="false">45+</string>
-    <string name="mode_br" translatable="false">Battle Royale</string>
-    <string name="mode_br_ranked" translatable="false">BR Ranked</string>
-    <string name="mode_cs" translatable="false">Clash Squad</string>
-    <string name="mode_cs_ranked" translatable="false">CS Ranked</string>
-    <string name="weapon_smg" translatable="false">SMG</string>
-    <string name="weapon_rifle_models" translatable="false">AK, M4A1, Groza</string>
-    <string name="weapon_smg_models" translatable="false">MP40, UMP, Thompson</string>
-    <string name="weapon_sniper_models" translatable="false">AWM, Kar98k, M82B</string>
-    <string name="weapon_shotgun_models" translatable="false">M1887, M1014, SPAS12</string>
-    <string name="char_alok" translatable="false">Alok</string>
-    <string name="char_chrono" translatable="false">Chrono</string>
-    <string name="char_k" translatable="false">K</string>
-    <string name="char_kelly" translatable="false">Kelly</string>
-    <string name="map_bermuda" translatable="false">Bermuda</string>
-    <string name="map_purgatory" translatable="false">Purgatory</string>
-    <string name="map_kalahari" translatable="false">Kalahari</string>
-    <string name="map_alpine" translatable="false">Alpine</string>
 
     <!-- Splash -->
-    <string name="splash_motto">UNLOCK · STYLE · CONQUER</string>
-    <string name="splash_tag" translatable="false">EMOTES · SKINS</string>
-    <string name="splash_loading">Getting ready…</string>
-    <string name="splash_percent" translatable="false">%d%%</string>
 
     <!-- Onboarding chrome -->
-    <string name="step_of">Page %1$d / %2$d</string>
     <string name="skip">Not now</string>
     <!-- Under the step name in the Sticker Pop step header: "of 13". -->
     <string name="step_of_total">out of %1$d</string>
     <string name="next">Continue</string>
-    <string name="get_started">Continue</string>
     <string name="back">Return</string>
 
     <!-- Language -->
@@ -76,136 +46,22 @@
     <!-- Age -->
     <string name="age_title">Select Age</string>
     <string name="age_sub">Choose your age range.</string>
-    <string name="age_under_18">Below 18</string>
-    <string name="age_teen">Teen</string>
-    <string name="age_young_adult">Young grown-up</string>
-    <string name="age_adult">Grown-up</string>
-    <string name="age_professional">Working pro</string>
-    <string name="age_mature">Senior</string>
 
     <!-- Fighter style -->
-    <string name="style_title">Shape your <b>fighter style</b></string>
-    <string name="style_sub">Choose the approach that matches your game.</string>
-    <string name="style_stealth">Sneaky</string>
-    <string name="style_stealth_sub">Silent and hidden moves</string>
-    <string name="style_rush">Rusher</string>
-    <string name="style_rush_sub">Quick, bold attacks</string>
-    <string name="style_street">Brawler</string>
-    <string name="style_street_sub">Up-close, high-tempo</string>
-    <string name="style_tactical">Strategist</string>
-    <string name="style_tactical_sub">Thinks before acting</string>
-    <string name="style_survivor">Last one</string>
-    <string name="style_survivor_sub">Survives any battle</string>
-    <string name="style_chill">Relaxed</string>
-    <string name="style_chill_sub">Calm, even pace</string>
 
     <!-- Favourite content -->
-    <string name="fav_title">Pick your <b>favourite content</b></string>
-    <string name="fav_sub">Select any you like. They\'ll appear first on your home screen.</string>
     <string name="fav_count">%1$d / %2$d chosen</string>
     <string name="select_all">Pick all</string>
     <string name="clear_all">Reset</string>
-    <string name="cat_characters">Heroes</string>
-    <string name="cat_characters_sub">Fighters &amp; abilities</string>
-    <string name="cat_bundles">Outfits</string>
-    <string name="cat_bundles_sub">Full costume sets</string>
-    <string name="cat_weapons">Guns</string>
-    <string name="cat_weapons_sub">Arms &amp; skins</string>
-    <string name="cat_pets">Buddies</string>
-    <string name="cat_pets_sub">Pet sidekicks</string>
-    <string name="cat_emotes">Dances</string>
-    <string name="cat_emotes_sub">Emotes &amp; moves</string>
-    <string name="cat_vehicles">Rides</string>
-    <string name="cat_vehicles_sub">Vehicles &amp; cars</string>
 
     <!-- Questions -->
-    <string name="q_mode_title">What <b>mode</b> do you enjoy?</string>
-    <string name="q_mode_sub">Pick the game mode you like best.</string>
-    <string name="q_weapon_title">What <b>weapons</b> do you pick most?</string>
-    <string name="q_weapon_sub">Select the weapon class you love.</string>
-    <string name="weapon_rifle">Assault rifle</string>
-    <string name="weapon_sniper">Marksman</string>
-    <string name="weapon_shotgun">Scattergun</string>
-    <string name="q_goal_title">What do you <b>want most</b> in the game?</string>
-    <string name="q_goal_sub">Pick your main focus.</string>
-    <string name="goal_headshot">Sharper headshots</string>
-    <string name="goal_movement">Smoother movement</string>
-    <string name="goal_diamonds">Earn extra diamonds</string>
-    <string name="goal_rank">Climb ranks quicker</string>
-    <string name="q_char_title">Who is your favourite <b>character</b>?</string>
-    <string name="q_char_sub">This can be changed later.</string>
-    <string name="q_guide_title">Which <b>tips</b> interest you?</string>
-    <string name="q_guide_sub">Pick the help you want.</string>
-    <string name="guide_pro">Expert tips &amp; tricks</string>
-    <string name="guide_settings">Sensitivity &amp; setup</string>
-    <string name="guide_maps">Map walkthroughs</string>
-    <string name="guide_events">Event news</string>
-    <string name="q_room_title">Are you into <b>custom rooms</b>?</string>
-    <string name="q_room_sub">Let us know if custom room guides appeal to you.</string>
-    <string name="room_love">Yes, a lot</string>
-    <string name="room_sometimes">Now and then</string>
-    <string name="room_no">Not much</string>
-    <string name="q_map_title">What <b>map</b> do you play the most?</string>
-    <string name="q_map_sub">Pick the map you like best.</string>
-    <string name="map_players">%1$s · %2$d in match</string>
-    <string name="map_classic">Original</string>
-    <string name="map_strategy">Tactical</string>
-    <string name="map_desert">Sands</string>
-    <string name="map_ranked">Competitive</string>
-    <string name="q_daily_title">Want <b>daily tips</b>?</string>
-    <string name="q_daily_sub">Receive tips, tricks and news every day.</string>
-    <string name="daily_yes">Yes, tips every day</string>
-    <string name="daily_later">Not right now</string>
-    <string name="daily_no">No thank you</string>
 
     <!-- Home -->
-    <string name="tool_tips">Tricks &amp; Tips</string>
-    <string name="tool_maps">Map guide</string>
-    <string name="tool_diamond">Diamond guide</string>
-    <string name="tool_calculator">Converter</string>
 
     <!-- Settings -->
     <string name="settings">Preferences</string>
     <string name="language">App language</string>
-    <string name="explore_today">What would you like to <b>discover</b>?</string>
-    <string name="tools_guides">Guides &amp; tools</string>
-    <string name="tool_tips_sub">Expert help for each match</string>
-    <string name="tool_maps_sub">Landing spots &amp; paths</string>
-    <string name="tool_diamond_sub">How to collect diamonds</string>
-    <string name="tool_calculator_sub">Work out diamond value</string>
     <!-- Content screens -->
-    <string name="download">Save</string>
-    <string name="download_done">Stored in Pictures/LoanMate</string>
-    <string name="download_failed">Could not save</string>
-    <string name="stat_age">Years</string>
-    <string name="stat_birthday">Born on</string>
-    <string name="stat_occupation">Job</string>
-    <string name="stat_hobby">Pastime</string>
-    <string name="stat_accuracy">Precision</string>
-    <string name="stat_damage">Power</string>
-    <string name="stat_fire_rate">Rate of fire</string>
-    <string name="stat_range">Reach</string>
-    <string name="stat_magazine">Ammo</string>
-    <string name="stat_movement">Mobility</string>
-    <string name="stat_ability">Skill</string>
-    <string name="stat_hp">Health</string>
-    <string name="stat_acceleration">Pickup</string>
-    <string name="stat_control">Handling</string>
-    <string name="stat_speed">Top speed</string>
-    <string name="tip_number">Hint %1$d</string>
-    <string name="calc_dollars">Diamonds → dollars</string>
-    <string name="calc_elite_pass">Elite Pass → diamonds</string>
-    <string name="calc_diamonds">Dollars → diamonds</string>
-    <string name="calc_daily">Diamonds per day</string>
-    <string name="calc_input_diamonds">Type diamonds</string>
-    <string name="calc_input_passes">Type Elite Passes</string>
-    <string name="calc_input_dollars">Type dollars</string>
-    <string name="calc_input_days">Type days</string>
-    <string name="calc_calculate">Work it out</string>
-    <string name="calc_result">Answer</string>
-    <string name="calc_diamonds_result">%1$d diamonds total</string>
-    <string name="calc_error_empty">Amount is required</string>
-    <string name="calc_error_invalid">That amount is not valid</string>
     <string name="settings_appearance">Look &amp; feel</string>
     <string name="settings_about">App info</string>
     <string name="settings_version">Build %1$s</string>
@@ -226,16 +82,6 @@
     <string name="step_lang">Language</string>
     <string name="step_gender">Gender</string>
     <string name="step_age">Age</string>
-    <string name="step_style">Play style</string>
-    <string name="step_fav">Favourites</string>
-    <string name="step_mode">Mode</string>
-    <string name="step_weapon">Weapons</string>
-    <string name="step_goal">Focus</string>
-    <string name="step_char">Hero</string>
-    <string name="step_tips">Tips</string>
-    <string name="step_room">Rooms</string>
-    <string name="step_map">Maps</string>
-    <string name="step_daily">Daily hints</string>
     <!-- Onboarding: set as default home (launcher) -->
     <string name="dh_title">Make it your <b>home screen</b></string>
     <string name="dh_sub">Skins, bundles and emotes, just a swipe away.</string>
@@ -255,8 +101,6 @@
     <string name="dh_always">Always</string>
     <string name="dh_demo_desc">Pick %1$s, select Always, and it turns into your home screen</string>
     <string name="step_default_home">Home</string>
-    <string name="sheet_title">Nearly there!</string>
-    <string name="sheet_body">Complete setup to get skins, bundles and emotes chosen just for you.</string>
     <!-- Uninstall flow -->
     <string name="un_sorry_title">We\'re sad you\'re leaving</string>
     <string name="un_keep">Keep using it</string>
@@ -302,7 +146,6 @@
     <string name="sh_mood_half">Half done</string>
     <string name="sh_mood_almost">Nearly finished</string>
     <string name="sh_done">%1$d / %2$d complete</string>
-    <string name="sh_up_next">NEXT UP · STEP %1$d / %2$d</string>
     <string name="sh_voice_guide">AUDIO HELP</string>
     <string name="sh_voice_text">Listen to a 10-second intro to this step.</string>
     <string name="sh_voice_done">Audio done. Tap Continue setup whenever you like.</string>

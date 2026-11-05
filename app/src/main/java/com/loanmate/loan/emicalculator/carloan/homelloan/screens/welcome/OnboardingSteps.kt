@@ -35,6 +35,13 @@ data class Phase(
 private fun s(@StringRes id: Int): (Context) -> String = { it.getString(id) }
 
 const val LANG_KEY = "OB_1"
+const val CURRENCY_KEY = "OB_4"
+
+/** Currency step options, in order; the picked code becomes the calculators' currency. */
+val CURRENCIES = listOf(
+    "USD" to "$", "INR" to "₹", "KWD" to "KD", "BHD" to "BD", "OMR" to "RO", "JOD" to "JD",
+    "GBP" to "£", "EUR" to "€", "CHF" to "Fr", "AED" to "د.إ", "SAR" to "﷼",
+)
 const val DEFAULT_HOME_KEY = "default_home"
 const val WELCOME_KEY = "welcome"
 const val PERMISSION_HUB_KEY = "permission_hub"
@@ -75,11 +82,8 @@ private val DEFAULT_HOME_STEP = Phase(
 /** Claude Design "Loan Cash" onboarding: currency → amount → loan type → repayment → gender → age → employment → existing EMI. */
 private val QUESTION_STEPS = listOf(
     Phase(
-        "OB_4", R.string.cur_title, R.string.cur_sub, R.string.step_currency, icon = R.drawable.ob_ic_coin,
-        opts = listOf(
-            "USD" to "$", "INR" to "₹", "KWD" to "KD", "BHD" to "BD", "OMR" to "RO", "JOD" to "JD",
-            "GBP" to "£", "EUR" to "€", "CHF" to "Fr", "AED" to "د.إ", "SAR" to "﷼",
-        ).zip(
+        CURRENCY_KEY, R.string.cur_title, R.string.cur_sub, R.string.step_currency, icon = R.drawable.ob_ic_coin,
+        opts = CURRENCIES.zip(
             listOf(
                 R.string.cur_usd, R.string.cur_inr, R.string.cur_kwd, R.string.cur_bhd, R.string.cur_omr, R.string.cur_jod,
                 R.string.cur_gbp, R.string.cur_eur, R.string.cur_chf, R.string.cur_aed, R.string.cur_sar,

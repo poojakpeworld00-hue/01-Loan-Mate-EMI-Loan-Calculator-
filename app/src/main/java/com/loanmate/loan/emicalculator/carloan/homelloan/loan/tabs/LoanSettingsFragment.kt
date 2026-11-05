@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import com.loanmate.loan.emicalculator.carloan.adkit.Spots
 import com.loanmate.loan.emicalculator.carloan.homelloan.LoanTwo
 import com.loanmate.loan.emicalculator.carloan.homelloan.R
+import com.loanmate.loan.emicalculator.carloan.homelloan.BuildConfig
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.LnFragmentSettingsBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.databinding.LnItemSettingRowBinding
 import com.loanmate.loan.emicalculator.carloan.homelloan.loan.LoanViewModelFactory
@@ -44,6 +45,7 @@ class LoanSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.footerVw.text = getString(R.string.ln_settings_footer, BuildConfig.VERSION_NAME)
         viewModel.resourceProvider = { resId -> getString(resId) }
 
         // PREFERENCES

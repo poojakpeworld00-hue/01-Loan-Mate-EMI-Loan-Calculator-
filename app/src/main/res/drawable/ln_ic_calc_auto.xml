@@ -9,7 +9,7 @@
         android:fillColor="#3D7BFF"
         android:pathData="M4,12 L36,12 L36,30 L4,30 Z" />
     <path
-        android:fillColor="#0F3CC1"
+        android:fillColor="#1A6FD6"
         android:pathData="M4,16 L36,16 L36,20 L4,20 Z" />
     <path
         android:fillColor="#FFFFFF"
@@ -19,9 +19,9 @@
         android:pathData="M26,23 L34,23 L34,28 L26,28 Z" />
     <!-- Car silhouette top -->
     <path
-        android:fillColor="#1C5BFF"
+        android:fillColor="#3399FF"
         android:pathData="M10,8 C10,6 12,5 14,5 L26,5 C28,5 30,6 30,8 L30,12 L10,12 Z" />
     <path
-        android:fillColor="#0F3CC1"
+        android:fillColor="#1A6FD6"
         android:pathData="M14,7 L26,7 L26,11 L14,11 Z" />
 </vector>
