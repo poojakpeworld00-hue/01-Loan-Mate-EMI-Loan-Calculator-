@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ported from LoanSmart EMI Calculator (light palette). -->
+<resources>
+    <color name="ln_bg_card">#FFFFFFFF</color>
+    <color name="ln_bg_card_selected">#FFFFFFFF</color>
+    <color name="ln_bg_screen">#F4F6FB</color>
+    <color name="ln_black">#FF000000</color>
+    <color name="ln_bottom_nav_active_pill">#E5EDFF</color>
+    <color name="ln_bottom_nav_bg">#FFFFFFFF</color>
+    <color name="ln_bottom_nav_inactive">#8A95AB</color>
+    <color name="ln_brand_primary">#1C5BFF</color>
+    <color name="ln_brand_primary_dark">#0F3CC1</color>
+    <color name="ln_brand_primary_light">#E5EDFF</color>
+    <color name="ln_brand_primary_tint">#F0F4FF</color>
+    <color name="ln_divider">#EAEDF2</color>
+    <color name="ln_grid_amber_bg">#FFE9C5</color>
+    <color name="ln_grid_amber_fg">#D58300</color>
+    <color name="ln_grid_blue_bg">#E0EBFF</color>
+    <color name="ln_grid_blue_fg">#1C5BFF</color>
+    <color name="ln_grid_dark_bg">#E1E6F0</color>
+    <color name="ln_grid_dark_fg">#3B4660</color>
+    <color name="ln_grid_green_bg">#D9F4DD</color>
+    <color name="ln_grid_green_fg">#1F8F44</color>
+    <color name="ln_grid_pink_bg">#FFE3EC</color>
+    <color name="ln_grid_pink_fg">#E1467E</color>
+    <color name="ln_grid_purple_bg">#EDE3FF</color>
+    <color name="ln_grid_purple_fg">#7B4DFF</color>
+    <color name="ln_grid_red_bg">#FFE0DC</color>
+    <color name="ln_grid_red_fg">#D9382C</color>
+    <color name="ln_grid_yellow_bg">#FFF1CC</color>
+    <color name="ln_grid_yellow_fg">#C68A00</color>
+    <color name="ln_stroke_default">#E2E6EE</color>
+    <color name="ln_stroke_selected">#1C5BFF</color>
+    <color name="ln_text_on_primary">#FFFFFFFF</color>
+    <color name="ln_text_primary">#0F1733</color>
+    <color name="ln_text_secondary">#5A6478</color>
+    <color name="ln_text_tertiary">#8A95AB</color>
+    <color name="ln_white">#FFFFFFFF</color>
+</resources>

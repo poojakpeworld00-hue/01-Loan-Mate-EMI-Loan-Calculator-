@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ln_bg_screen">
+
+    <!-- LIST STATE: header (Recent History | N ITEMS) + RecyclerView -->
+    <LinearLayout
+        android:id="@+id/listGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/_14sdp"
+            android:paddingTop="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_8sdp">
+
+            <TextView
+                android:id="@+id/tvHeaderTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:letterSpacing="-0.01"
+                android:text="@string/ln_history_recent"
+                android:textColor="@color/ln_brand_primary"
+                android:textSize="@dimen/_16ssp" />
+
+            <TextView
+                android:id="@+id/tvHeaderCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ln_sf_pro_semibold"
+                android:letterSpacing="0.06"
+                android:textColor="@color/ln_text_tertiary"
+                android:textSize="@dimen/_11ssp"
+                tools:text="2 ITEMS" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHistory"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            android:paddingHorizontal="@dimen/_14sdp"
+            android:paddingBottom="@dimen/_18sdp"
+            android:scrollbars="none"
+            tools:listitem="@layout/ln_item_history" />
+    </LinearLayout>
+
+    <!-- EMPTY STATE -->
+    <LinearLayout
+        android:id="@+id/emptyGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_28sdp">
+
+        <TextView
+            android:id="@+id/tvEmptyTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ln_sfprodisplaybold"
+            android:letterSpacing="-0.01"
+            android:text="@string/ln_history_empty_title"
+            android:textColor="@color/ln_text_primary"
+            android:textSize="@dimen/_22ssp" />
+
+        <TextView
+            android:id="@+id/tvEmptySubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:fontFamily="@font/ln_sf_pro"
+            android:gravity="center"
+            android:text="@string/ln_history_empty_subtitle"
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

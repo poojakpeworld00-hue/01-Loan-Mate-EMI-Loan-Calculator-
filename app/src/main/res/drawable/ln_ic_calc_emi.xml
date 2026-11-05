@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <!-- Receipt background -->
+    <path
+        android:fillColor="#FFE5C4"
+        android:pathData="M6,4 L24,4 L26,6 L26,30 L6,30 Z" />
+    <path
+        android:fillColor="#E1B074"
+        android:pathData="M9,8 L23,8 L23,10 L9,10 Z" />
+    <path
+        android:fillColor="#E1B074"
+        android:pathData="M9,12 L20,12 L20,14 L9,14 Z" />
+    <path
+        android:fillColor="#E1B074"
+        android:pathData="M9,16 L23,16 L23,18 L9,18 Z" />
+    <path
+        android:fillColor="#E1B074"
+        android:pathData="M9,20 L18,20 L18,22 L9,22 Z" />
+    <!-- Mini calculator -->
+    <path
+        android:fillColor="#1F8FBF"
+        android:pathData="M18,20 L34,20 L34,34 L18,34 Z" />
+    <path
+        android:fillColor="#0C5A85"
+        android:pathData="M20,22 L32,22 L32,26 L20,26 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M21,28 L23,28 L23,30 L21,30 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25,28 L27,28 L27,30 L25,30 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M29,28 L31,28 L31,30 L29,30 Z" />
+    <path
+        android:fillColor="#FFC83D"
+        android:pathData="M21,31 L31,31 L31,33 L21,33 Z" />
+    <!-- Star indicator -->
+    <path
+        android:fillColor="#FFC83D"
+        android:pathData="M32,8 L33.4,11.4 L37,11.4 L34.1,13.7 L35.1,17 L32,15 L28.9,17 L29.9,13.7 L27,11.4 L30.6,11.4 Z" />
+</vector>

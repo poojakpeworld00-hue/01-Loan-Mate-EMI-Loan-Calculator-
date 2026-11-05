@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rvTools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ln_bg_screen"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:paddingHorizontal="@dimen/_12sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_14sdp"
+    android:scrollbars="none"
+    tools:listitem="@layout/ln_item_tool_card" />

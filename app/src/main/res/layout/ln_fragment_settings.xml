@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ln_bg_screen"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:paddingHorizontal="@dimen/_12sdp"
+    android:paddingTop="@dimen/_10sdp"
+    android:paddingBottom="@dimen/_18sdp"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ln_sfprodisplaybold"
+            android:letterSpacing="-0.02"
+            android:text="@string/ln_settings_title"
+            android:textColor="@color/ln_text_primary"
+            android:textSize="@dimen/_22ssp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/ln_sf_pro"
+            android:text="@string/ln_settings_subtitle"
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="@dimen/_11ssp" />
+
+        <!-- PREFERENCES -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:letterSpacing="0.06"
+            android:text="@string/ln_settings_section_preferences"
+            android:textColor="@color/ln_text_tertiary"
+            android:textSize="@dimen/_10ssp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/ln_bg_banking_card"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/rowCurrency"
+                layout="@layout/ln_item_setting_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/ln_divider_inset" />
+
+            <include
+                android:id="@+id/rowLanguage"
+                layout="@layout/ln_item_setting_row" />
+
+        </LinearLayout>
+
+        <!-- SUPPORT -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:letterSpacing="0.06"
+            android:text="@string/ln_settings_section_support"
+            android:textColor="@color/ln_text_tertiary"
+            android:textSize="@dimen/_10ssp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/ln_bg_banking_card"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/rowRate"
+                layout="@layout/ln_item_setting_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/ln_divider_inset" />
+
+            <include
+                android:id="@+id/rowShare"
+                layout="@layout/ln_item_setting_row" />
+        </LinearLayout>
+
+        <!-- LEGAL -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:letterSpacing="0.06"
+            android:text="@string/ln_settings_section_legal"
+            android:textColor="@color/ln_text_tertiary"
+            android:textSize="@dimen/_10ssp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:background="@drawable/ln_bg_banking_card"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/rowDisclaimer"
+                layout="@layout/ln_item_setting_row" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/ln_divider_inset" />
+
+            <include
+                android:id="@+id/rowPrivacy"
+                layout="@layout/ln_item_setting_row" />
+        </LinearLayout>
+
+        <!-- Footer -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_18sdp"
+            android:fontFamily="@font/ln_sf_pro"
+            android:text="@string/ln_settings_footer"
+            android:textColor="@color/ln_text_tertiary"
+            android:textSize="@dimen/_10ssp" />
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

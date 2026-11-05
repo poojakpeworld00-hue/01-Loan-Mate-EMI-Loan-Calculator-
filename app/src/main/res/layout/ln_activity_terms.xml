@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ln_bg_screen">
+
+    <!-- Top bar: title -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_10sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ln_sfprodisplaybold"
+            android:letterSpacing="-0.02"
+            android:text="@string/ln_title_terms_conditions"
+            android:textColor="@color/ln_brand_primary"
+            android:textSize="@dimen/_16ssp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Scrollable content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingHorizontal="@dimen/_18sdp"
+        android:paddingTop="@dimen/_4sdp"
+        android:paddingBottom="@dimen/_18sdp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:lineSpacingMultiplier="1.4"
+                android:text="@string/ln_terms_intro"
+                android:textColor="@color/ln_text_secondary"
+                android:textSize="@dimen/_10sdp" />
+
+            <!-- Section 1 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:text="@string/ln_terms_section_1_title"
+                android:textColor="@color/ln_text_primary"
+                android:textSize="@dimen/_14ssp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:lineSpacingMultiplier="1.4"
+                android:text="@string/ln_terms_section_1_body"
+                android:textColor="@color/ln_text_secondary"
+                android:textSize="@dimen/_10sdp" />
+
+            <!-- Section 2 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:text="@string/ln_terms_section_2_title"
+                android:textColor="@color/ln_text_primary"
+                android:textSize="@dimen/_14ssp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:lineSpacingMultiplier="1.4"
+                android:text="@string/ln_terms_section_2_body"
+                android:textColor="@color/ln_text_secondary"
+                android:textSize="@dimen/_10sdp" />
+
+            <!-- Section 3 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:text="@string/ln_terms_section_3_title"
+                android:textColor="@color/ln_text_primary"
+                android:textSize="@dimen/_14ssp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:lineSpacingMultiplier="1.4"
+                android:text="@string/ln_terms_section_3_body"
+                android:textColor="@color/ln_text_secondary"
+                android:textSize="@dimen/_10sdp" />
+
+            <!-- Section 4 -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:text="@string/ln_terms_section_4_title"
+                android:textColor="@color/ln_text_primary"
+                android:textSize="@dimen/_14ssp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:lineSpacingMultiplier="1.4"
+                android:text="@string/ln_terms_section_4_body"
+                android:textColor="@color/ln_text_secondary"
+                android:textSize="@dimen/_10sdp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom bar with checkbox + CTA -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/ln_bg_screen"
+        android:elevation="@dimen/_2sdp"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_10sdp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/cbAgree"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/ln_brand_primary"
+            android:fontFamily="@font/ln_sfprodisplayregular"
+            android:lineSpacingMultiplier="1.35"
+            android:paddingStart="@dimen/_6sdp"
+            android:paddingEnd="0dp"
+            android:text="@string/ln_terms_agree_checkbox"
+            android:textColor="@color/ln_text_primary"
+            android:textSize="@dimen/_10ssp" />
+
+        <TextView
+            android:id="@+id/btnAccept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:alpha="0.5"
+            android:background="@drawable/ln_bg_btn_primary"
+            android:clickable="false"
+            android:enabled="false"
+            android:focusable="false"
+            android:fontFamily="@font/ln_sfprodisplaybold"
+            android:gravity="center"
+            android:text="@string/ln_action_accept_continue"
+            android:textColor="@color/ln_text_on_primary"
+            android:textSize="@dimen/_12ssp"
+            android:padding="@dimen/_10sdp"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

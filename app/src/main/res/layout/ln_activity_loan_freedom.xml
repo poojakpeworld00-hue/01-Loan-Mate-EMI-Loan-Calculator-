@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ln_bg_screen">
+
+    <!-- Top bar -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/_8sdp"
+        android:paddingVertical="@dimen/_8sdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:contentDescription="@string/ln_action_back"
+            android:focusable="true"
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ln_ic_arrow_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ln_bg_currency_chip"
+            android:fontFamily="@font/ln_sf_pro_medium"
+            android:paddingHorizontal="@dimen/_10sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:textColor="@color/ln_text_primary"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Currency: ₹ INR" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingBottom="@dimen/_24sdp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_14sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:letterSpacing="-0.02"
+                android:text="@string/ln_freedom_title"
+                android:textColor="@color/ln_text_primary"
+                android:textSize="@dimen/_22ssp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/ln_sf_pro"
+                android:text="@string/ln_freedom_subtitle"
+                android:textColor="@color/ln_text_secondary"
+                android:textSize="@dimen/_11ssp" />
+
+            <!-- INPUT CARD -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_14sdp"
+                android:background="@drawable/ln_bg_summary_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <!-- Loan Amount -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ln_sf_pro_semibold"
+                    android:letterSpacing="0.04"
+                    android:text="@string/ln_freedom_field_total_loan"
+                    android:textColor="@color/ln_text_secondary"
+                    android:textSize="@dimen/_10ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/ln_bg_input_field"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_4sdp">
+
+                    <TextView
+                        android:id="@+id/tvAmountSymbol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sf_pro_semibold"
+                        android:textColor="@color/ln_brand_primary"
+                        android:textSize="@dimen/_14ssp"
+                        tools:text="$" />
+
+                    <EditText
+                        android:id="@+id/etAmount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_14ssp"
+                        tools:text="2,500,000" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/sliderAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="1000"
+                    android:progress="50" />
+
+                <!-- Rate -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/ln_sf_pro_semibold"
+                    android:letterSpacing="0.04"
+                    android:text="@string/ln_calc_field_interest_rate"
+                    android:textColor="@color/ln_text_secondary"
+                    android:textSize="@dimen/_10ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/ln_bg_input_field"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_4sdp">
+
+                    <EditText
+                        android:id="@+id/etRate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:imeOptions="actionDone"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_14ssp"
+                        tools:text="8.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sf_pro_semibold"
+                        android:text="@string/ln_calc_unit_pct_short"
+                        android:textColor="@color/ln_brand_primary"
+                        android:textSize="@dimen/_14ssp" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/sliderRate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="500"
+                    android:progress="85" />
+
+                <!-- Total Tenure -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/ln_sf_pro_semibold"
+                    android:letterSpacing="0.04"
+                    android:text="@string/ln_freedom_field_total_tenure"
+                    android:textColor="@color/ln_text_secondary"
+                    android:textSize="@dimen/_10ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/ln_bg_input_field"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_4sdp">
+
+                    <EditText
+                        android:id="@+id/etTotalTenure"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_14ssp"
+                        tools:text="20" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sf_pro_semibold"
+                        android:text="@string/ln_calc_unit_yrs_short"
+                        android:textColor="@color/ln_brand_primary"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/sliderTotalTenure"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="30"
+                    android:progress="20" />
+
+                <!-- Months Already Paid -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:fontFamily="@font/ln_sf_pro_semibold"
+                    android:letterSpacing="0.04"
+                    android:text="@string/ln_freedom_field_months_paid"
+                    android:textColor="@color/ln_text_secondary"
+                    android:textSize="@dimen/_10ssp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_6sdp"
+                    android:background="@drawable/ln_bg_input_field"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:paddingVertical="@dimen/_4sdp">
+
+                    <EditText
+                        android:id="@+id/etMonthsPaid"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_14ssp"
+                        tools:text="60" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sf_pro_semibold"
+                        android:text="@string/ln_calc_unit_months"
+                        android:textColor="@color/ln_brand_primary"
+                        android:textSize="@dimen/_12ssp" />
+                </LinearLayout>
+
+                <SeekBar
+                    android:id="@+id/sliderMonthsPaid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="360"
+                    android:progress="60" />
+
+                <!-- Calculate / Reset -->
+                <TextView
+                    android:id="@+id/btnCalculate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_14sdp"
+                    android:background="@drawable/ln_bg_btn_primary"
+                    android:fontFamily="@font/ln_sf_pro_semibold"
+                    android:gravity="center"
+                    android:text="@string/ln_calc_action_calculate"
+                    android:textColor="@color/ln_text_on_primary"
+                    android:textSize="@dimen/_13ssp" />
+
+                <TextView
+                    android:id="@+id/btnReset"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_44sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:background="@drawable/ln_bg_btn_outline"
+                    android:fontFamily="@font/ln_sf_pro_semibold"
+                    android:gravity="center"
+                    android:text="@string/ln_calc_action_reset"
+                    android:textColor="@color/ln_brand_primary"
+                    android:textSize="@dimen/_13ssp" />
+            </LinearLayout>
+
+            <!-- SUMMARY -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginTop="@dimen/_18sdp"
+                android:fontFamily="@font/ln_sfprodisplaybold"
+                android:text="@string/ln_calc_section_summary"
+                android:textColor="@color/ln_text_primary"
+                android:textSize="@dimen/_15ssp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/ln_bg_summary_card"
+                android:orientation="vertical"
+                android:padding="@dimen/_14sdp">
+
+                <!-- Headline pill: months remaining -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ln_bg_summary_headline"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sf_pro_semibold"
+                        android:letterSpacing="0.06"
+                        android:text="@string/ln_freedom_headline_remaining"
+                        android:textColor="@color/ln_text_secondary"
+                        android:textSize="@dimen/_10ssp" />
+
+                    <TextView
+                        android:id="@+id/tvMonthsRemaining"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:textColor="@color/ln_brand_primary"
+                        android:textSize="@dimen/_22ssp"
+                        tools:text="180 months" />
+
+                    <TextView
+                        android:id="@+id/tvDebtFreeDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:fontFamily="@font/ln_sf_pro"
+                        android:textColor="@color/ln_brand_primary_dark"
+                        android:textSize="@dimen/_11ssp"
+                        tools:text="Debt-free on Apr 2041" />
+                </LinearLayout>
+
+                <!-- Donut + center label -->
+                <FrameLayout
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/_18sdp">
+
+                    <com.loanmate.loan.emicalculator.carloan.homelloan.loan.calc.LoanDonutView
+                        android:id="@+id/donut"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ln_sf_pro_semibold"
+                            android:letterSpacing="0.08"
+                            android:text="@string/ln_freedom_chart_paid"
+                            android:textColor="@color/ln_text_tertiary"
+                            android:textSize="@dimen/_9ssp" />
+
+                        <TextView
+                            android:id="@+id/tvDonutPct"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/ln_sfprodisplaybold"
+                            android:textColor="@color/ln_text_primary"
+                            android:textSize="@dimen/_18ssp"
+                            tools:text="25%" />
+                    </LinearLayout>
+                </FrameLayout>
+
+                <!-- Breakdown: Monthly EMI -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_18sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/_8sdp"
+                        android:layout_height="@dimen/_8sdp"
+                        android:background="@drawable/ln_bg_circle_brand_tint" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ln_sf_pro_medium"
+                        android:text="@string/ln_freedom_breakdown_emi"
+                        android:textColor="@color/ln_text_secondary"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvEmi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_12ssp"
+                        tools:text="$22,000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:background="@color/ln_divider" />
+
+                <!-- Principal Paid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/_8sdp"
+                        android:layout_height="@dimen/_8sdp"
+                        android:background="@drawable/ln_bg_circle_brand" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ln_sf_pro_medium"
+                        android:text="@string/ln_freedom_breakdown_principal_paid"
+                        android:textColor="@color/ln_text_secondary"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvPrincipalPaid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_12ssp"
+                        tools:text="$640,000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:background="@color/ln_divider" />
+
+                <!-- Interest Paid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="@dimen/_8sdp"
+                        android:layout_height="@dimen/_8sdp"
+                        android:background="@drawable/ln_bg_circle_brand_tint" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ln_sf_pro_medium"
+                        android:text="@string/ln_freedom_breakdown_interest_paid"
+                        android:textColor="@color/ln_text_secondary"
+                        android:textSize="@dimen/_12ssp" />
+
+                    <TextView
+                        android:id="@+id/tvInterestPaid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_12ssp"
+                        tools:text="$680,000" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginVertical="@dimen/_8sdp"
+                    android:background="@color/ln_divider" />
+
+                <!-- Outstanding -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/ln_sf_pro_semibold"
+                        android:text="@string/ln_freedom_breakdown_outstanding"
+                        android:textColor="@color/ln_text_primary"
+                        android:textSize="@dimen/_13ssp" />
+
+                    <TextView
+                        android:id="@+id/tvOutstanding"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/ln_sfprodisplaybold"
+                        android:textColor="@color/ln_brand_primary"
+                        android:textSize="@dimen/_13ssp"
+                        tools:text="$1,860,000" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

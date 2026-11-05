@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_14sdp"
+    android:background="@drawable/ln_bg_summary_card"
+    android:orientation="vertical"
+    android:padding="@dimen/_14sdp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ln_sf_pro_semibold"
+        android:text="@string/ln_ci_starting_investment"
+        android:textColor="@color/ln_text_primary"
+        android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@drawable/ln_bg_input_field"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_8sdp">
+
+        <EditText
+            android:id="@+id/etStarting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/ln_sf_pro_medium"
+            android:hint="@string/ln_ci_enter_here"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:textColor="@color/ln_text_primary"
+            android:textColorHint="@color/ln_text_tertiary"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tvStartingSymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:textColor="@color/ln_brand_primary"
+            android:textSize="@dimen/_12ssp"
+            tools:text="$" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/ln_sf_pro_semibold"
+        android:text="@string/ln_ci_last_investment"
+        android:textColor="@color/ln_text_primary"
+        android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@drawable/ln_bg_input_field"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_8sdp">
+
+        <EditText
+            android:id="@+id/etLast"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/ln_sf_pro_medium"
+            android:hint="@string/ln_ci_enter_here"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:textColor="@color/ln_text_primary"
+            android:textColorHint="@color/ln_text_tertiary"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/tvLastSymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:textColor="@color/ln_brand_primary"
+            android:textSize="@dimen/_12ssp"
+            tools:text="$" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:fontFamily="@font/ln_sf_pro_semibold"
+        android:text="@string/ln_ci_time_period"
+        android:textColor="@color/ln_text_primary"
+        android:textSize="@dimen/_12ssp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_6sdp"
+        android:background="@drawable/ln_bg_input_field"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_8sdp">
+
+        <EditText
+            android:id="@+id/etTenure"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/ln_sf_pro_medium"
+            android:hint="@string/ln_ci_enter_here"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textColor="@color/ln_text_primary"
+            android:textColorHint="@color/ln_text_tertiary"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/btnMonths"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:text="@string/ln_ci_unit_month"
+            android:textColor="@color/ln_text_secondary"
+            android:textSize="@dimen/_12ssp" />
+
+        <TextView
+            android:id="@+id/btnYears"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/ln_sf_pro_semibold"
+            android:paddingHorizontal="@dimen/_6sdp"
+            android:text="@string/ln_ci_unit_year"
+            android:textColor="@color/ln_brand_primary"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/btnCalculate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@drawable/ln_bg_btn_primary"
+        android:fontFamily="@font/ln_sf_pro_semibold"
+        android:gravity="center"
+        android:text="@string/ln_calc_action_calculate"
+        android:textColor="@color/ln_text_on_primary"
+        android:textSize="@dimen/_13ssp" />
+
+    <TextView
+        android:id="@+id/btnReset"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_42sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/ln_sf_pro_semibold"
+        android:gravity="center"
+        android:text="@string/ln_calc_action_reset"
+        android:textColor="@color/ln_brand_primary"
+        android:textSize="@dimen/_13ssp" />
+</LinearLayout>

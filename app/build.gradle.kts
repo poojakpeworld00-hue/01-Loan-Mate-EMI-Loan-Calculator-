@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.play.app.update)
     implementation(libs.play.review)
     implementation(libs.timber)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     testImplementation(libs.org.json)
     androidTestImplementation(libs.androidx.espresso.core)

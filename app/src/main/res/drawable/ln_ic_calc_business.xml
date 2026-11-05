@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <!-- Bar chart -->
+    <path
+        android:fillColor="#1C5BFF"
+        android:pathData="M6,30 L10,30 L10,22 L6,22 Z" />
+    <path
+        android:fillColor="#1C5BFF"
+        android:pathData="M12,30 L16,30 L16,16 L12,16 Z" />
+    <path
+        android:fillColor="#0F3CC1"
+        android:pathData="M18,30 L22,30 L22,12 L18,12 Z" />
+    <path
+        android:fillColor="#1C5BFF"
+        android:pathData="M24,30 L28,30 L28,18 L24,18 Z" />
+    <!-- Trend arrow -->
+    <path
+        android:strokeColor="#0F3CC1"
+        android:strokeWidth="2"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M6,18 L14,12 L20,8 L28,4" />
+    <path
+        android:fillColor="#0F3CC1"
+        android:pathData="M28,4 L33,4 L31,9 Z" />
+    <!-- Star indicator -->
+    <path
+        android:fillColor="#FF4757"
+        android:pathData="M32,28 L33.4,31.4 L37,31.4 L34.1,33.7 L35.1,37 L32,35 L28.9,37 L29.9,33.7 L27,31.4 L30.6,31.4 Z" />
+</vector>

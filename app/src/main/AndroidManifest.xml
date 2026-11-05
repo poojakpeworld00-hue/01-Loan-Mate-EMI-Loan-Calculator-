@@ -72,6 +72,27 @@
         <activity
             android:name=".screens.prefs.LanguageActivity"
             android:screenOrientation="portrait" />
+        <!-- Loan calculator screens (loan package) -->
+        <activity
+            android:name=".loan.calc.LoanCalculatorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SkinHubSkinsBundles" />
+        <activity
+            android:name=".loan.calc.CalcPlaceholderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SkinHubSkinsBundles" />
+        <activity
+            android:name=".loan.calc.FreedomCountdownActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SkinHubSkinsBundles" />
+        <activity
+            android:name=".loan.currency.LoanCurrencyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SkinHubSkinsBundles" />
+        <activity
+            android:name=".loan.terms.LoanTermsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.SkinHubSkinsBundles" />
         <activity
             android:name=".screens.leave.ExitPathActivity"
             android:configChanges="locale|layoutDirection"
